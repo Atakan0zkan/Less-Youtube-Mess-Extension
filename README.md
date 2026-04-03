@@ -5,7 +5,7 @@ Customize YouTube: Hide Shorts, Sidebar, Comments, Recommendations, and More!
 
 Take back your focus and enjoy YouTube the way it was meant to be: simple. This extension aims to reclaim your focus and stop doomscrolling on YouTube.
 
-YouTube is an incredible platform, but it is engineered to keep you consuming content endlessly. This sleek, simple, ultra-lightweight and completely privacy-focused extension puts the power back in your hands. Control exactly what you see through a modern, easy-to-use menu.
+YouTube is an incredible platform, but it is engineered to keep you consuming content endlessly. This sleek, simple, ultra-lightweight and completely **privacy-focused** extension puts the power back in your hands. Control exactly what you see through a modern, easy-to-use menu.
 
 ✨ What can you hide or modify? ✨
 
