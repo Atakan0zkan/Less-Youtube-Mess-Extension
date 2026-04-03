@@ -5,50 +5,50 @@ Customize YouTube: Hide Shorts, Sidebar, Comments, Recommendations, and More!
 
 Take back your focus and enjoy YouTube the way it was meant to be: simple. This extension aims to reclaim your focus and stop doomscrolling on YouTube.
 
-YouTube is an incredible platform, but it is engineered to keep you consuming content endlessly. This sleek, simple, ultra-lightweight and completely **privacy-focused** extension puts the power back in your hands. Control exactly what you see through a modern, easy-to-use menu.
+YouTube is an incredible platform, but it is engineered to keep you consuming content endlessly. This sleek, simple, ultra-lightweight and **completely privacy-focused** extension puts the power back in your hands. Control exactly what you see through a modern, easy-to-use menu.
 
-✨ What can you hide or modify? ✨
+✨ **What can you hide or modify?** ✨
 
-1️⃣ Shorts: Completely remove them from your Home feed, Subscriptions, and Search results. Put an end to the "doomscrolling" trap!
+1️⃣ **Shorts:** Completely remove them from your Home feed, Subscriptions, and Search results. Put an end to the "doomscrolling" trap!
 
-2️⃣ Comments: Stay focused on the video without getting lost in the comment sections.
+2️⃣ **Comments:** Stay focused on the video without getting lost in the comment sections.
 
-3️⃣ Sidebar & End-Screen Suggestions: Clear away distracting video recommendations and those pesky pop-up cards at the end of videos.
+3️⃣ **Sidebar & End-Screen Suggestions:** Clear away distracting video recommendations and those pesky pop-up cards at the end of videos.
 
-4️⃣ Live Streams & Premieres: Keep your feed clean by showing only standard video uploads.
+4️⃣ **Live Streams & Premieres:** Keep your feed clean by showing only standard video uploads.
 
-5️⃣ Like Counts: Enjoy a bias-free viewing experience by hiding like counts and popularity metrics.
+5️⃣ **Like Counts:** Enjoy a bias-free viewing experience by hiding like counts and popularity metrics.
 
-6️⃣ Search Suggestions: Stop the auto-complete suggestions that pop up before you even finish typing.
+6️⃣ **Search Suggestions:** Stop the auto-complete suggestions that pop up before you even finish typing.
 
-7️⃣ Visual Clutter: Remove the voice search microphone, the YouTube logo, and the notification bell for a truly minimalist look.
+7️⃣ **Visual Clutter:** Remove the voice search microphone, the YouTube logo, and the notification bell for a truly minimalist look.
 
-8️⃣ Granular Left Navigation Control: Hide the entire left menu entirely, or selectively hide specific sections like "Explore", "You", "Subscriptions" (channel list), and "More from YouTube".
+8️⃣ **Granular Left Navigation Control:** Hide the entire left menu entirely, or selectively hide specific sections like "Explore", "You", "Subscriptions" (channel list), and "More from YouTube".
 
-9️⃣ Redirect to Subscriptions: Automatically land on your "Subscriptions" page every time you open YouTube, bypassing the chaotic Home feed.
+9️⃣ **Redirect to Subscriptions:** Automatically land on your "Subscriptions" page every time you open YouTube, bypassing the chaotic Home feed.
 
-📺 Bonus: "List View"
+📺 **Bonus:** "List View"
 Are those massive thumbnails on your Subscriptions page overwhelming? With a single click, transform your subscription feed from a cluttered grid into a minimal, clean, and easy-to-read chronological list.
 
 <img width="1280" height="800" alt="store3" src="https://github.com/user-attachments/assets/b4471f6b-1b13-4550-98d4-755ae834dad0" />
 
-📩 For suggestions, please email me: atakanozkanapps@gmail.com
+📩 **For suggestions, please email me:** atakanozkanapps@gmail.com
 
-UPDATES
+**UPDATES**
 
-Version 1.0 – Initial release!
+*Version 1.0 – Initial release!*
 
-Version 1.0.3 – Fixed minor bugs
+*Version 1.0.3 – Fixed minor bugs*
 
-Version 1.1 – Major performance improvements and bug fixes
+*Version 1.1 – Major performance improvements and bug fixes*
 
-Version 1.1.1 - Fixed minor bugs 
+*Version 1.1.1 - Fixed minor bugs*
 
-Version 1.2 - New features for Left Navigation Bar!
+*Version 1.2 - New features for Left Navigation Bar!*
 
-Version 1.3 - Fixed minor bugs and extension menu is better now
+*Version 1.3 - Fixed minor bugs and extension menu is better now*
 
-Version 1.4 - Fixed Left Navigation bugs, improved toggles to work in real-time without refreshing, option to disable Premium popups and added major performance optimizations
+*Version 1.4 - Fixed Left Navigation bugs, improved toggles to work in real-time without refreshing, option to disable Premium popups and added major performance optimizations*
 
 <img width="1400" height="560" alt="kayanyazi" src="https://github.com/user-attachments/assets/dac7db96-5b21-40e6-91da-b8324a8dfb13" />
 
