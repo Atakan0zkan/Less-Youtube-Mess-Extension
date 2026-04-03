@@ -1,41 +1,55 @@
 # Less YouTube Mess
 
-A Chrome extension that gives you granular control over the YouTube interface — hide distracting elements, clean up the subscriptions feed, and browse without the noise.
+Customize YouTube: Hide Shorts, Sidebar, Comments, Recommendations, and More!
 
-## Features
+Take back your focus and enjoy YouTube the way it was meant to be: simple. This extension aims to reclaim your focus and stop doomscrolling on YouTube.
 
-| Feature | Description |
-|---|---|
-| **List View** | Converts the subscriptions grid into a clean, scrollable list with descriptions |
-| **Hide Shorts** | Removes Shorts from all pages (navigation, homepage, subscriptions, search) |
-| **Hide Live / Premieres** | Hides upcoming streams and premieres from the subscriptions feed |
-| **Hide Sidebar** | Removes the suggested videos panel; expands the player to fill the space |
-| **Hide Comments** | Hides the comments section on video pages |
-| **Hide Likes** | Hides like counts on videos (real-time, no page refresh needed) |
-| **Hide End Screen Suggestions** | Removes overlay cards at the end of videos |
-| **Hide Search Suggestions** | Disables the search bar autocomplete dropdown |
-| **Hide Premium Popups** | Dismisses YouTube Premium banners, upsell dialogs, and enforcement messages |
-| **Left Nav sections** | Individually hide Subscriptions list, You, Explore, or More from YouTube |
-| **Hide Entire Left Nav** | Collapses the entire left navigation drawer |
-| **Hide Notification Bell** | Removes the notification bell from the top bar |
-| **Hide Voice Search** | Removes the microphone button from the search bar |
-| **Hide YouTube Logo** | Removes the top-left YouTube logo |
-| **Default Subscriptions** | Auto-redirects the homepage to `/feed/subscriptions` |
+YouTube is an incredible platform, but it is engineered to keep you consuming content endlessly. This sleek, simple, ultra-lightweight and completely privacy-focused extension puts the power back in your hands. Control exactly what you see through a modern, easy-to-use menu.
 
-## How It Works
+✨ What can you hide or modify? ✨
 
-- Settings are saved to `chrome.storage.sync` and applied immediately — no page refresh needed.
-- A content script sets attributes on the `<html>` element; CSS handles the hiding via attribute selectors (fast and layout-thrash-free).
-- JS supplements CSS only where necessary (like-button re-renders, premium popup backdrop cleanup).
-- Shorts hiding is zero-JS, handled entirely via CSS `:has()` selectors.
-- Video descriptions in list view are lazy-loaded via `IntersectionObserver` to minimize network requests.
+1️⃣ Shorts: Completely remove them from your Home feed, Subscriptions, and Search results. Put an end to the "doomscrolling" trap!
+
+2️⃣ Comments: Stay focused on the video without getting lost in the comment sections.
+
+3️⃣ Sidebar & End-Screen Suggestions: Clear away distracting video recommendations and those pesky pop-up cards at the end of videos.
+
+4️⃣ Live Streams & Premieres: Keep your feed clean by showing only standard video uploads.
+
+5️⃣ Like Counts: Enjoy a bias-free viewing experience by hiding like counts and popularity metrics.
+
+6️⃣ Search Suggestions: Stop the auto-complete suggestions that pop up before you even finish typing.
+
+7️⃣ Visual Clutter: Remove the voice search microphone, the YouTube logo, and the notification bell for a truly minimalist look.
+
+8️⃣ Granular Left Navigation Control: Hide the entire left menu entirely, or selectively hide specific sections like "Explore", "You", "Subscriptions" (channel list), and "More from YouTube".
+
+9️⃣ Redirect to Subscriptions: Automatically land on your "Subscriptions" page every time you open YouTube, bypassing the chaotic Home feed.
+
+📺 Bonus: "List View"
+Are those massive thumbnails on your Subscriptions page overwhelming? With a single click, transform your subscription feed from a cluttered grid into a minimal, clean, and easy-to-read chronological list.
+
+📩 For suggestions, please email me: atakanozkanapps@gmail.com
+
+UPDATES
+
+Version 1.0 – Initial release!
+
+Version 1.0.3 – Fixed minor bugs
+
+Version 1.1 – Major performance improvements and bug fixes
+
+Version 1.1.1 - Fixed minor bugs 
+
+Version 1.2 - New features for Left Navigation Bar!
+
+Version 1.3 - Fixed minor bugs and extension menu is better now
+
+Version 1.4 - Fixed Left Navigation bugs, improved toggles to work in real-time without refreshing, option to disable Premium popups and added major performance optimizations
 
 ## Installation
 
-1. Download or clone this repository.
-2. Open Chrome and go to `chrome://extensions`.
-3. Enable **Developer mode** (top-right toggle).
-4. Click **Load unpacked** and select the repository folder.
+https://chromewebstore.google.com/detail/less-youtube-mess/opoonnlbochomodkkaflhdfmghbbikkb
 
 ## File Structure
 
@@ -49,9 +63,6 @@ popup.js               Popup settings manager
 icons/                 Extension icons (16, 48, 128px)
 ```
 
-## Version
-
-**v1.4** — See [active changes](memory-bank/activeContext.md) for recent fixes and additions.
 
 ## License
 
