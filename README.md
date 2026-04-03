@@ -1,4 +1,5 @@
-# Less YouTube Mess
+# <img width="48" height="48" alt="icon128" src="https://github.com/user-attachments/assets/5a8e60ec-6cfe-479a-ac9f-ba1603ac669c" /> **Less YouTube Mess**
+
 
 Customize YouTube: Hide Shorts, Sidebar, Comments, Recommendations, and More!
 
@@ -29,6 +30,8 @@ YouTube is an incredible platform, but it is engineered to keep you consuming co
 📺 Bonus: "List View"
 Are those massive thumbnails on your Subscriptions page overwhelming? With a single click, transform your subscription feed from a cluttered grid into a minimal, clean, and easy-to-read chronological list.
 
+<img width="1280" height="800" alt="store3" src="https://github.com/user-attachments/assets/b4471f6b-1b13-4550-98d4-755ae834dad0" />
+
 📩 For suggestions, please email me: atakanozkanapps@gmail.com
 
 UPDATES
@@ -46,6 +49,9 @@ Version 1.2 - New features for Left Navigation Bar!
 Version 1.3 - Fixed minor bugs and extension menu is better now
 
 Version 1.4 - Fixed Left Navigation bugs, improved toggles to work in real-time without refreshing, option to disable Premium popups and added major performance optimizations
+
+<img width="1400" height="560" alt="kayanyazi" src="https://github.com/user-attachments/assets/dac7db96-5b21-40e6-91da-b8324a8dfb13" />
+
 
 ## Installation
 
