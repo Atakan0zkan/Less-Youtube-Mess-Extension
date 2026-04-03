@@ -67,4 +67,3 @@ icons/                 Extension icons (16, 48, 128px)
 ## License
 
 MIT
-# Less-Youtube-Mess-Extension
