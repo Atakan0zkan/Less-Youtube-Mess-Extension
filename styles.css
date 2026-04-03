@@ -1,0 +1,386 @@
+/* ========================================
+   Less Youtube Mess - Content Styles
+   CSS attribute-selector based toggle system
+   ======================================== */
+
+/* ===== 1. LEFT NAVIGATION BAR ===== */
+html[hide_left_nav="true"] tp-yt-app-drawer#guide,
+html[hide_left_nav="true"] ytd-mini-guide-renderer[role="navigation"],
+html[hide_left_nav="true"] yt-icon-button#guide-button {
+    display: none !important;
+}
+
+/* Shift content left when navbar is hidden */
+html[hide_left_nav="true"] ytd-app {
+    margin-left: 0 !important;
+}
+
+html[hide_left_nav="true"] ytd-page-manager {
+    margin-left: 0 !important;
+}
+
+/* ===== 1.1. SPECIFIC LEFT NAVIGATION SECTIONS ===== */
+/* Explore */
+html[hide_explore="true"] ytd-guide-section-renderer:has(a[href*="/gaming"]),
+html[hide_explore="true"] ytd-guide-section-renderer:has(a[href*="/trending"]) {
+    display: none !important;
+}
+
+/* More from YouTube */
+html[hide_more_from_youtube="true"] ytd-guide-section-renderer:has(a[href*="/premium"]),
+html[hide_more_from_youtube="true"] ytd-guide-section-renderer:has(a[href*="youtubekids.com"]) {
+    display: none !important;
+}
+
+/* You */
+html[hide_you_section="true"] ytd-guide-section-renderer:has(a[href*="/feed/history"]),
+html[hide_you_section="true"] ytd-guide-section-renderer:has(a[href*="/playlist?list=WL"]) {
+    display: none !important;
+}
+
+/* Subscriptions section — targets sections with the "All subscriptions" link or individual channel links.
+   Does NOT use :has(ytd-guide-collapsible-entry-renderer) as it also matches other sections. */
+html[hide_subscriptions_section="true"] ytd-guide-section-renderer:has(a[href="/feed/channels"]),
+html[hide_subscriptions_section="true"] ytd-guide-section-renderer:has(> #items > ytd-guide-entry-renderer > a[href^="/@"]) {
+    display: none !important;
+}
+
+
+/* ===== 2. LIST VIEW ===== */
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer {
+    --ytd-rich-grid-items-per-row: 1 !important;
+    --ytd-rich-grid-posts-per-row: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+}
+
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] #contents {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer > #contents > ytd-rich-item-renderer {
+    width: 100% !important;
+    max-width: 90% !important;
+    padding-bottom: 16px !important;
+    margin: 0 auto 16px auto !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer > #contents > ytd-rich-item-renderer:last-child {
+    border-bottom: none !important;
+}
+
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer > #contents > ytd-rich-item-renderer .yt-lockup-view-model {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+    width: 100% !important;
+    justify-content: flex-start !important;
+    position: relative !important;
+    padding-top: 50px !important;
+    isolation: isolate;
+}
+
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .yt-lockup-view-model__content-image {
+    width: 260px !important;
+    min-width: 260px !important;
+    max-width: 260px !important;
+    flex-shrink: 0 !important;
+    display: block !important;
+    margin-right: 0 !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    margin-top: 0 !important;
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .yt-lockup-view-model__metadata,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-metadata-view-model,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .yt-lockup-metadata-view-model,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .yt-lockup-metadata-view-model__text-container,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-content-metadata-view-model {
+    position: static !important;
+    transform: none !important;
+    contain: none !important;
+}
+
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .yt-lockup-metadata-view-model__title {
+    font-size: 1.8rem !important;
+    line-height: 1.3 !important;
+    margin-bottom: 6px !important;
+    max-width: 90% !important;
+    display: block !important;
+}
+
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .yt-lockup-metadata-view-model__avatar {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 32px !important;
+    height: 32px !important;
+    z-index: 100 !important;
+    margin: 0 !important;
+    border-radius: 50% !important;
+}
+
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .custom-avatar-link {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+}
+
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .yt-lockup-metadata-view-model__avatar img {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+    border-radius: 50% !important;
+}
+
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .cloned-channel-name {
+    position: absolute !important;
+    top: 0 !important;
+    left: 42px !important;
+    height: 32px !important;
+    z-index: 100 !important;
+    background: transparent !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    pointer-events: auto !important;
+}
+
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .cloned-channel-name a,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .cloned-channel-name span {
+    color: var(--yt-spec-text-primary) !important;
+    font-weight: 500 !important;
+    font-size: 1.8rem !important;
+    text-shadow: none !important;
+    text-decoration: none !important;
+    line-height: 1 !important;
+}
+
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .cloned-channel-name span[role="separator"] {
+    display: none !important;
+}
+
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-content-metadata-view-model {
+    display: block !important;
+    width: 100% !important;
+}
+
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-content-metadata-view-model .yt-content-metadata-view-model__metadata-row:not(.cloned-channel-name) {
+    display: inline-flex !important;
+    align-items: baseline !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 1.3rem !important;
+    color: #aaa !important;
+    white-space: nowrap !important;
+}
+
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-content-metadata-view-model .yt-content-metadata-view-model__metadata-row:not(.cloned-channel-name):first-of-type {
+    margin-right: 8px !important;
+}
+
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-content-metadata-view-model .yt-content-metadata-view-model__metadata-row:not(.cloned-channel-name) a {
+    color: #aaa !important;
+    font-weight: 400 !important;
+    text-decoration: none !important;
+}
+
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-content-metadata-view-model .yt-content-metadata-view-model__metadata-row:not(.cloned-channel-name) a:hover {
+    color: #fff !important;
+}
+
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-content-metadata-view-model .yt-content-metadata-view-model__metadata-row:not(.cloned-channel-name) span[role="separator"] {
+    display: none !important;
+}
+
+html[list_view="true"] .custom-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 1.3rem;
+    line-height: 1.5;
+    color: #9a9a9a;
+    margin-top: 10px;
+    width: 100%;
+    max-width: 95%;
+    white-space: normal;
+}
+
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .yt-lockup-metadata-view-model__menu-button {
+    position: absolute !important;
+    top: 50px !important;
+    right: 0 !important;
+}
+
+/* Hide irrelevant content shelves when list view is active */
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-section-renderer,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-shelf-renderer,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-reel-shelf-renderer {
+    display: none !important;
+}
+
+
+/* ===== 2b. LIVE / PREMIERE HIDING ===== */
+/* CSS :has() fallback for items not yet processed by JS */
+html[hide_live_premiere="true"] ytd-rich-item-renderer:has([overlay-style="LIVE"]),
+html[hide_live_premiere="true"] ytd-rich-item-renderer:has([overlay-style="UPCOMING"]),
+html[hide_live_premiere="true"] ytd-rich-item-renderer:has([aria-label*="Remind me"]),
+/* JS-marked elements via data-live-premiere attribute */
+html[hide_live_premiere="true"] ytd-rich-item-renderer[data-live-premiere="true"] {
+    display: none !important;
+}
+
+
+/* ===== 3. SEARCH SUGGESTIONS ===== */
+html[hide_search_suggestions="true"] div.sbdd_a,
+html[hide_search_suggestions="true"] .sbsb_a,
+html[hide_search_suggestions="true"] .gsfi_normal,
+html[hide_search_suggestions="true"] .sbfl_b,
+html[hide_search_suggestions="true"] ytd-search-suggestion-renderer,
+html[hide_search_suggestions="true"] ytd-searchbox .ytSearchboxComponentSuggestionsContainer,
+html[hide_search_suggestions="true"] ytd-searchbox [role="listbox"],
+html[hide_search_suggestions="true"] .ytSearchboxComponentSuggestionsContainer {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+
+/* ===== 4. END SCREEN SUGGESTIONS ===== */
+html[hide_end_suggestions="true"] .html5-endscreen,
+html[hide_end_suggestions="true"] .ytp-endscreen-content,
+html[hide_end_suggestions="true"] .ytp-ce-element,
+html[hide_end_suggestions="true"] .ytp-fullscreen-grid-stills-container {
+    display: none !important;
+}
+
+/* ===== 4.1. HIDE LIKES ===== */
+html[hide_likes="true"] like-button-view-model .yt-core-attributed-string,
+html[hide_likes="true"] document-like-button-view-model .yt-core-attributed-string,
+html[hide_likes="true"] ytd-toggle-button-renderer a yt-formatted-string[aria-label*="beğen" i],
+html[hide_likes="true"] ytd-toggle-button-renderer a yt-formatted-string[aria-label*="like" i],
+html[hide_likes="true"] like-button-view-model .yt-spec-button-shape-next__button-text-content,
+html[hide_likes="true"] segmented-like-dislike-button-view-model .yt-spec-button-shape-next__button-text-content {
+    display: none !important;
+}
+
+
+/* ===== 5. HIDE ALL SHORTS ===== */
+/* Navigation and general shorts */
+html[hide_shorts="true"] a[title="Shorts"],
+html[hide_shorts="true"] ytd-mini-guide-entry-renderer[aria-label="Shorts"],
+html[hide_shorts="true"] ytd-guide-entry-renderer:has(a[title="Shorts"]),
+
+/* Shorts content markers */
+html[hide_shorts="true"] *[is-shorts],
+html[hide_shorts="true"] *[is_short],
+html[hide_shorts="true"] *[is-reel-item-style],
+html[hide_shorts="true"] ytd-reel-shelf-renderer,
+html[hide_shorts="true"] ytd-rich-shelf-renderer[is-shorts],
+html[hide_shorts="true"] ytd-rich-item-renderer:has([overlay-style="SHORTS"]),
+html[hide_shorts="true"] ytd-rich-item-renderer:has(a[href*="/shorts/"]),
+html[hide_shorts="true"] ytd-grid-video-renderer:has(a[href*="/shorts/"]),
+html[hide_shorts="true"] ytd-video-renderer:has(a[href*="/shorts/"]),
+
+/* Homepage shorts shelf */
+html[hide_shorts="true"] ytd-rich-section-renderer:has(ytd-rich-shelf-renderer[is-shorts]),
+html[hide_shorts="true"] ytd-rich-section-renderer:has(ytd-reel-shelf-renderer),
+
+/* Search results shorts */
+html[hide_shorts="true"] ytd-search ytd-reel-shelf-renderer,
+html[hide_shorts="true"] ytd-search ytd-video-renderer[is_short="true"],
+html[hide_shorts="true"] grid-shelf-view-model.ytGridShelfViewModelHostHasBottomButton.ytd-item-section-renderer.ytGridShelfViewModelHost,
+
+/* Subscriptions page shorts */
+html[hide_shorts="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-item-renderer[is_sub_short],
+html[hide_shorts="true"] ytd-browse[page-subtype="subscriptions"] ytd-grid-video-renderer[is_sub_short] {
+    display: none !important;
+}
+
+
+/* ===== 6. SIDEBAR (SUGGESTED VIDEOS PANEL) ===== */
+html[hide_sidebar="true"] #secondary,
+html[hide_sidebar="true"] #related {
+    display: none !important;
+}
+
+/* Center and expand the video player when sidebar is hidden */
+html[hide_sidebar="true"] ytd-watch-flexy[flexy][is-two-columns_]:not([fullscreen]):not([theater]) {
+    --ytd-watch-flexy-max-player-width: calc(var(--ytd-watch-flexy-chat-max-height) * var(--ytd-watch-flexy-width-ratio) / var(--ytd-watch-flexy-height-ratio)) !important;
+}
+
+html[hide_sidebar="true"] #columns {
+    justify-content: center !important;
+}
+
+html[hide_sidebar="true"] #primary {
+    max-width: none !important;
+}
+
+
+/* ===== 7. HIDE COMMENTS ===== */
+html[hide_comments="true"] #comments,
+html[hide_comments="true"] #comment-teaser,
+html[hide_comments="true"] ytd-comments#comments,
+html[hide_comments="true"] ytd-engagement-panel-section-list-renderer[target-id="engagement-panel-comments-section"] {
+    display: none !important;
+}
+
+
+/* ===== 8. HIDE NOTIFICATION BELL ===== */
+html[hide_notif_bell="true"] ytd-notification-topbar-button-renderer {
+    display: none !important;
+}
+
+
+/* ===== 9. HIDE VOICE SEARCH BUTTON ===== */
+html[hide_voice_search="true"] #voice-search-button,
+html[hide_voice_search="true"] yt-icon-button#voice-search-button {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+
+/* ===== 10. HIDE YOUTUBE LOGO ===== */
+html[hide_youtube_logo="true"] ytd-topbar-logo-renderer,
+html[hide_youtube_logo="true"] #logo[href="/"] {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+
+/* ===== 11. HIDE PREMIUM POPUPS ===== */
+/* Only targets premium-specific elements. Does NOT touch shared popup containers
+   (ytd-popup-container, tp-yt-paper-dialog, ytd-menu-popup-renderer).
+   Those are used by Watch Later, Share, Playlist, and other functional features. */
+
+/* Mealbar promotional banners (bottom/top promo strips) */
+html[hide_premium_popups="true"] ytd-mealbar-promo-renderer {
+    display: none !important;
+}
+
+/* Premium enforcement messages */
+html[hide_premium_popups="true"] ytd-enforcement-message-view-model {
+    display: none !important;
+}
+
+/* Statement banners (premium/music promotional banners) */
+html[hide_premium_popups="true"] ytd-statement-banner-renderer {
+    display: none !important;
+}
+
+/* Premium upsell dialogs — CSS targets the dialog; JS cleans up the shared backdrop */
+html[hide_premium_popups="true"] tp-yt-paper-dialog:has(yt-upsell-dialog-renderer) {
+    display: none !important;
+}
+
