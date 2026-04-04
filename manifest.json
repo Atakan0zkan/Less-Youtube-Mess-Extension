@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Less Youtube Mess",
   "description": "Customize YouTube: Hide Shorts, Sidebar, Comments, Recommendations, and More!",
-  "version": "1.4",
+  "version": "1.5",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -21,9 +21,12 @@
     {
       "matches": ["*://www.youtube.com/*"],
       "css": ["styles.css"],
-      "js": ["content.js"],
+      "js": ["shared/constants.js", "content.js"],
       "run_at": "document_start"
     }
   ],
-  "permissions": ["storage"]
+  "permissions": ["storage"],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'"
+  }
 }

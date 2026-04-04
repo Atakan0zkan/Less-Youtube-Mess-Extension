@@ -3,52 +3,14 @@
 
 'use strict';
 
-const SETTINGS_KEYS = [
-  'hide_left_nav',
-  'list_view',
-  'hide_live_premiere',
-  'hide_shorts',
-  'hide_sidebar',
-  'hide_comments',
-  'hide_search_suggestions',
-  'hide_end_suggestions',
-  'hide_notif_bell',
-  'hide_voice_search',
-  'hide_youtube_logo',
-  'default_subscriptions',
-  'hide_likes',
-  'hide_explore',
-  'hide_more_from_youtube',
-  'hide_subscriptions_section',
-  'hide_you_section',
-  'hide_premium_popups'
-];
-
-const DEFAULTS = {
-  hide_left_nav: false,
-  list_view: true,
-  hide_live_premiere: true,
-  hide_shorts: false,
-  hide_sidebar: false,
-  hide_comments: false,
-  hide_search_suggestions: false,
-  hide_end_suggestions: false,
-  hide_notif_bell: false,
-  hide_voice_search: false,
-  hide_youtube_logo: false,
-  default_subscriptions: false,
-  hide_likes: false,
-  hide_explore: false,
-  hide_more_from_youtube: false,
-  hide_subscriptions_section: false,
-  hide_you_section: false,
-  hide_premium_popups: false,
-  theme: 'dark'
-};
+// SETTINGS_KEYS and DEFAULTS are loaded from shared/constants.js
 
 function loadSettings() {
   chrome.storage.sync.get(DEFAULTS, (settings) => {
-    if (chrome.runtime.lastError) return;
+    if (chrome.runtime.lastError) {
+      console.warn('[Less YouTube Mess]', chrome.runtime.lastError.message);
+      return;
+    }
 
     SETTINGS_KEYS.forEach(key => {
       const el = document.getElementById(key);
@@ -60,11 +22,17 @@ function loadSettings() {
 }
 
 function saveSetting(key, value) {
+  if (!SETTINGS_KEYS.includes(key)) return;
   chrome.storage.sync.set({ [key]: value });
 }
 
 function setupCollapsibleGroups() {
   chrome.storage.local.get('collapsed_groups', (res) => {
+    if (chrome.runtime.lastError) {
+      console.warn('[Less YouTube Mess]', chrome.runtime.lastError.message);
+      return;
+    }
+
     const collapsed = res.collapsed_groups || {};
     
     document.querySelectorAll('.settings-group').forEach(group => {

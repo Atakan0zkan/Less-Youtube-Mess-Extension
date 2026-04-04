@@ -3,49 +3,7 @@
 
 'use strict';
 
-// ===================== SETTINGS =====================
-
-const SETTINGS_KEYS = [
-    'hide_left_nav',
-    'list_view',
-    'hide_live_premiere',
-    'hide_shorts',
-    'hide_sidebar',
-    'hide_comments',
-    'hide_search_suggestions',
-    'hide_end_suggestions',
-    'hide_notif_bell',
-    'hide_voice_search',
-    'hide_youtube_logo',
-    'default_subscriptions',
-    'hide_likes',
-    'hide_explore',
-    'hide_more_from_youtube',
-    'hide_subscriptions_section',
-    'hide_you_section',
-    'hide_premium_popups'
-];
-
-const DEFAULTS = {
-    hide_left_nav: false,
-    list_view: true,
-    hide_live_premiere: true,
-    hide_shorts: false,
-    hide_sidebar: false,
-    hide_comments: false,
-    hide_search_suggestions: false,
-    hide_end_suggestions: false,
-    hide_notif_bell: false,
-    hide_voice_search: false,
-    hide_youtube_logo: false,
-    default_subscriptions: false,
-    hide_likes: false,
-    hide_explore: false,
-    hide_more_from_youtube: false,
-    hide_subscriptions_section: false,
-    hide_you_section: false,
-    hide_premium_popups: false
-};
+// SETTINGS_KEYS and DEFAULTS are loaded from shared/constants.js
 
 // Cached settings — updated via storage listener
 let cachedSettings = { ...DEFAULTS };
@@ -75,16 +33,21 @@ function applySettings(settings) {
 if (isExtensionValid()) {
     try {
         chrome.storage.sync.get(DEFAULTS, (settings) => {
-            if (chrome.runtime.lastError) return;
+            if (chrome.runtime.lastError) {
+                console.warn('[Less YouTube Mess]', chrome.runtime.lastError.message);
+                return;
+            }
             applySettings(settings);
-            
+
             if (settings.default_subscriptions) {
                 if (window.location.pathname === '/' && !window.location.search) {
                     window.location.replace('https://www.youtube.com/feed/subscriptions');
                 }
             }
         });
-    } catch (e) {}
+    } catch (e) {
+        console.warn('[Less YouTube Mess] Init error:', e.message);
+    }
 }
 
 // ===================== STORAGE CHANGE LISTENER =====================
@@ -105,7 +68,9 @@ if (isExtensionValid()) {
                 runFeatures();
             }
         });
-    } catch (e) {}
+    } catch (e) {
+        console.warn('[Less YouTube Mess] Storage listener error:', e.message);
+    }
 }
 
 // ===================== DOM MANIPULATION =====================
@@ -121,11 +86,7 @@ function debounce(fn, ms) {
 
 // --- Live / Premiere Marking ---
 // Marks items with data-live-premiere attribute; CSS handles the actual hiding.
-function markLiveAndPremieres() {
-    if (!window.location.href.includes('/feed/subscriptions')) return;
-
-    const items = document.querySelectorAll('ytd-rich-item-renderer');
-
+function markLiveAndPremieres(items) {
     items.forEach(item => {
         const titleLink = item.querySelector('a#video-title-link, a.yt-lockup-metadata-view-model__title');
         if (!titleLink || !titleLink.href) return;
@@ -234,11 +195,7 @@ function dismissPremiumPopups() {
 
 // --- Subscriptions Header ---
 // Clones channel name and wraps avatar in a channel link for list view.
-function processSubscriptionsHeader() {
-    if (!window.location.href.includes('/feed/subscriptions')) return;
-
-    const items = document.querySelectorAll('ytd-rich-item-renderer');
-
+function processSubscriptionsHeader(items) {
     items.forEach(item => {
         const titleLink = item.querySelector('a#video-title-link, a.yt-lockup-metadata-view-model__title');
         if (!titleLink || !titleLink.href) return;
@@ -262,7 +219,7 @@ function processSubscriptionsHeader() {
             }
             el.remove();
         });
-        
+
         const oldClones = item.querySelectorAll('.cloned-channel-name');
         oldClones.forEach(el => el.remove());
 
@@ -298,18 +255,53 @@ function processSubscriptionsHeader() {
 
 // --- Video Descriptions ---
 // Lazily fetches meta descriptions via IntersectionObserver to limit network requests.
+// Uses streaming fetch to download only the <head> portion (~10KB) instead of full page (~300KB).
 const MAX_CONCURRENT_FETCHES = 3;
 let activeFetches = 0;
 const fetchQueue = [];
 
-function decodeHtmlEntities(str) {
-    if (!str) return '';
-    return str
-        .replace(/&amp;/g, '&')
-        .replace(/&lt;/g, '<')
-        .replace(/&gt;/g, '>')
-        .replace(/&quot;/g, '"')
-        .replace(/&#39;/g, "'");
+// Fetches only the <head> of a YouTube page using streaming reader.
+// Returns the meta description content string, or null.
+async function fetchVideoDescription(href) {
+    // Security: Only allow fetches to YouTube's origin
+    try {
+        const url = new URL(href);
+        if (url.origin !== 'https://www.youtube.com') return null;
+    } catch (e) {
+        return null;
+    }
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+    try {
+        const response = await fetch(href, { signal: controller.signal });
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let accumulated = '';
+
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            accumulated += decoder.decode(value, { stream: true });
+            // Meta tags are in <head>; stop after </head> or 15KB to save bandwidth
+            if (accumulated.includes('</head>') || accumulated.length > 15000) {
+                reader.cancel().catch(() => {});
+                break;
+            }
+        }
+
+        clearTimeout(timeoutId);
+
+        // Parse safely with DOMParser (no script execution, handles all HTML entities natively)
+        const doc = new DOMParser().parseFromString(accumulated, 'text/html');
+        const metaDesc = doc.querySelector('meta[name="description"]');
+        const content = metaDesc?.getAttribute('content');
+        return (content && content !== 'null') ? content : null;
+    } catch (e) {
+        clearTimeout(timeoutId);
+        return null;
+    }
 }
 
 function processQueue() {
@@ -325,50 +317,53 @@ function processQueue() {
     }
 
     activeFetches++;
-    fetch(linkEl.href)
-        .then(r => r.text())
-        .then(html => {
-            const match = html.match(/<meta name="description" content="([^"]*)"/);
-            if (match && match[1] && match[1] !== 'null') {
+    fetchVideoDescription(linkEl.href)
+        .then(content => {
+            if (content) {
                 const descDiv = document.createElement('div');
                 descDiv.className = 'custom-description';
-                descDiv.textContent = decodeHtmlEntities(match[1]);
+                descDiv.textContent = content; // textContent prevents XSS
                 metadataContainer.appendChild(descDiv);
             }
         })
-        .catch(() => {})
         .finally(() => {
             activeFetches--;
             processQueue();
         });
 }
 
-const descriptionObserver = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const item = entry.target;
-            observer.unobserve(item);
-            fetchQueue.push(item);
-            processQueue();
-        }
-    });
-}, {
-    rootMargin: '500px 0px 500px 0px'
-});
+// Lazy-initialized IntersectionObserver for video descriptions
+let descriptionObserver = null;
 
-function processVideoDescriptions() {
-    if (!window.location.href.includes('/feed/subscriptions')) return;
+function getDescriptionObserver() {
+    if (!descriptionObserver) {
+        descriptionObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const item = entry.target;
+                    observer.unobserve(item);
+                    fetchQueue.push(item);
+                    processQueue();
+                }
+            });
+        }, {
+            rootMargin: '500px 0px 500px 0px'
+        });
+    }
+    return descriptionObserver;
+}
 
-    const items = document.querySelectorAll('ytd-rich-item-renderer');
+function processVideoDescriptions(items) {
+    const observer = getDescriptionObserver();
 
     items.forEach(item => {
         const metadataContainer = item.querySelector('yt-content-metadata-view-model');
         const linkEl = item.querySelector('a#video-title-link') || item.querySelector('a.yt-lockup-metadata-view-model__title');
-        
+
         if (!metadataContainer || !linkEl || !linkEl.href) return;
 
         const videoId = linkEl.href.split('&')[0];
-        
+
         if (item.getAttribute('data-desc-done') === videoId) return;
 
         item.setAttribute('data-desc-done', videoId);
@@ -376,19 +371,25 @@ function processVideoDescriptions() {
         const oldDesc = item.querySelectorAll('.custom-description');
         oldDesc.forEach(d => d.remove());
 
-        descriptionObserver.observe(item);
+        observer.observe(item);
     });
 }
 
 // ===================== MAIN FEATURE RUNNER =====================
 
 function runFeatures() {
-
-    if (cachedSettings.hide_live_premiere) {
-        markLiveAndPremieres();
-    }
-
     const isSubscriptions = window.location.href.includes('/feed/subscriptions');
+
+    // Query items once, share across functions that need them
+    let items = null;
+    const getItems = () => {
+        if (!items) items = document.querySelectorAll('ytd-rich-item-renderer');
+        return items;
+    };
+
+    if (cachedSettings.hide_live_premiere && isSubscriptions) {
+        markLiveAndPremieres(getItems());
+    }
 
     if (cachedSettings.list_view) {
         const browse = document.querySelector('ytd-browse');
@@ -396,8 +397,8 @@ function runFeatures() {
             if (browse && browse.getAttribute('page-subtype') !== 'subscriptions') {
                 browse.setAttribute('page-subtype', 'subscriptions');
             }
-            processSubscriptionsHeader();
-            processVideoDescriptions();
+            processSubscriptionsHeader(getItems());
+            processVideoDescriptions(getItems());
         } else if (browse && browse.getAttribute('page-subtype') === 'subscriptions') {
             // Reset to prevent list view CSS from applying on other pages
             if (window.location.pathname === '/' || window.location.pathname === '/web') {
@@ -412,31 +413,46 @@ function runFeatures() {
     dismissPremiumPopups();
 }
 
-// ===================== MUTATION OBSERVER =====================
+// ===================== NAVIGATION & OBSERVATION =====================
 
 let lastUrl = window.location.href;
 
-const debouncedRun = debounce(() => {
-    const currentUrl = window.location.href;
-    if (currentUrl !== lastUrl) {
-        lastUrl = currentUrl;
+// Shared navigation handler — used by both yt-navigate-finish and MutationObserver.
+// Returns true if a redirect was triggered (callers should skip runFeatures).
+function handleNavigation(currentUrl) {
+    if (currentUrl === lastUrl) return false;
+    lastUrl = currentUrl;
 
-        // Clean up resources from previous page
-        fetchQueue.length = 0;
-        if (!currentUrl.includes('/feed/subscriptions')) {
-            descriptionObserver.disconnect();
-        }
+    // Clean up resources from previous page
+    fetchQueue.length = 0;
+    if (!currentUrl.includes('/feed/subscriptions') && descriptionObserver) {
+        descriptionObserver.disconnect();
+    }
 
-        // Redirect on SPA navigation (only fires on URL change, not every mutation)
-        if (cachedSettings.default_subscriptions) {
-            const url = new URL(currentUrl);
-            if (url.pathname === '/' && !url.search) {
-                window.location.replace('https://www.youtube.com/feed/subscriptions');
-                return;
-            }
+    // Redirect on SPA navigation (only fires on URL change, not every mutation)
+    if (cachedSettings.default_subscriptions) {
+        const url = new URL(currentUrl);
+        if (url.pathname === '/' && !url.search) {
+            window.location.replace('https://www.youtube.com/feed/subscriptions');
+            return true;
         }
     }
 
+    return false;
+}
+
+// --- YouTube SPA Navigation Event ---
+// More efficient than detecting URL changes via MutationObserver alone.
+// Fires reliably on YouTube's internal SPA route changes.
+document.addEventListener('yt-navigate-finish', () => {
+    const redirected = handleNavigation(window.location.href);
+    if (!redirected) runFeatures();
+});
+
+// --- MutationObserver ---
+// Still needed for lazy-loaded content (new videos appearing on scroll).
+const debouncedRun = debounce(() => {
+    handleNavigation(window.location.href);
     runFeatures();
 }, 150);
 
