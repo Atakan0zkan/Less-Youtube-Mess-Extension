@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Less Youtube Mess",
   "description": "Customize YouTube: Hide Shorts, Sidebar, Comments, Recommendations, and More!",
-  "version": "1.5",
+  "version": "1.6.1",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",

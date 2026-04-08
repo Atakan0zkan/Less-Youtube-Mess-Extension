@@ -5,241 +5,275 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Less Youtube Mess</title>
   <link rel="stylesheet" href="popup.css">
+  <!-- BUG-06: Scripts moved to <head> with defer so they load after DOM is parsed -->
+  <script src="shared/constants.js" defer></script>
+  <script src="popup.js" defer></script>
 </head>
 <body>
   <div class="popup-container">
     <div class="popup-header">
       <h1>Less <span class="highlight">YouTube</span> Mess</h1>
-      <button id="theme-toggle" class="theme-btn" title="Toggle Theme">
-        <span class="icon-sun">☀️</span>
-        <span class="icon-moon">🌙</span>
+      <button id="theme-toggle" class="theme-btn" title="Toggle Theme" aria-label="Toggle light/dark theme">
+        <span class="icon-sun" aria-hidden="true">☀️</span>
+        <span class="icon-moon" aria-hidden="true">🌙</span>
       </button>
     </div>
 
     <!-- Basic UI -->
+    <!-- IMPROVE-04: group-header changed to <button> for keyboard navigation -->
     <div class="settings-group" data-group="basic_ui">
-      <div class="group-header">Basic UI</div>
-      
-      <div class="setting-item">
-        <div class="setting-info">
-          <span class="setting-label">YouTube Logo</span>
-          <span class="setting-desc">Hide the top-left YouTube logo</span>
-        </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_youtube_logo" />
-          <span class="slider"></span>
-        </label>
-      </div>
+      <button class="group-header" type="button" aria-expanded="true" aria-controls="basic_ui_content">Basic UI</button>
+      <div class="settings-group__content" id="basic_ui_content" role="region" aria-label="Basic UI settings">
 
-      <div class="setting-item">
-        <div class="setting-info">
-          <span class="setting-label">Search Suggestions</span>
-          <span class="setting-desc">Hide search bar autocomplete</span>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">YouTube Logo</span>
+            <span class="setting-desc">Hide the top-left YouTube logo</span>
+          </div>
+          <label class="toggle-switch" aria-label="Hide YouTube Logo">
+            <input type="checkbox" id="hide_youtube_logo" role="switch" />
+            <span class="slider"></span>
+          </label>
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_search_suggestions" />
-          <span class="slider"></span>
-        </label>
-      </div>
 
-      <div class="setting-item">
-        <div class="setting-info">
-          <span class="setting-label">Voice Search</span>
-          <span class="setting-desc">Hide the microphone icon</span>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Search Suggestions</span>
+            <span class="setting-desc">Hide search bar autocomplete</span>
+          </div>
+          <label class="toggle-switch" aria-label="Hide search suggestions">
+            <input type="checkbox" id="hide_search_suggestions" role="switch" />
+            <span class="slider"></span>
+          </label>
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_voice_search" />
-          <span class="slider"></span>
-        </label>
-      </div>
 
-
-      <div class="setting-item">
-        <div class="setting-info">
-          <span class="setting-label">Notification Bell</span>
-          <span class="setting-desc">Hide the notification bell</span>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Voice Search</span>
+            <span class="setting-desc">Hide the microphone icon</span>
+          </div>
+          <label class="toggle-switch" aria-label="Hide voice search">
+            <input type="checkbox" id="hide_voice_search" role="switch" />
+            <span class="slider"></span>
+          </label>
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_notif_bell" />
-          <span class="slider"></span>
-        </label>
-      </div>
 
-      <div class="setting-item">
-        <div class="setting-info">
-          <span class="setting-label">Video Sidebar</span>
-          <span class="setting-desc">Hide the suggested videos panel</span>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Notification Bell</span>
+            <span class="setting-desc">Hide the notification bell</span>
+          </div>
+          <label class="toggle-switch" aria-label="Hide notification bell">
+            <input type="checkbox" id="hide_notif_bell" role="switch" />
+            <span class="slider"></span>
+          </label>
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_sidebar" />
-          <span class="slider"></span>
-        </label>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Video Sidebar</span>
+            <span class="setting-desc">Hide the suggested videos panel</span>
+          </div>
+          <label class="toggle-switch" aria-label="Hide video sidebar">
+            <input type="checkbox" id="hide_sidebar" role="switch" />
+            <span class="slider"></span>
+          </label>
+        </div>
       </div>
     </div>
 
     <!-- Left Navigation Specific Sections -->
     <div class="settings-group" data-group="left_nav">
-      <div class="group-header">Left Navigation Bar</div>
-      
-      <div class="setting-item">
-        <div class="setting-info">
-          <span class="setting-label">Hide Entire Left Navigation Bar</span>
-          <span class="setting-desc">Hide the entire left sidebar menu</span>
-        </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_left_nav" />
-          <span class="slider"></span>
-        </label>
-      </div>
+      <button class="group-header" type="button" aria-expanded="true" aria-controls="left_nav_content">Left Navigation Bar</button>
+      <div class="settings-group__content" id="left_nav_content" role="region" aria-label="Left navigation settings">
 
-      <div class="setting-item">
-        <div class="setting-info">
-          <span class="setting-label">Subscriptions</span>
-          <span class="setting-desc">Hide subscribed channels list</span>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Hide Entire Left Navigation Bar</span>
+            <span class="setting-desc">Hide the entire left sidebar menu</span>
+          </div>
+          <label class="toggle-switch" aria-label="Hide entire left navigation bar">
+            <input type="checkbox" id="hide_left_nav" role="switch" />
+            <span class="slider"></span>
+          </label>
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_subscriptions_section" />
-          <span class="slider"></span>
-        </label>
-      </div>
 
-      <div class="setting-item">
-        <div class="setting-info">
-          <span class="setting-label">You</span>
-          <span class="setting-desc">Hide "You" section (History, Playlists)</span>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Subscriptions</span>
+            <span class="setting-desc">Hide subscribed channels list</span>
+          </div>
+          <label class="toggle-switch" aria-label="Hide subscriptions section">
+            <input type="checkbox" id="hide_subscriptions_section" role="switch" />
+            <span class="slider"></span>
+          </label>
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_you_section" />
-          <span class="slider"></span>
-        </label>
-      </div>
 
-      <div class="setting-item">
-        <div class="setting-info">
-          <span class="setting-label">Explore</span>
-          <span class="setting-desc">Hide the Explore section</span>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">You</span>
+            <span class="setting-desc">Hide "You" section (History, Playlists)</span>
+          </div>
+          <label class="toggle-switch" aria-label="Hide You section">
+            <input type="checkbox" id="hide_you_section" role="switch" />
+            <span class="slider"></span>
+          </label>
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_explore" />
-          <span class="slider"></span>
-        </label>
-      </div>
 
-      <div class="setting-item">
-        <div class="setting-info">
-          <span class="setting-label">More from YouTube</span>
-          <span class="setting-desc">Hide Premium, Music, Kids links</span>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Explore</span>
+            <span class="setting-desc">Hide the Explore section</span>
+          </div>
+          <label class="toggle-switch" aria-label="Hide Explore section">
+            <input type="checkbox" id="hide_explore" role="switch" />
+            <span class="slider"></span>
+          </label>
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_more_from_youtube" />
-          <span class="slider"></span>
-        </label>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">More from YouTube</span>
+            <span class="setting-desc">Hide Premium, Music, Kids links</span>
+          </div>
+          <label class="toggle-switch" aria-label="Hide More from YouTube section">
+            <input type="checkbox" id="hide_more_from_youtube" role="switch" />
+            <span class="slider"></span>
+          </label>
+        </div>
       </div>
     </div>
 
     <!-- Video Player -->
     <div class="settings-group" data-group="video_player">
-      <div class="group-header">Video Player</div>
-      
-      <div class="setting-item">
-        <div class="setting-info">
-          <span class="setting-label">Comments</span>
-          <span class="setting-desc">Hide video comments section</span>
-        </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_comments" />
-          <span class="slider"></span>
-        </label>
-      </div>
+      <button class="group-header" type="button" aria-expanded="true" aria-controls="video_player_content">Video Player</button>
+      <div class="settings-group__content" id="video_player_content" role="region" aria-label="Video player settings">
 
-      <div class="setting-item">
-        <div class="setting-info">
-          <span class="setting-label">Likes</span>
-          <span class="setting-desc">Hide like counts on videos</span>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Comments</span>
+            <span class="setting-desc">Hide video comments section</span>
+          </div>
+          <label class="toggle-switch" aria-label="Hide comments">
+            <input type="checkbox" id="hide_comments" role="switch" />
+            <span class="slider"></span>
+          </label>
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_likes" />
-          <span class="slider"></span>
-        </label>
-      </div>
 
-      <div class="setting-item">
-        <div class="setting-info">
-          <span class="setting-label">End Screen Suggestions</span>
-          <span class="setting-desc">Hide end-of-video overlay cards</span>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Likes</span>
+            <span class="setting-desc">Hide like counts on videos</span>
+          </div>
+          <label class="toggle-switch" aria-label="Hide likes">
+            <input type="checkbox" id="hide_likes" role="switch" />
+            <span class="slider"></span>
+          </label>
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_end_suggestions" />
-          <span class="slider"></span>
-        </label>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">End Screen Suggestions</span>
+            <span class="setting-desc">Hide end-of-video overlay cards</span>
+          </div>
+          <label class="toggle-switch" aria-label="Hide end screen suggestions">
+            <input type="checkbox" id="hide_end_suggestions" role="switch" />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <!-- IMPROVE-01: Hide & Disable Autoplay -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Autoplay</span>
+            <span class="setting-desc">Hide &amp; disable video autoplay</span>
+          </div>
+          <label class="toggle-switch" aria-label="Hide and disable autoplay">
+            <input type="checkbox" id="hide_autoplay" role="switch" />
+            <span class="slider"></span>
+          </label>
+        </div>
       </div>
     </div>
 
     <!-- Misc -->
     <div class="settings-group" data-group="misc">
-      <div class="group-header">Misc</div>
-      
-      <div class="setting-item">
-        <div class="setting-info">
-          <span class="setting-label">Premium Popups</span>
-          <span class="setting-desc">Hide YouTube Premium promotions</span>
-        </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_premium_popups" />
-          <span class="slider"></span>
-        </label>
-      </div>
+      <button class="group-header" type="button" aria-expanded="true" aria-controls="misc_content">Misc</button>
+      <div class="settings-group__content" id="misc_content" role="region" aria-label="Miscellaneous settings">
 
-      <div class="setting-item">
-        <div class="setting-info">
-          <span class="setting-label">Premieres</span>
-          <span class="setting-desc">Hide upcoming/live streams</span>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Premium Popups</span>
+            <span class="setting-desc">Hide YouTube Premium promotions</span>
+          </div>
+          <label class="toggle-switch" aria-label="Hide Premium popups">
+            <input type="checkbox" id="hide_premium_popups" role="switch" />
+            <span class="slider"></span>
+          </label>
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_live_premiere" />
-          <span class="slider"></span>
-        </label>
-      </div>
 
-      <div class="setting-item">
-        <div class="setting-info">
-          <span class="setting-label">Shorts</span>
-          <span class="setting-desc">Hide all Shorts content</span>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Premieres</span>
+            <span class="setting-desc">Hide upcoming/live streams</span>
+          </div>
+          <label class="toggle-switch" aria-label="Hide premieres and live streams">
+            <input type="checkbox" id="hide_live_premiere" role="switch" />
+            <span class="slider"></span>
+          </label>
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="hide_shorts" />
-          <span class="slider"></span>
-        </label>
-      </div>
 
-      <div class="setting-item">
-        <div class="setting-info">
-          <span class="setting-label">Default Subscriptions</span>
-          <span class="setting-desc">Auto-redirect homepage to feed</span>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Shorts</span>
+            <span class="setting-desc">Hide all Shorts content</span>
+          </div>
+          <label class="toggle-switch" aria-label="Hide Shorts">
+            <input type="checkbox" id="hide_shorts" role="switch" />
+            <span class="slider"></span>
+          </label>
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="default_subscriptions" />
-          <span class="slider"></span>
-        </label>
-      </div>
 
-      <div class="setting-item">
-        <div class="setting-info">
-          <span class="setting-label">List View</span>
-          <span class="setting-desc">Show subscriptions as a list</span>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Default Subscriptions</span>
+            <span class="setting-desc">Auto-redirect homepage to feed</span>
+          </div>
+          <label class="toggle-switch" aria-label="Default to subscriptions feed">
+            <input type="checkbox" id="default_subscriptions" role="switch" />
+            <span class="slider"></span>
+          </label>
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="list_view" />
-          <span class="slider"></span>
-        </label>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">List View</span>
+            <span class="setting-desc">Show subscriptions as a list</span>
+          </div>
+          <label class="toggle-switch" aria-label="Enable list view">
+            <input type="checkbox" id="list_view" role="switch" />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <!-- IMPROVE-03: Compact List View — only effective when List View is also enabled -->
+        <div class="setting-item" id="compact_list_view_item">
+          <div class="setting-info">
+            <span class="setting-label">Compact List View</span>
+            <span class="setting-desc">Smaller thumbnails (requires List View)</span>
+          </div>
+          <label class="toggle-switch" aria-label="Enable compact list view">
+            <input type="checkbox" id="compact_list_view" role="switch" />
+            <span class="slider"></span>
+          </label>
+        </div>
       </div>
     </div>
 
     <div class="popup-footer">
-      <span>v1.5</span>
+      <!-- IMPROVE-08: Version is injected by popup.js from chrome.runtime.getManifest() -->
+      <span id="version-display"></span>
     </div>
-
-    <script src="shared/constants.js"></script>
-    <script src="popup.js"></script>
+  </div>
 </body>
 </html>

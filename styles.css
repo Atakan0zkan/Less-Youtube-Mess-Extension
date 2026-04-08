@@ -20,26 +20,28 @@ html[hide_left_nav="true"] ytd-page-manager {
 }
 
 /* ===== 1.1. SPECIFIC LEFT NAVIGATION SECTIONS ===== */
-/* Explore */
+/* RISK-01 Tested: 2026-04 — href-based section detection for Explore */
 html[hide_explore="true"] ytd-guide-section-renderer:has(a[href*="/gaming"]),
 html[hide_explore="true"] ytd-guide-section-renderer:has(a[href*="/trending"]) {
     display: none !important;
 }
 
-/* More from YouTube */
+/* RISK-01 Tested: 2026-04 — href-based section detection for More from YouTube */
 html[hide_more_from_youtube="true"] ytd-guide-section-renderer:has(a[href*="/premium"]),
 html[hide_more_from_youtube="true"] ytd-guide-section-renderer:has(a[href*="youtubekids.com"]) {
     display: none !important;
 }
 
 /* You */
+/* RISK-01 Tested: 2026-04 — href pattern for You section */
 html[hide_you_section="true"] ytd-guide-section-renderer:has(a[href*="/feed/history"]),
 html[hide_you_section="true"] ytd-guide-section-renderer:has(a[href*="/playlist?list=WL"]) {
     display: none !important;
 }
 
 /* Subscriptions section — targets sections with the "All subscriptions" link or individual channel links.
-   Does NOT use :has(ytd-guide-collapsible-entry-renderer) as it also matches other sections. */
+   Does NOT use :has(ytd-guide-collapsible-entry-renderer) as it also matches other sections.
+   RISK-01 Tested: 2026-04 */
 html[hide_subscriptions_section="true"] ytd-guide-section-renderer:has(a[href="/feed/channels"]),
 html[hide_subscriptions_section="true"] ytd-guide-section-renderer:has(> #items > ytd-guide-entry-renderer > a[href^="/@"]) {
     display: none !important;
@@ -65,141 +67,72 @@ html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-re
     max-width: 90% !important;
     padding-bottom: 16px !important;
     margin: 0 auto 16px auto !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-bottom: 1px solid var(--yt-spec-10-percent-layer, rgba(128, 128, 128, 0.15)) !important;
 }
 
 html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer > #contents > ytd-rich-item-renderer:last-child {
     border-bottom: none !important;
 }
 
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer > #contents > ytd-rich-item-renderer .yt-lockup-view-model {
+/* Flex row layout — NO position:relative needed, avatar uses flow not absolute */
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer > #contents > ytd-rich-item-renderer .ytLockupViewModelHost,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer > #contents > ytd-rich-item-renderer yt-lockup-view-model > div {
     display: flex !important;
     flex-direction: row !important;
     align-items: flex-start !important;
     gap: 16px !important;
     width: 100% !important;
     justify-content: flex-start !important;
-    position: relative !important;
-    padding-top: 50px !important;
-    isolation: isolate;
+    padding-top: 12px !important;
 }
 
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .yt-lockup-view-model__content-image {
+/* THUMBNAIL CONTAINER — tag-based fallback: a:has(> yt-thumbnail-view-model) */
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) {
     width: 260px !important;
     min-width: 260px !important;
     max-width: 260px !important;
+    height: 146px !important;
+    min-height: 146px !important;
+    max-height: 146px !important;
     flex-shrink: 0 !important;
+    flex-basis: 260px !important;
     display: block !important;
-    margin-right: 0 !important;
+    position: relative !important;
     border-radius: 12px !important;
     overflow: hidden !important;
-    margin-top: 0 !important;
-    position: relative !important;
+    margin: 0 !important;
     z-index: 1 !important;
 }
 
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .yt-lockup-view-model__metadata,
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-metadata-view-model,
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .yt-lockup-metadata-view-model,
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .yt-lockup-metadata-view-model__text-container,
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-content-metadata-view-model {
-    position: static !important;
-    transform: none !important;
-    contain: none !important;
-}
-
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .yt-lockup-metadata-view-model__title {
-    font-size: 1.8rem !important;
-    line-height: 1.3 !important;
-    margin-bottom: 6px !important;
-    max-width: 90% !important;
-    display: block !important;
-}
-
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .yt-lockup-metadata-view-model__avatar {
+/* Thumbnail children */
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage > *,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage yt-thumbnail-view-model,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage .ytThumbnailViewModelImage,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) > *,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) yt-thumbnail-view-model,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) > div {
     position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 32px !important;
-    height: 32px !important;
-    z-index: 100 !important;
-    margin: 0 !important;
-    border-radius: 50% !important;
-}
-
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .custom-avatar-link {
-    display: block !important;
-    width: 100% !important;
-    height: 100% !important;
-    border-radius: 50% !important;
-    cursor: pointer !important;
-}
-
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .yt-lockup-metadata-view-model__avatar img {
+    inset: 0 !important;
     width: 100% !important;
     height: 100% !important;
     display: block !important;
-    border-radius: 50% !important;
+    border-radius: 12px !important;
 }
 
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .cloned-channel-name {
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage img,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) img {
     position: absolute !important;
-    top: 0 !important;
-    left: 42px !important;
-    height: 32px !important;
-    z-index: 100 !important;
-    background: transparent !important;
-    padding: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    pointer-events: auto !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    border-radius: 12px !important;
 }
-
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .cloned-channel-name a,
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .cloned-channel-name span {
-    color: var(--yt-spec-text-primary) !important;
-    font-weight: 500 !important;
-    font-size: 1.8rem !important;
-    text-shadow: none !important;
-    text-decoration: none !important;
-    line-height: 1 !important;
-}
-
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .cloned-channel-name span[role="separator"] {
-    display: none !important;
-}
-
 html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-content-metadata-view-model {
     display: block !important;
     width: 100% !important;
-}
-
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-content-metadata-view-model .yt-content-metadata-view-model__metadata-row:not(.cloned-channel-name) {
-    display: inline-flex !important;
-    align-items: baseline !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    font-size: 1.3rem !important;
-    color: #aaa !important;
-    white-space: nowrap !important;
-}
-
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-content-metadata-view-model .yt-content-metadata-view-model__metadata-row:not(.cloned-channel-name):first-of-type {
-    margin-right: 8px !important;
-}
-
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-content-metadata-view-model .yt-content-metadata-view-model__metadata-row:not(.cloned-channel-name) a {
-    color: #aaa !important;
-    font-weight: 400 !important;
-    text-decoration: none !important;
-}
-
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-content-metadata-view-model .yt-content-metadata-view-model__metadata-row:not(.cloned-channel-name) a:hover {
-    color: #fff !important;
-}
-
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-content-metadata-view-model .yt-content-metadata-view-model__metadata-row:not(.cloned-channel-name) span[role="separator"] {
-    display: none !important;
 }
 
 html[list_view="true"] .custom-description {
@@ -217,11 +150,6 @@ html[list_view="true"] .custom-description {
     white-space: normal;
 }
 
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .yt-lockup-metadata-view-model__menu-button {
-    position: absolute !important;
-    top: 50px !important;
-    right: 0 !important;
-}
 
 /* Hide irrelevant content shelves when list view is active */
 html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-section-renderer,
@@ -232,6 +160,7 @@ html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-reel-shelf-r
 
 
 /* ===== 2b. LIVE / PREMIERE HIDING ===== */
+/* RISK-01 Tested: 2026-04 — overlay-style attribute for live/premiere detection */
 /* CSS :has() fallback for items not yet processed by JS */
 html[hide_live_premiere="true"] ytd-rich-item-renderer:has([overlay-style="LIVE"]),
 html[hide_live_premiere="true"] ytd-rich-item-renderer:has([overlay-style="UPCOMING"]),
@@ -265,6 +194,7 @@ html[hide_end_suggestions="true"] .ytp-fullscreen-grid-stills-container {
 }
 
 /* ===== 4.1. HIDE LIKES ===== */
+/* RISK-01 Tested: 2026-04 — like button selectors rely on view-model class names */
 html[hide_likes="true"] like-button-view-model .yt-core-attributed-string,
 html[hide_likes="true"] document-like-button-view-model .yt-core-attributed-string,
 html[hide_likes="true"] ytd-toggle-button-renderer a yt-formatted-string[aria-label*="beğen" i],
@@ -299,7 +229,8 @@ html[hide_shorts="true"] ytd-rich-section-renderer:has(ytd-reel-shelf-renderer),
 /* Search results shorts */
 html[hide_shorts="true"] ytd-search ytd-reel-shelf-renderer,
 html[hide_shorts="true"] ytd-search ytd-video-renderer[is_short="true"],
-html[hide_shorts="true"] grid-shelf-view-model.ytGridShelfViewModelHostHasBottomButton.ytd-item-section-renderer.ytGridShelfViewModelHost,
+html[hide_shorts="true"] grid-shelf-view-model:has(a[href*="/shorts/"]),
+html[hide_shorts="true"] grid-shelf-view-model.ytGridShelfViewModelHost,
 
 /* Subscriptions page shorts */
 html[hide_shorts="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-item-renderer[is_sub_short],
@@ -380,7 +311,43 @@ html[hide_premium_popups="true"] ytd-statement-banner-renderer {
 }
 
 /* Premium upsell dialogs — CSS targets the dialog; JS cleans up the shared backdrop */
+/* RISK-01 Tested: 2026-04 — upsell dialog class name */
 html[hide_premium_popups="true"] tp-yt-paper-dialog:has(yt-upsell-dialog-renderer) {
     display: none !important;
+}
+
+
+/* ===== 12. HIDE & DISABLE AUTOPLAY ===== */
+/* IMPROVE-01: Hides the autoplay countdown overlay and next-video preview panel.
+   JS (applyAutoplay) also clicks the in-player toggle off and sets localStorage. */
+html[hide_autoplay="true"] .ytp-autonav-endscreen,
+html[hide_autoplay="true"] .ytp-autonav-up-next-autoplay {
+    display: none !important;
+}
+
+/* Hide the autoplay toggle button inside player controls (RISK-01 Tested: 2026-04) */
+html[hide_autoplay="true"] .ytp-autonav-toggle-button {
+    display: none !important;
+}
+
+
+/* ===== 13. COMPACT LIST VIEW ===== */
+/* IMPROVE-03: Smaller thumbnails when compact_list_view is enabled alongside list_view.
+   Compact only makes sense with list_view active; popup enforces this dependency. */
+/* COMPACT CONTAINER — tag-based fallback */
+html[list_view="true"][compact_list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage,
+html[list_view="true"][compact_list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) {
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+    height: 101px !important;
+    min-height: 101px !important;
+    max-height: 101px !important;
+    flex-basis: 180px !important;
+}
+
+/* Adjust the menu button position for the smaller thumbnail */
+html[list_view="true"][compact_list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupMetadataViewModelMenuButton {
+    top: 30px !important;
 }
 

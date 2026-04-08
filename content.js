@@ -8,16 +8,6 @@
 // Cached settings — updated via storage listener
 let cachedSettings = { ...DEFAULTS };
 
-// ===================== EXTENSION CONTEXT GUARD =====================
-
-function isExtensionValid() {
-    try {
-        return !!(chrome && chrome.runtime && chrome.runtime.id);
-    } catch (e) {
-        return false;
-    }
-}
-
 // ===================== APPLY SETTINGS TO HTML =====================
 
 function applySettings(settings) {
@@ -25,6 +15,20 @@ function applySettings(settings) {
     const html = document.documentElement;
     for (const key of SETTINGS_KEYS) {
         html.setAttribute(key, String(cachedSettings[key]));
+    }
+}
+
+// IMPROVE-07: Apply DEFAULTS immediately at document_start to minimise FOUC.
+// The async storage callback below will override with the real values shortly after.
+applySettings(DEFAULTS);
+
+// ===================== EXTENSION CONTEXT GUARD =====================
+
+function isExtensionValid() {
+    try {
+        return !!(chrome && chrome.runtime && chrome.runtime.id);
+    } catch (e) {
+        return false;
     }
 }
 
@@ -65,7 +69,7 @@ if (isExtensionValid()) {
             }
             if (needsUpdate) {
                 applySettings(cachedSettings);
-                runFeatures();
+                scheduleRunFeatures(); // BUG-E: use scheduler to coalesce with yt-navigate-finish
             }
         });
     } catch (e) {
@@ -88,7 +92,7 @@ function debounce(fn, ms) {
 // Marks items with data-live-premiere attribute; CSS handles the actual hiding.
 function markLiveAndPremieres(items) {
     items.forEach(item => {
-        const titleLink = item.querySelector('a#video-title-link, a.yt-lockup-metadata-view-model__title');
+        const titleLink = item.querySelector(SELECTORS.TITLE_LINK);
         if (!titleLink || !titleLink.href) return;
 
         const videoId = titleLink.href.split('&')[0];
@@ -150,8 +154,17 @@ function markLiveAndPremieres(items) {
 // --- Force Likes Visibility ---
 // Supplements CSS: like-button-view-model re-renders after attribute changes,
 // so JS forces visibility immediately without requiring a page reload.
+// PERF-01: Track last applied value; skip DOM queries when nothing has changed.
+let _lastHideLikes = undefined;
+
+// OPT-1: Cache guard for applyAutoplay() — mirrors _lastHideLikes pattern.
+let _lastHideAutoplay = undefined;
+
 function forceLikesVisibility() {
     const shouldHide = cachedSettings.hide_likes;
+    if (shouldHide === _lastHideLikes) return; // No change — skip DOM query
+    _lastHideLikes = shouldHide;
+
     const selectors = [
         'like-button-view-model .yt-core-attributed-string',
         'like-button-view-model .yt-spec-button-shape-next__button-text-content',
@@ -176,20 +189,42 @@ function forceLikesVisibility() {
 function dismissPremiumPopups() {
     if (!cachedSettings.hide_premium_popups) return;
 
-    const dialogs = document.querySelectorAll('tp-yt-paper-dialog');
+    // PERF-02: Only query dialogs not yet processed, avoiding redundant work.
+    const dialogs = document.querySelectorAll('tp-yt-paper-dialog:not([data-premium-hidden])');
     for (const dialog of dialogs) {
-        if (dialog.hasAttribute('data-premium-hidden')) continue;
-
         const isUpsell = dialog.querySelector('yt-upsell-dialog-renderer');
         if (isUpsell) {
             dialog.setAttribute('data-premium-hidden', 'true');
             dialog.style.setProperty('display', 'none', 'important');
 
-            const backdrop = dialog.previousElementSibling;
-            if (backdrop && backdrop.tagName.toLowerCase() === 'tp-yt-iron-overlay-backdrop') {
-                backdrop.style.setProperty('display', 'none', 'important');
-            }
+            // BUG-04: Use a global query for open backdrops instead of fragile
+            // previousElementSibling position-based detection.
+            const openBackdrops = document.querySelectorAll('tp-yt-iron-overlay-backdrop[opened]');
+            openBackdrops.forEach(b => b.style.setProperty('display', 'none', 'important'));
         }
+    }
+}
+
+// --- Apply Autoplay Setting ---
+// IMPROVE-01: Disables YouTube autoplay when hide_autoplay is enabled.
+// CSS handles hiding the overlay panel; JS turns the toggle off if it is currently active.
+// OPT-1: _lastHideAutoplay guard skips DOM queries when nothing has changed.
+function applyAutoplay() {
+    const shouldHide = cachedSettings.hide_autoplay;
+    if (shouldHide === _lastHideAutoplay) return; // No change — skip DOM query
+    _lastHideAutoplay = shouldHide;
+
+    if (!shouldHide) return;
+
+    // Persist preference via localStorage (YouTube reads this key for autoplay state)
+    try {
+        localStorage.setItem('yt-autoplay', '0');
+    } catch (e) { /* storage may be blocked */ }
+
+    // Click the in-player autoplay toggle if it is currently active
+    const autonavToggle = document.querySelector('.ytp-autonav-toggle-button[aria-checked="true"]');
+    if (autonavToggle) {
+        autonavToggle.click();
     }
 }
 
@@ -197,13 +232,13 @@ function dismissPremiumPopups() {
 // Clones channel name and wraps avatar in a channel link for list view.
 function processSubscriptionsHeader(items) {
     items.forEach(item => {
-        const titleLink = item.querySelector('a#video-title-link, a.yt-lockup-metadata-view-model__title');
+        const titleLink = item.querySelector(SELECTORS.TITLE_LINK);
         if (!titleLink || !titleLink.href) return;
 
         const videoId = titleLink.href.split('&')[0];
 
-        const lockup = item.querySelector('.yt-lockup-view-model');
-        const metadataModel = item.querySelector('yt-content-metadata-view-model');
+        const lockup = item.querySelector(SELECTORS.LOCKUP_HOST) || item.querySelector(SELECTORS.LOCKUP_TAG);
+        const metadataModel = item.querySelector(SELECTORS.CONTENT_METADATA);
         if (!lockup || !metadataModel) return;
 
         if (item.getAttribute('data-header-done') === videoId) return;
@@ -211,10 +246,12 @@ function processSubscriptionsHeader(items) {
         item.setAttribute('data-header-done', videoId);
 
         // Clean up recycled clones
+        // BUG-03: Guard against null parentElement (element may be detached during recycling)
         const oldAvatars = item.querySelectorAll('.custom-avatar-link');
         oldAvatars.forEach(el => {
             const parent = el.parentElement;
-            while(el.firstChild) {
+            if (!parent) { el.remove(); return; }
+            while (el.firstChild) {
                 parent.insertBefore(el.firstChild, el);
             }
             el.remove();
@@ -223,21 +260,12 @@ function processSubscriptionsHeader(items) {
         const oldClones = item.querySelectorAll('.cloned-channel-name');
         oldClones.forEach(el => el.remove());
 
-        // Clone channel name
-        if (!item.querySelector('.cloned-channel-name')) {
-            const originalRow = metadataModel.querySelector(
-                '.yt-content-metadata-view-model__metadata-row'
-            );
-            if (originalRow) {
-                const clone = originalRow.cloneNode(true);
-                clone.classList.add('cloned-channel-name');
-                lockup.appendChild(clone);
-            }
-        }
+        // Query avatar container FIRST — needed for both wrapping and clone placement
+        const avatarContainer = item.querySelector(SELECTORS.AVATAR);
 
-        const avatarContainer = item.querySelector('.yt-lockup-metadata-view-model__avatar');
+        // Wrap avatar image in a channel link
         const channelLinkEl =
-            item.querySelector('.cloned-channel-name a') ||
+            metadataModel.querySelector('.yt-content-metadata-view-model__metadata-row a') ||
             item.querySelector('yt-content-metadata-view-model a');
 
         if (avatarContainer && channelLinkEl &&
@@ -250,6 +278,23 @@ function processSubscriptionsHeader(items) {
             }
             avatarContainer.appendChild(anchor);
         }
+
+        // Clone channel name — place INSIDE avatar container for natural flex flow
+        // (not in lockup host, which required fragile absolute positioning)
+        if (!item.querySelector('.cloned-channel-name')) {
+            const originalRow = metadataModel.querySelector(
+                '.yt-content-metadata-view-model__metadata-row'
+            );
+            if (originalRow) {
+                const clone = originalRow.cloneNode(true);
+                clone.classList.add('cloned-channel-name');
+                if (avatarContainer) {
+                    avatarContainer.appendChild(clone);
+                } else {
+                    lockup.appendChild(clone); // fallback
+                }
+            }
+        }
     });
 }
 
@@ -259,6 +304,9 @@ function processSubscriptionsHeader(items) {
 const MAX_CONCURRENT_FETCHES = 3;
 let activeFetches = 0;
 const fetchQueue = [];
+
+// PERF-04: Track all active AbortControllers so in-flight fetches can be cancelled on navigation.
+const activeControllers = new Set();
 
 // Fetches only the <head> of a YouTube page using streaming reader.
 // Returns the meta description content string, or null.
@@ -273,9 +321,15 @@ async function fetchVideoDescription(href) {
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000);
+    activeControllers.add(controller); // PERF-04: Register for potential cancellation
 
     try {
-        const response = await fetch(href, { signal: controller.signal });
+        // SEC-01: credentials: 'omit' — description fetch does not need auth cookies
+        const response = await fetch(href, {
+            signal: controller.signal,
+            credentials: 'omit',
+            mode: 'same-origin'
+        });
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let accumulated = '';
@@ -301,35 +355,45 @@ async function fetchVideoDescription(href) {
     } catch (e) {
         clearTimeout(timeoutId);
         return null;
+    } finally {
+        activeControllers.delete(controller); // PERF-04: Deregister when done
     }
 }
 
+// OPT-2: Iterative processQueue to avoid call stack overflow when the queue contains
+// many consecutive stale items (e.g. after rapid scroll + SPA navigation).
 function processQueue() {
-    if (activeFetches >= MAX_CONCURRENT_FETCHES || fetchQueue.length === 0) return;
+    // Drain stale items inline, then kick off one fetch per available slot.
+    while (activeFetches < MAX_CONCURRENT_FETCHES && fetchQueue.length > 0) {
+        const item = fetchQueue.shift();
+        const linkEl = item.querySelector(SELECTORS.TITLE_LINK);
+        const metadataContainer = item.querySelector(SELECTORS.CONTENT_METADATA);
 
-    const item = fetchQueue.shift();
-    const linkEl = item.querySelector('a#video-title-link') || item.querySelector('a.yt-lockup-metadata-view-model__title');
-    const metadataContainer = item.querySelector('yt-content-metadata-view-model');
+        if (!linkEl || !linkEl.href || !metadataContainer) continue;
 
-    if (!linkEl || !linkEl.href || !metadataContainer) {
-        processQueue();
-        return;
+        // BUG-07: Verify the item hasn't been recycled since it was queued.
+        // YouTube's ytd-rich-item-renderer reuse is async; the href may have changed by the time
+        // we dequeue. If the current href no longer matches our mark, skip this stale entry.
+        const currentVideoId = linkEl.href.split('&')[0];
+        if (item.getAttribute('data-desc-done') !== currentVideoId) continue; // Stale — skip
+
+        activeFetches++;
+        fetchVideoDescription(linkEl.href)
+            .then(content => {
+                if (content) {
+                    const descDiv = document.createElement('div');
+                    descDiv.className = 'custom-description';
+                    descDiv.textContent = content; // textContent prevents XSS
+                    metadataContainer.appendChild(descDiv);
+                }
+            })
+            .finally(() => {
+                activeFetches--;
+                processQueue(); // Re-enter to fill the freed slot
+            });
+        // One fetch per loop iteration — finally() handles the rest
+        break;
     }
-
-    activeFetches++;
-    fetchVideoDescription(linkEl.href)
-        .then(content => {
-            if (content) {
-                const descDiv = document.createElement('div');
-                descDiv.className = 'custom-description';
-                descDiv.textContent = content; // textContent prevents XSS
-                metadataContainer.appendChild(descDiv);
-            }
-        })
-        .finally(() => {
-            activeFetches--;
-            processQueue();
-        });
 }
 
 // Lazy-initialized IntersectionObserver for video descriptions
@@ -357,8 +421,8 @@ function processVideoDescriptions(items) {
     const observer = getDescriptionObserver();
 
     items.forEach(item => {
-        const metadataContainer = item.querySelector('yt-content-metadata-view-model');
-        const linkEl = item.querySelector('a#video-title-link') || item.querySelector('a.yt-lockup-metadata-view-model__title');
+        const metadataContainer = item.querySelector(SELECTORS.CONTENT_METADATA);
+        const linkEl = item.querySelector(SELECTORS.TITLE_LINK);
 
         if (!metadataContainer || !linkEl || !linkEl.href) return;
 
@@ -375,42 +439,92 @@ function processVideoDescriptions(items) {
     });
 }
 
+// ===================== SELF-DIAGNOSTICS =====================
+// Runs once per page load on /feed/subscriptions. Warns in console if critical
+// DOM selectors are missing — indicates YouTube changed its class names.
+let _diagnosed = false;
+function selfDiagnose() {
+    if (_diagnosed) return;
+    if (!window.location.href.includes('/feed/subscriptions')) return;
+    const items = document.querySelectorAll('ytd-rich-item-renderer');
+    if (items.length === 0) return;
+    const item = [...items].find(el => el.querySelector(SELECTORS.LOCKUP_TAG));
+    if (!item) return;
+    _diagnosed = true;
+    const checks = [
+        ['Title link', SELECTORS.TITLE_LINK],
+        ['Lockup host', SELECTORS.LOCKUP_HOST],
+        ['Avatar', SELECTORS.AVATAR],
+        ['Content metadata', SELECTORS.CONTENT_METADATA],
+    ];
+    const missing = checks.filter(([, sel]) => !item.querySelector(sel));
+    if (missing.length === 0) {
+        console.log('[Less YouTube Mess] \u2705 All selectors verified');
+    } else {
+        missing.forEach(([name, sel]) => {
+            console.warn(`[Less YouTube Mess] \u26a0\ufe0f "${name}" not found (${sel}). YouTube may have changed its DOM.`);
+        });
+    }
+}
+
 // ===================== MAIN FEATURE RUNNER =====================
 
+// BUG-E: Coalesce rapid back-to-back runFeatures() calls (e.g. storage.onChanged
+// firing at the same time as yt-navigate-finish). JS is single-threaded so these
+// can't truly race, but they can cause a redundant DOM pass in the same tick.
+// scheduleRunFeatures() ensures only one execution per microtask batch.
+let _runFeaturesScheduled = false;
+function scheduleRunFeatures() {
+    if (_runFeaturesScheduled) return;
+    _runFeaturesScheduled = true;
+    // queueMicrotask fires after the current synchronous call stack, before the next
+    // macrotask — so both callers in the same tick collapse into one runFeatures() call.
+    queueMicrotask(() => {
+        _runFeaturesScheduled = false;
+        runFeatures();
+    });
+}
+
 function runFeatures() {
-    const isSubscriptions = window.location.href.includes('/feed/subscriptions');
+    try { // IMPROVE-05: Wrap in try-catch to prevent silent crash from unexpected YouTube DOM changes
+        const isSubscriptions = window.location.href.includes('/feed/subscriptions');
 
-    // Query items once, share across functions that need them
-    let items = null;
-    const getItems = () => {
-        if (!items) items = document.querySelectorAll('ytd-rich-item-renderer');
-        return items;
-    };
+        // Query items once, share across functions that need them
+        let items = null;
+        const getItems = () => {
+            if (!items) items = document.querySelectorAll('ytd-rich-item-renderer');
+            return items;
+        };
 
-    if (cachedSettings.hide_live_premiere && isSubscriptions) {
-        markLiveAndPremieres(getItems());
-    }
+        if (cachedSettings.hide_live_premiere && isSubscriptions) {
+            markLiveAndPremieres(getItems());
+        }
 
-    if (cachedSettings.list_view) {
-        const browse = document.querySelector('ytd-browse');
-        if (isSubscriptions) {
-            if (browse && browse.getAttribute('page-subtype') !== 'subscriptions') {
-                browse.setAttribute('page-subtype', 'subscriptions');
-            }
-            processSubscriptionsHeader(getItems());
-            processVideoDescriptions(getItems());
-        } else if (browse && browse.getAttribute('page-subtype') === 'subscriptions') {
-            // Reset to prevent list view CSS from applying on other pages
-            if (window.location.pathname === '/' || window.location.pathname === '/web') {
-                browse.setAttribute('page-subtype', 'home');
-            } else {
-                browse.removeAttribute('page-subtype');
+        if (cachedSettings.list_view) {
+            const browse = document.querySelector('ytd-browse');
+            if (isSubscriptions) {
+                if (browse && browse.getAttribute('page-subtype') !== 'subscriptions') {
+                    browse.setAttribute('page-subtype', 'subscriptions');
+                }
+                // processSubscriptionsHeader disabled — avatar uses YouTube's default layout
+                processVideoDescriptions(getItems());
+            } else if (browse && browse.getAttribute('page-subtype') === 'subscriptions') {
+                // Reset to prevent list view CSS from applying on other pages
+                if (window.location.pathname === '/' || window.location.pathname === '/web') {
+                    browse.setAttribute('page-subtype', 'home');
+                } else {
+                    browse.removeAttribute('page-subtype');
+                }
             }
         }
-    }
 
-    forceLikesVisibility();
-    dismissPremiumPopups();
+        forceLikesVisibility();
+        dismissPremiumPopups();
+        applyAutoplay(); // IMPROVE-01
+        selfDiagnose();
+    } catch (e) {
+        console.warn('[Less YouTube Mess] runFeatures error:', e.message);
+    }
 }
 
 // ===================== NAVIGATION & OBSERVATION =====================
@@ -423,11 +537,29 @@ function handleNavigation(currentUrl) {
     if (currentUrl === lastUrl) return false;
     lastUrl = currentUrl;
 
-    // Clean up resources from previous page
+    // PERF-04 + BUG-02: Cancel all in-flight description fetches and reset the counter.
+    // Without this, completed fetches call processQueue() on a different page,
+    // and activeFetches never reaches 0 so new fetches are blocked.
+    activeControllers.forEach(c => c.abort());
+    activeControllers.clear();
+    activeFetches = 0;
     fetchQueue.length = 0;
-    if (!currentUrl.includes('/feed/subscriptions') && descriptionObserver) {
+
+    // BUG-01 + RISK-03 + BUG-C/OPT-5: Always disconnect and null the observer on
+    // ANY navigation — not just when leaving /feed/subscriptions.
+    // This prevents stale IntersectionObserver entries from accumulating when the user
+    // navigates between subscription filters or internal sub-pages within subscriptions.
+    // The observer is lazily re-created by getDescriptionObserver() on the next runFeatures().
+    if (descriptionObserver) {
         descriptionObserver.disconnect();
+        descriptionObserver = null;
     }
+
+    // PERF-01: Reset likes-tracking so the new page re-applies the setting.
+    _lastHideLikes = undefined;
+    // OPT-1: Reset autoplay-tracking so the new page re-applies the setting.
+    _lastHideAutoplay = undefined;
+    _diagnosed = false; // Reset diagnostic for new page
 
     // Redirect on SPA navigation (only fires on URL change, not every mutation)
     if (cachedSettings.default_subscriptions) {
@@ -446,25 +578,31 @@ function handleNavigation(currentUrl) {
 // Fires reliably on YouTube's internal SPA route changes.
 document.addEventListener('yt-navigate-finish', () => {
     const redirected = handleNavigation(window.location.href);
-    if (!redirected) runFeatures();
+    if (!redirected) scheduleRunFeatures(); // BUG-E: coalesce with storage.onChanged
 });
 
 // --- MutationObserver ---
 // Still needed for lazy-loaded content (new videos appearing on scroll).
 const debouncedRun = debounce(() => {
     handleNavigation(window.location.href);
-    runFeatures();
+    runFeatures(); // MutationObserver path: debounce already coalesces rapid DOM changes
 }, 150);
 
 const observer = new MutationObserver(debouncedRun);
 
 function startObserver() {
-    if (document.body) {
-        observer.observe(document.body, { childList: true, subtree: true });
+    // PERF-03: Prefer ytd-app over document.body for a tighter subtree —
+    // avoids triggering on browser-chrome or extension mutations outside the YT app root.
+    const target = document.querySelector('ytd-app') || document.body;
+    if (target) {
+        // OPT-4: attributes: false is the default but stated explicitly for clarity —
+        // we only need to react to DOM structure changes, not attribute mutations.
+        observer.observe(target, { childList: true, subtree: true, attributes: false });
         runFeatures();
     } else {
         document.addEventListener('DOMContentLoaded', () => {
-            observer.observe(document.body, { childList: true, subtree: true });
+            const t = document.querySelector('ytd-app') || document.body;
+            observer.observe(t, { childList: true, subtree: true, attributes: false });
             runFeatures();
         }, { once: true });
     }

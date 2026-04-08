@@ -17,13 +17,25 @@ function loadSettings() {
       if (el) el.checked = settings[key];
     });
 
-    document.body.setAttribute('data-theme', settings.theme || 'dark');
+    // Initialise the compact toggle's enabled/disabled state based on loaded list_view
+    updateCompactRowState(settings.list_view);
+  });
+
+  // BUG-05: Theme is a UI preference — store in local storage, not sync.
+  // Previously it was written to sync but never read back (not in DEFAULTS), so
+  // it always fell back to 'dark'. Now it is properly persisted locally.
+  chrome.storage.local.get({ theme: 'dark' }, (res) => {
+    if (chrome.runtime.lastError) {
+      console.warn('[Less YouTube Mess]', chrome.runtime.lastError.message);
+      return;
+    }
+    document.body.setAttribute('data-theme', res.theme || 'dark');
   });
 }
 
 function saveSetting(key, value) {
   if (!SETTINGS_KEYS.includes(key)) return;
-  chrome.storage.sync.set({ [key]: value });
+  chrome.storage.sync.set({ [key]: Boolean(value) }); // SEC-02: enforce boolean type
 }
 
 function setupCollapsibleGroups() {
@@ -43,10 +55,14 @@ function setupCollapsibleGroups() {
       
       const header = group.querySelector('.group-header');
       if (header) {
+        // IMPROVE-04: Keep aria-expanded in sync with collapsed state (accessibility)
+        header.setAttribute('aria-expanded', collapsed[id] ? 'false' : 'true');
         header.addEventListener('click', () => {
           group.classList.toggle('collapsed');
+          const isCollapsed = group.classList.contains('collapsed');
+          header.setAttribute('aria-expanded', isCollapsed ? 'false' : 'true');
           if (id) {
-            collapsed[id] = group.classList.contains('collapsed');
+            collapsed[id] = isCollapsed;
             chrome.storage.local.set({ collapsed_groups: collapsed });
           }
         });
@@ -59,11 +75,32 @@ document.addEventListener('DOMContentLoaded', () => {
   loadSettings();
   setupCollapsibleGroups();
 
+  // IMPROVE-08: Read version from manifest so only manifest.json needs updating per release.
+  const versionEl = document.getElementById('version-display');
+  if (versionEl) {
+    versionEl.textContent = 'v' + chrome.runtime.getManifest().version;
+  }
+
   SETTINGS_KEYS.forEach(key => {
     const el = document.getElementById(key);
     if (el) {
       el.addEventListener('change', (e) => {
         saveSetting(key, e.target.checked);
+        // Compact list view depends on list_view being enabled.
+        // Update the compact row's visual state whenever list_view changes.
+        if (key === 'list_view') {
+          updateCompactRowState(e.target.checked);
+          // OPT-3: If list_view is turned off, also clear compact_list_view in storage
+          // so it doesn't silently remain true while the CSS guard (html[list_view="true"])
+          // prevents it from taking effect. Keeps storage consistent with UI state.
+          if (!e.target.checked) {
+            const compactEl = document.getElementById('compact_list_view');
+            if (compactEl && compactEl.checked) {
+              compactEl.checked = false;
+              saveSetting('compact_list_view', false);
+            }
+          }
+        }
       });
     }
   });
@@ -72,6 +109,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const current = document.body.getAttribute('data-theme') || 'dark';
     const next = current === 'dark' ? 'light' : 'dark';
     document.body.setAttribute('data-theme', next);
-    chrome.storage.sync.set({ theme: next });
+    // BUG-05: Theme stored in local storage (UI preference, not a sync setting)
+    chrome.storage.local.set({ theme: next });
   });
 });
+
+// Compact list view only works when list_view is also enabled.
+// Visually disable the compact row when list_view is off.
+function updateCompactRowState(listViewEnabled) {
+  const compactItem = document.getElementById('compact_list_view_item');
+  const compactInput = document.getElementById('compact_list_view');
+  if (!compactItem || !compactInput) return;
+  if (listViewEnabled) {
+    compactItem.removeAttribute('data-disabled');
+    compactInput.disabled = false;
+  } else {
+    compactItem.setAttribute('data-disabled', 'true');
+    compactInput.disabled = true;
+  }
+}

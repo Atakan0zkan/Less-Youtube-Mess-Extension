@@ -134,8 +134,16 @@ body {
   transition: max-height 0.3s ease;
 }
 
+/* IMPROVE-04: group-header is now a <button>; reset native button styles */
 .group-header {
-  padding: 12px 14px 12px 14px;
+  /* Button reset */
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  margin: 0;
+  /* Layout */
+  width: 100%;
+  padding: 12px 14px;
   font-size: 14px;
   font-weight: 800;
   text-transform: uppercase;
@@ -149,6 +157,8 @@ body {
   align-items: center;
   user-select: none;
   transition: background 0.2s ease;
+  font-family: inherit;
+  text-align: left;
 }
 
 .group-header:hover {
@@ -156,7 +166,7 @@ body {
 }
 
 .group-header::after {
-  content: '▼';
+  content: '\25BC';
   font-size: 10px;
   color: var(--text-secondary);
   transition: transform 0.3s ease;
@@ -170,8 +180,9 @@ body {
   transform: rotate(-90deg);
 }
 
-.settings-group.collapsed .setting-item {
-  display: none !important;
+/* Hide content area when collapsed (consistent with aria-expanded) */
+.settings-group.collapsed .settings-group__content {
+  display: none;
 }
 
 .setting-item {
@@ -190,6 +201,12 @@ body {
   background: var(--bg-hover);
 }
 
+/* Visually dim setting rows that are inactive due to a dependency on another setting */
+.setting-item[data-disabled] {
+  opacity: 0.4;
+  pointer-events: none;
+  user-select: none;
+}
 
 
 .setting-info {
