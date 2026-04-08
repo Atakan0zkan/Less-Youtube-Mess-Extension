@@ -105,27 +105,14 @@ html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-m
     z-index: 1 !important;
 }
 
-/* Thumbnail children */
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage > *,
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage yt-thumbnail-view-model,
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage .ytThumbnailViewModelImage,
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) > *,
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) yt-thumbnail-view-model,
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) > div {
-    position: absolute !important;
-    inset: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    display: block !important;
-    border-radius: 12px !important;
-}
-
+/* Thumbnail img — fixed pixel dimensions matching the container (260×146).
+   No intermediate wrapper manipulation needed. YouTube's internal wrapper divs
+   can have any dimensions — the img is sized directly to container dimensions.
+   object-fit:cover scales the source image to fill without gaps or distortion. */
 html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage img,
 html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) img {
-    position: absolute !important;
-    inset: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
+    width: 260px !important;
+    height: 146px !important;
     object-fit: cover !important;
     display: block !important;
     border-radius: 12px !important;
@@ -344,6 +331,13 @@ html[list_view="true"][compact_list_view="true"] ytd-browse[page-subtype="subscr
     min-height: 101px !important;
     max-height: 101px !important;
     flex-basis: 180px !important;
+}
+
+/* Compact img override — match smaller container */
+html[list_view="true"][compact_list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage img,
+html[list_view="true"][compact_list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) img {
+    width: 180px !important;
+    height: 101px !important;
 }
 
 /* Adjust the menu button position for the smaller thumbnail */
