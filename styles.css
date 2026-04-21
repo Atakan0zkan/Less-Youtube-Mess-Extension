@@ -312,11 +312,38 @@ html[hide_autoplay="true"] .ytp-autonav-up-next-autoplay {
     display: none !important;
 }
 
-/* Hide the autoplay toggle button inside player controls (RISK-01 Tested: 2026-04) */
+/* Hide the autoplay toggle button AND its parent wrapper button.
+   The parent wrapper (button.ytp-button) retains a shadow/background and remains
+   clickable even when the inner toggle is hidden. Target the entire wrapper. */
 html[hide_autoplay="true"] .ytp-autonav-toggle-button {
     display: none !important;
 }
 
+/* Parent wrapper — the button element that contains the toggle (RISK-01 Tested: 2026-04) */
+html[hide_autoplay="true"] button.ytp-button[data-tooltip-target-id="ytp-autonav-toggle-button"] {
+    display: none !important;
+    pointer-events: none !important;
+}
+
+/* Fallback: hide any remaining autoplay toggle container by class */
+html[hide_autoplay="true"] .ytp-autonav-toggle-button-container {
+    display: none !important;
+}
+
+
+/* ===== 14. HIDE CREATE BUTTON ===== */
+/* Hides the "+Oluştur" / "Create" upload button in the top-right navigation bar.
+   Uses aria-label for locale-specific targeting + href fallback.
+   RISK-01 Tested: 2026-04 — aria-label values are locale-dependent */
+html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-label="Create"]),
+html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-label="Oluştur"]),
+html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-label="Créer"]),
+html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-label="Erstellen"]),
+html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-label="Crear"]),
+html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(a[href*="/upload"]),
+html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(a[href*="studio.youtube.com"]) {
+    display: none !important;
+}
 
 /* ===== 13. COMPACT LIST VIEW ===== */
 /* IMPROVE-03: Smaller thumbnails when compact_list_view is enabled alongside list_view.

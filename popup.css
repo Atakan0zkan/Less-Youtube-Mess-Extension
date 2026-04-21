@@ -96,7 +96,15 @@ body {
   text-transform: uppercase;
 }
 
-.theme-btn {
+/* ===== Header Actions ===== */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.theme-btn,
+.power-btn {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: 8px;
@@ -111,10 +119,35 @@ body {
   box-shadow: var(--card-shadow);
 }
 
-.theme-btn:hover {
+.theme-btn:hover,
+.power-btn:hover {
   background: var(--bg-hover);
   transform: scale(1.08);
   border-color: var(--accent);
+}
+
+/* Power button — enabled (default) */
+.power-btn {
+  color: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow), var(--card-shadow);
+}
+
+.power-btn .icon-power {
+  font-weight: 900;
+  text-shadow: 0 0 6px var(--accent-glow);
+}
+
+/* Power button — disabled */
+.power-btn[aria-pressed="false"] {
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+  box-shadow: var(--card-shadow);
+  opacity: 0.6;
+}
+
+.power-btn[aria-pressed="false"] .icon-power {
+  text-shadow: none;
 }
 
 /* Theme icon toggle */
@@ -293,4 +326,60 @@ input:focus-visible + .slider {
   opacity: 0.5;
   letter-spacing: 0.5px;
   text-transform: uppercase;
+}
+
+/* ===== Extension Disabled State ===== */
+/* When extension is disabled via power toggle, grey out ALL text and lock toggles.
+   The power button itself remains functional so the user can re-enable. */
+
+body[data-extension-disabled] .popup-header h1 {
+  color: var(--text-secondary);
+}
+
+body[data-extension-disabled] .popup-header h1 .highlight {
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: var(--text-secondary);
+  background-clip: unset;
+}
+
+body[data-extension-disabled] .group-header {
+  color: var(--text-secondary);
+}
+
+body[data-extension-disabled] .setting-label {
+  color: var(--text-secondary);
+}
+
+body[data-extension-disabled] .setting-desc {
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+/* Lock all toggle switches — pointer-events: none + visual dim */
+body[data-extension-disabled] .toggle-switch {
+  opacity: 0.3;
+  pointer-events: none;
+  filter: grayscale(1);
+}
+
+/* Lock group header collapse/expand too */
+body[data-extension-disabled] .group-header {
+  pointer-events: none;
+}
+
+/* Settings groups get a subtle dim */
+body[data-extension-disabled] .settings-group {
+  opacity: 0.7;
+}
+
+/* Smooth transitions for enable/disable state changes */
+.popup-header h1,
+.popup-header h1 .highlight,
+.group-header,
+.setting-label,
+.setting-desc,
+.toggle-switch,
+.settings-group {
+  transition: color 0.3s ease, opacity 0.3s ease, filter 0.3s ease;
 }

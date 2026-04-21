@@ -8,11 +8,24 @@
 // Cached settings — updated via storage listener
 let cachedSettings = { ...DEFAULTS };
 
+// Extension-wide enable/disable state (local storage, default: true)
+let extensionEnabled = true;
+
 // ===================== APPLY SETTINGS TO HTML =====================
 
 function applySettings(settings) {
     cachedSettings = { ...DEFAULTS, ...settings };
     const html = document.documentElement;
+
+    // If extension is disabled, strip all attributes and return early.
+    // YouTube reverts to its normal appearance.
+    if (!extensionEnabled) {
+        for (const key of SETTINGS_KEYS) {
+            html.removeAttribute(key);
+        }
+        return;
+    }
+
     for (const key of SETTINGS_KEYS) {
         html.setAttribute(key, String(cachedSettings[key]));
     }
@@ -36,18 +49,28 @@ function isExtensionValid() {
 
 if (isExtensionValid()) {
     try {
-        chrome.storage.sync.get(DEFAULTS, (settings) => {
+        // Load extension_enabled from local storage first
+        chrome.storage.local.get({ extension_enabled: true }, (res) => {
             if (chrome.runtime.lastError) {
                 console.warn('[Less YouTube Mess]', chrome.runtime.lastError.message);
                 return;
             }
-            applySettings(settings);
+            extensionEnabled = res.extension_enabled !== false;
 
-            if (settings.default_subscriptions) {
-                if (window.location.pathname === '/' && !window.location.search) {
-                    window.location.replace('https://www.youtube.com/feed/subscriptions');
+            // Now load sync settings and apply
+            chrome.storage.sync.get(DEFAULTS, (settings) => {
+                if (chrome.runtime.lastError) {
+                    console.warn('[Less YouTube Mess]', chrome.runtime.lastError.message);
+                    return;
                 }
-            }
+                applySettings(settings);
+
+                if (extensionEnabled && settings.default_subscriptions) {
+                    if (window.location.pathname === '/' && !window.location.search) {
+                        window.location.replace('https://www.youtube.com/feed/subscriptions');
+                    }
+                }
+            });
         });
     } catch (e) {
         console.warn('[Less YouTube Mess] Init error:', e.message);
@@ -59,6 +82,19 @@ if (isExtensionValid()) {
 if (isExtensionValid()) {
     try {
         chrome.storage.onChanged.addListener((changes, area) => {
+            // SEC-03: Guard against extension context invalidation mid-session
+            if (!isExtensionValid()) return;
+
+            // React to extension_enabled changes from local storage
+            if (area === 'local' && 'extension_enabled' in changes) {
+                extensionEnabled = changes.extension_enabled.newValue !== false;
+                applySettings(cachedSettings);
+                if (extensionEnabled) {
+                    scheduleRunFeatures();
+                }
+                return;
+            }
+
             if (area !== 'sync') return;
             let needsUpdate = false;
             for (const key of SETTINGS_KEYS) {
@@ -217,6 +253,7 @@ function applyAutoplay() {
     if (!shouldHide) return;
 
     // Persist preference via localStorage (YouTube reads this key for autoplay state)
+    // RISK: 'yt-autoplay' is a YouTube-internal key; collision is unlikely but possible.
     try {
         localStorage.setItem('yt-autoplay', '0');
     } catch (e) { /* storage may be blocked */ }
@@ -229,74 +266,13 @@ function applyAutoplay() {
 }
 
 // --- Subscriptions Header ---
-// Clones channel name and wraps avatar in a channel link for list view.
-function processSubscriptionsHeader(items) {
-    items.forEach(item => {
-        const titleLink = item.querySelector(SELECTORS.TITLE_LINK);
-        if (!titleLink || !titleLink.href) return;
-
-        const videoId = titleLink.href.split('&')[0];
-
-        const lockup = item.querySelector(SELECTORS.LOCKUP_HOST) || item.querySelector(SELECTORS.LOCKUP_TAG);
-        const metadataModel = item.querySelector(SELECTORS.CONTENT_METADATA);
-        if (!lockup || !metadataModel) return;
-
-        if (item.getAttribute('data-header-done') === videoId) return;
-
-        item.setAttribute('data-header-done', videoId);
-
-        // Clean up recycled clones
-        // BUG-03: Guard against null parentElement (element may be detached during recycling)
-        const oldAvatars = item.querySelectorAll('.custom-avatar-link');
-        oldAvatars.forEach(el => {
-            const parent = el.parentElement;
-            if (!parent) { el.remove(); return; }
-            while (el.firstChild) {
-                parent.insertBefore(el.firstChild, el);
-            }
-            el.remove();
-        });
-
-        const oldClones = item.querySelectorAll('.cloned-channel-name');
-        oldClones.forEach(el => el.remove());
-
-        // Query avatar container FIRST — needed for both wrapping and clone placement
-        const avatarContainer = item.querySelector(SELECTORS.AVATAR);
-
-        // Wrap avatar image in a channel link
-        const channelLinkEl =
-            metadataModel.querySelector('.yt-content-metadata-view-model__metadata-row a') ||
-            item.querySelector('yt-content-metadata-view-model a');
-
-        if (avatarContainer && channelLinkEl &&
-            !avatarContainer.querySelector('.custom-avatar-link')) {
-            const anchor = document.createElement('a');
-            anchor.href = channelLinkEl.href;
-            anchor.classList.add('custom-avatar-link');
-            while (avatarContainer.firstChild) {
-                anchor.appendChild(avatarContainer.firstChild);
-            }
-            avatarContainer.appendChild(anchor);
-        }
-
-        // Clone channel name — place INSIDE avatar container for natural flex flow
-        // (not in lockup host, which required fragile absolute positioning)
-        if (!item.querySelector('.cloned-channel-name')) {
-            const originalRow = metadataModel.querySelector(
-                '.yt-content-metadata-view-model__metadata-row'
-            );
-            if (originalRow) {
-                const clone = originalRow.cloneNode(true);
-                clone.classList.add('cloned-channel-name');
-                if (avatarContainer) {
-                    avatarContainer.appendChild(clone);
-                } else {
-                    lockup.appendChild(clone); // fallback
-                }
-            }
-        }
-    });
-}
+// TOMBSTONE (v1.7.0): processSubscriptionsHeader is intentionally DISABLED.
+// It previously cloned channel names and wrapped avatars in links for list view.
+// This caused persistent layout conflicts because YouTube sets position:relative,
+// contain:layout, and isolation:isolate on intermediate wrapper elements.
+// Avatar and channel metadata now use YouTube's default layout (flow positioning).
+// DO NOT re-enable without completely rethinking the positioning strategy.
+// See: systemPatterns.md "Let YouTube Handle Avatar/Metadata Layout"
 
 // --- Video Descriptions ---
 // Lazily fetches meta descriptions via IntersectionObserver to limit network requests.
@@ -345,17 +321,17 @@ async function fetchVideoDescription(href) {
             }
         }
 
-        clearTimeout(timeoutId);
-
         // Parse safely with DOMParser (no script execution, handles all HTML entities natively)
         const doc = new DOMParser().parseFromString(accumulated, 'text/html');
         const metaDesc = doc.querySelector('meta[name="description"]');
         const content = metaDesc?.getAttribute('content');
         return (content && content !== 'null') ? content : null;
     } catch (e) {
-        clearTimeout(timeoutId);
         return null;
     } finally {
+        // BUG-C FIX: clearTimeout moved to finally block so it ALWAYS runs,
+        // even if reader.cancel() throws or an unexpected error occurs.
+        clearTimeout(timeoutId);
         activeControllers.delete(controller); // PERF-04: Deregister when done
     }
 }
@@ -486,6 +462,9 @@ function scheduleRunFeatures() {
 }
 
 function runFeatures() {
+    // If extension is disabled, skip all DOM manipulation
+    if (!extensionEnabled) return;
+
     try { // IMPROVE-05: Wrap in try-catch to prevent silent crash from unexpected YouTube DOM changes
         const isSubscriptions = window.location.href.includes('/feed/subscriptions');
 
@@ -561,6 +540,9 @@ function handleNavigation(currentUrl) {
     _lastHideAutoplay = undefined;
     _diagnosed = false; // Reset diagnostic for new page
 
+    // Skip redirect when extension is disabled
+    if (!extensionEnabled) return false;
+
     // Redirect on SPA navigation (only fires on URL change, not every mutation)
     if (cachedSettings.default_subscriptions) {
         const url = new URL(currentUrl);
@@ -577,15 +559,26 @@ function handleNavigation(currentUrl) {
 // More efficient than detecting URL changes via MutationObserver alone.
 // Fires reliably on YouTube's internal SPA route changes.
 document.addEventListener('yt-navigate-finish', () => {
+    // SEC-03: Guard against extension context invalidation mid-session
+    if (!isExtensionValid()) return;
     const redirected = handleNavigation(window.location.href);
     if (!redirected) scheduleRunFeatures(); // BUG-E: coalesce with storage.onChanged
 });
 
 // --- MutationObserver ---
 // Still needed for lazy-loaded content (new videos appearing on scroll).
+// OPT-D: Only call handleNavigation when the URL has actually changed.
 const debouncedRun = debounce(() => {
-    handleNavigation(window.location.href);
-    runFeatures(); // MutationObserver path: debounce already coalesces rapid DOM changes
+    // SEC-03: Guard against extension context invalidation mid-session
+    if (!isExtensionValid()) return;
+    const currentUrl = window.location.href;
+    if (currentUrl !== lastUrl) {
+        handleNavigation(currentUrl);
+    }
+    // MutationObserver path: debounce already coalesces rapid DOM changes
+    if (extensionEnabled) {
+        runFeatures();
+    }
 }, 150);
 
 const observer = new MutationObserver(debouncedRun);
@@ -598,12 +591,14 @@ function startObserver() {
         // OPT-4: attributes: false is the default but stated explicitly for clarity —
         // we only need to react to DOM structure changes, not attribute mutations.
         observer.observe(target, { childList: true, subtree: true, attributes: false });
-        runFeatures();
+        // OPT-A: Use scheduleRunFeatures() instead of direct runFeatures() to coalesce
+        // with the yt-navigate-finish event that fires shortly after page load.
+        scheduleRunFeatures();
     } else {
         document.addEventListener('DOMContentLoaded', () => {
             const t = document.querySelector('ytd-app') || document.body;
             observer.observe(t, { childList: true, subtree: true, attributes: false });
-            runFeatures();
+            scheduleRunFeatures(); // OPT-A
         }, { once: true });
     }
 }

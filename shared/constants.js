@@ -26,7 +26,8 @@ self.SETTINGS_KEYS = [
     'hide_more_from_youtube',
     'hide_subscriptions_section',
     'hide_you_section',
-    'hide_premium_popups'
+    'hide_premium_popups',
+    'hide_create_button'
 ];
 
 self.DEFAULTS = {
@@ -49,7 +50,8 @@ self.DEFAULTS = {
     hide_more_from_youtube: false,
     hide_subscriptions_section: false,
     hide_you_section: false,
-    hide_premium_popups: false
+    hide_premium_popups: false,
+    hide_create_button: false
 };
 
 // Centralized DOM selectors — used by content.js.

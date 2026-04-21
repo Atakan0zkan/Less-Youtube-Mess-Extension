@@ -24,12 +24,17 @@ function loadSettings() {
   // BUG-05: Theme is a UI preference — store in local storage, not sync.
   // Previously it was written to sync but never read back (not in DEFAULTS), so
   // it always fell back to 'dark'. Now it is properly persisted locally.
-  chrome.storage.local.get({ theme: 'dark' }, (res) => {
+  // extension_enabled is also a local preference (default: true).
+  chrome.storage.local.get({ theme: 'dark', extension_enabled: true }, (res) => {
     if (chrome.runtime.lastError) {
       console.warn('[Less YouTube Mess]', chrome.runtime.lastError.message);
       return;
     }
     document.body.setAttribute('data-theme', res.theme || 'dark');
+
+    // Power toggle state — apply both button state and disabled UI
+    const enabled = res.extension_enabled !== false; // default true
+    applyExtensionDisabledState(enabled);
   });
 }
 
@@ -105,6 +110,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // --- Power toggle: enable/disable the entire extension ---
+  document.getElementById('power-toggle').addEventListener('click', () => {
+    const powerBtn = document.getElementById('power-toggle');
+    const currentlyEnabled = powerBtn.getAttribute('aria-pressed') === 'true';
+    const newState = !currentlyEnabled;
+    applyExtensionDisabledState(newState);
+    // Persist to local storage — content script reacts via storage.onChanged
+    chrome.storage.local.set({ extension_enabled: newState });
+  });
+
+  // --- Theme toggle ---
   document.getElementById('theme-toggle').addEventListener('click', () => {
     const current = document.body.getAttribute('data-theme') || 'dark';
     const next = current === 'dark' ? 'light' : 'dark';
@@ -126,5 +142,35 @@ function updateCompactRowState(listViewEnabled) {
   } else {
     compactItem.setAttribute('data-disabled', 'true');
     compactInput.disabled = true;
+  }
+}
+
+// Apply extension enabled/disabled visual state to the popup.
+// When disabled: body gets data-extension-disabled (CSS greys out text),
+// all setting toggle inputs are locked (disabled), power button stays functional.
+function applyExtensionDisabledState(enabled) {
+  const powerBtn = document.getElementById('power-toggle');
+  if (powerBtn) {
+    powerBtn.setAttribute('aria-pressed', String(enabled));
+  }
+
+  if (enabled) {
+    document.body.removeAttribute('data-extension-disabled');
+  } else {
+    document.body.setAttribute('data-extension-disabled', '');
+  }
+
+  // Lock/unlock all setting toggles (but NOT the power button)
+  SETTINGS_KEYS.forEach(key => {
+    const el = document.getElementById(key);
+    if (el) {
+      el.disabled = !enabled;
+    }
+  });
+
+  // Re-apply compact dependency state when enabling
+  if (enabled) {
+    const listViewEl = document.getElementById('list_view');
+    if (listViewEl) updateCompactRowState(listViewEl.checked);
   }
 }
