@@ -76,7 +76,27 @@ function setupCollapsibleGroups() {
   });
 }
 
+// i18n: Apply translations from _locales/ to all elements with data-i18n attributes.
+// data-i18n="key"       → sets textContent
+// data-i18n-title="key" → sets title attribute
+// data-i18n-aria="key"  → sets aria-label attribute
+function applyI18n() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const msg = chrome.i18n.getMessage(el.getAttribute('data-i18n'));
+    if (msg) el.textContent = msg;
+  });
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    const msg = chrome.i18n.getMessage(el.getAttribute('data-i18n-title'));
+    if (msg) el.title = msg;
+  });
+  document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+    const msg = chrome.i18n.getMessage(el.getAttribute('data-i18n-aria'));
+    if (msg) el.setAttribute('aria-label', msg);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  applyI18n();
   loadSettings();
   setupCollapsibleGroups();
 

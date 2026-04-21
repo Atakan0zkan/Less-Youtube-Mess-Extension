@@ -372,3 +372,22 @@ html[list_view="true"][compact_list_view="true"] ytd-browse[page-subtype="subscr
     top: 30px !important;
 }
 
+
+/* ===== 15. THUMBNAIL BLUR ===== */
+/* Blurs all video thumbnails to reduce clickbait/distraction.
+   Hover on the thumbnail area reveals the image with a smooth transition.
+   Works on: homepage grid, subscriptions (grid + list view), search results, sidebar. */
+
+html[blur_thumbnails="true"] ytd-thumbnail img,
+html[blur_thumbnails="true"] yt-thumbnail-view-model img {
+    filter: blur(15px) !important;
+    transition: filter 0.3s ease !important;
+}
+
+/* Reveal on hover — target the PARENT container so the full thumbnail area triggers unblur,
+   not just the visible (unblurred) portion of the img element. */
+html[blur_thumbnails="true"] ytd-thumbnail:hover img,
+html[blur_thumbnails="true"] a:has(> yt-thumbnail-view-model):hover img,
+html[blur_thumbnails="true"] yt-thumbnail-view-model:hover img {
+    filter: blur(0) !important;
+}

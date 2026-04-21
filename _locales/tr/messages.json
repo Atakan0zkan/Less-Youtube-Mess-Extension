@@ -1,0 +1,63 @@
+{
+  "extDescription": {
+    "message": "YouTube'u Özelleştir: Shorts, Yan Panel, Yorumlar ve Önerileri Gizle!"
+  },
+
+  "toggleThemeTitle": { "message": "Temayı Değiştir" },
+  "toggleThemeAria": { "message": "Açık/koyu temayı aç/kapat" },
+  "powerToggleTitle": { "message": "Uzantıyı Etkinleştir/Devre Dışı Bırak" },
+  "powerToggleAria": { "message": "Uzantıyı aç/kapat" },
+
+  "groupBasicUI": { "message": "Temel Arayüz" },
+  "groupLeftNav": { "message": "Sol Gezinme Çubuğu" },
+  "groupVideoPlayer": { "message": "Video Oynatıcı" },
+  "groupMisc": { "message": "Çeşitli" },
+
+  "labelYouTubeLogo": { "message": "YouTube Logosu" },
+  "descYouTubeLogo": { "message": "Sol üstteki YouTube logosunu gizle" },
+  "labelSearchSuggestions": { "message": "Arama Önerileri" },
+  "descSearchSuggestions": { "message": "Arama çubuğundaki otomatik tamamlamayı gizle" },
+  "labelVoiceSearch": { "message": "Sesli Arama" },
+  "descVoiceSearch": { "message": "Mikrofon simgesini gizle" },
+  "labelNotificationBell": { "message": "Bildirim Zili" },
+  "descNotificationBell": { "message": "Bildirim zilini gizle" },
+  "labelVideoSidebar": { "message": "Video Yan Paneli" },
+  "descVideoSidebar": { "message": "Önerilen videolar panelini gizle" },
+  "labelCreateButton": { "message": "Oluştur Butonu" },
+  "descCreateButton": { "message": "\"+Oluştur\" yükleme butonunu gizle" },
+  "labelThumbnailBlur": { "message": "Küçük Resim Bulanıklaştırma" },
+  "descThumbnailBlur": { "message": "Video önizlemelerini bulanıklaştırır, görmek için üzerine gelin" },
+
+  "labelHideLeftNav": { "message": "Sol Menüyü Tamamen Gizle" },
+  "descHideLeftNav": { "message": "Sol yan menünün tamamını gizle" },
+  "labelSubscriptions": { "message": "Abonelikler" },
+  "descSubscriptions": { "message": "Abone olunan kanallar listesini gizle" },
+  "labelYou": { "message": "Siz" },
+  "descYou": { "message": "\"Siz\" bölümünü gizle (Geçmiş, Oynatma Listeleri vb.)" },
+  "labelExplore": { "message": "Keşfet" },
+  "descExplore": { "message": "Keşfet bölümünü gizle" },
+  "labelMoreFromYT": { "message": "YouTube'dan Daha Fazlası" },
+  "descMoreFromYT": { "message": "Premium, Müzik ve Kids bağlantılarını gizle" },
+
+  "labelComments": { "message": "Yorumlar" },
+  "descComments": { "message": "Video yorumları bölümünü gizle" },
+  "labelLikes": { "message": "Beğeniler" },
+  "descLikes": { "message": "Videolardaki beğeni sayılarını gizle" },
+  "labelEndScreen": { "message": "Bitiş Ekranı Önerileri" },
+  "descEndScreen": { "message": "Video sonundaki öneri kartlarını gizle" },
+  "labelAutoplay": { "message": "Otomatik Oynatma" },
+  "descAutoplay": { "message": "Otomatik oynatma özelliğini gizle ve devre dışı bırak" },
+
+  "labelPremiumPopups": { "message": "Premium Uyarıları" },
+  "descPremiumPopups": { "message": "YouTube Premium tanıtımlarını gizle" },
+  "labelPremieres": { "message": "İlk Gösterimler" },
+  "descPremieres": { "message": "Yaklaşan ve canlı yayınları gizle" },
+  "labelShorts": { "message": "Shorts" },
+  "descShorts": { "message": "Tüm Shorts içeriklerini gizle" },
+  "labelDefaultSubs": { "message": "Varsayılan Abonelikler" },
+  "descDefaultSubs": { "message": "Ana sayfayı otomatik olarak \"Abonelikler\" akışına yönlendir" },
+  "labelListView": { "message": "Liste Görünümü" },
+  "descListView": { "message": "Abonelikleri liste şeklinde göster" },
+  "labelCompactListView": { "message": "Dar Liste Görünümü" },
+  "descCompactListView": { "message": "Daha küçük resimler kullan (Liste Görünümü gerektirir)" }
+}

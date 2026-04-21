@@ -27,7 +27,8 @@ self.SETTINGS_KEYS = [
     'hide_subscriptions_section',
     'hide_you_section',
     'hide_premium_popups',
-    'hide_create_button'
+    'hide_create_button',
+    'blur_thumbnails'
 ];
 
 self.DEFAULTS = {
@@ -51,7 +52,8 @@ self.DEFAULTS = {
     hide_subscriptions_section: false,
     hide_you_section: false,
     hide_premium_popups: false,
-    hide_create_button: false
+    hide_create_button: false,
+    blur_thumbnails: false
 };
 
 // Centralized DOM selectors — used by content.js.
