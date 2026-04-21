@@ -3,32 +3,24 @@
 
 Customize YouTube: Hide Shorts, Sidebar, Comments, Recommendations, and More!
 
-Take back your focus and enjoy YouTube the way it was meant to be: simple. This extension aims to reclaim your focus and stop doomscrolling on YouTube.
+Take back your focus and enjoy YouTube the way it was meant to be: clean and simple. Stop the doomscrolling trap and reclaim your time.
 
-YouTube is an incredible platform, but it is engineered to keep you consuming content endlessly. This sleek, simple, ultra-lightweight and **completely privacy-focused** extension puts the power back in your hands. Control exactly what you see through a modern, easy-to-use menu.
+This extension is ultra-lightweight and gives you full control over what you see through a modern, easy-to-use menu.
 
-✨ **What can you hide or modify?** ✨
+ **Features** 
 
-1️⃣ **Shorts:** Completely remove them from your Home feed, Subscriptions, and Search results. Put an end to the "doomscrolling" trap!
+1️⃣ **Block Distractions:** Remove Shorts, comments and premieres.
 
-2️⃣ **Comments:** Stay focused on the video without getting lost in the comment sections.
+2️⃣ **Clean Video Player:** Disable Autoplay entirely and hide end-screen cards, video sidebars, and like counts for focused viewing. 
 
-3️⃣ **Sidebar & End-Screen Suggestions:** Clear away distracting video recommendations and those pesky pop-up cards at the end of videos.
+3️⃣ **Zero Clutter:** Instantly hide annoying Premium popups, search suggestions, the notification bell, and the YouTube logo.
 
-4️⃣ **Live Streams & Premieres:** Keep your feed clean by showing only standard video uploads.
+4️⃣ **Navigation Control:** Hide the left menu completely, or selectively remove sections like "Explore", "You", and "More from YouTube". 
 
-5️⃣ **Like Counts:** Enjoy a bias-free viewing experience by hiding like counts and popularity metrics.
+5️⃣ **Smart Redirect:** Bypass the chaotic homepage and land directly on your Subscriptions feed every time you open YouTube.
 
-6️⃣ **Search Suggestions:** Stop the auto-complete suggestions that pop up before you even finish typing.
+6️⃣ **List View:** Transform your Subscriptions grid into a clean, easy-to-read chronological list. Toggle on the new Compact Mode for smaller thumbnails.
 
-7️⃣ **Visual Clutter:** Remove the voice search microphone, the YouTube logo, and the notification bell for a truly minimalist look.
-
-8️⃣ **Granular Left Navigation Control:** Hide the entire left menu entirely, or selectively hide specific sections like "Explore", "You", "Subscriptions" (channel list), and "More from YouTube".
-
-9️⃣ **Redirect to Subscriptions:** Automatically land on your "Subscriptions" page every time you open YouTube, bypassing the chaotic Home feed.
-
-📺 **Bonus:** "List View"
-Are those massive thumbnails on your Subscriptions page overwhelming? With a single click, transform your subscription feed from a cluttered grid into a minimal, clean, and easy-to-read chronological list.
 
 <img width="1280" height="800" alt="store3" src="https://github.com/user-attachments/assets/b4471f6b-1b13-4550-98d4-755ae834dad0" />
 
@@ -49,6 +41,16 @@ Are those massive thumbnails on your Subscriptions page overwhelming? With a sin
 *Version 1.3 - Fixed minor bugs and extension menu is better now*
 
 *Version 1.4 - Fixed Left Navigation bugs, improved toggles to work in real-time without refreshing, option to disable Premium popups and added major performance optimizations*
+
+*Version 1.5 - Major optimization and security updates. This has been the biggest update so far*
+
+*Version 1.6 - Added Autoplay and Compact List View features. Smashed filthy bugs and performance upgrades as usual*
+
+*Version 1.6.3 - YouTube renamed ALL CSS class names from BEM format to camelCase. Updated all selectors.*
+
+*Version 1.6.6 - Fixed list view thumbnail scaling for good. No bug fixes; I couldn't find any.*
+
+*Version 1.7 - You can now hide the "+Create" button! I added a toggle to the popup menu and fixed the autoplay feature, along with some minor bugs.*
 
 <img width="1400" height="560" alt="kayanyazi" src="https://github.com/user-attachments/assets/dac7db96-5b21-40e6-91da-b8324a8dfb13" />
 
