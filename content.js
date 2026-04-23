@@ -151,7 +151,7 @@ function markLiveAndPremieres(items) {
             const buttons = item.querySelectorAll('button, yt-button-shape');
             for (const btn of buttons) {
                 const text = (btn.textContent || '');
-                if (/(remind me|notify me|bana hatırlat)/i.test(text)) {
+                if (/(remind me|notify me|bana hatırlat|recuérdame|rappelle-moi|erinnere mich|ricordami|リマインダー|알림 설정|मुझे याद दिलाएं)/i.test(text)) {
                     isLive = true;
                     break;
                 }
@@ -163,7 +163,7 @@ function markLiveAndPremieres(items) {
             const badges = item.querySelectorAll('.badge-shape-wiz__text, .yt-core-attributed-string');
             for (const badge of badges) {
                 const text = (badge.textContent || '');
-                if (/(yakında|canlı|live|premiere|upcoming|ilk gösterim|i̇lk gösterim)/i.test(text)) {
+                if (/(yakında|canlı|live|premiere|upcoming|ilk gösterim|i̇lk gösterim|estreno|première|premieren|anteprima|프리미어|プレミア公開|próximamente|em breve|bald|prossimamente)/i.test(text)) {
                     isLive = true;
                     break;
                 }
@@ -175,7 +175,7 @@ function markLiveAndPremieres(items) {
             const metadata = item.querySelector('yt-content-metadata-view-model, #metadata');
             if (metadata) {
                 const text = (metadata.textContent || '');
-                if (/(planlandı|scheduled for)/i.test(text)) {
+                if (/(planlandı|scheduled for|programado|programmé|geplant|programmato|予定|예정|निर्धारित)/i.test(text)) {
                     isLive = true;
                 }
             }
@@ -306,6 +306,8 @@ async function fetchVideoDescription(href) {
             credentials: 'omit',
             mode: 'same-origin'
         });
+        // BUG-08: Check response status before reading body — 4xx/5xx have no useful meta
+        if (!response.ok) return null;
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let accumulated = '';
@@ -357,6 +359,8 @@ function processQueue() {
         fetchVideoDescription(linkEl.href)
             .then(content => {
                 if (content) {
+                    // BUG-09: Prevent duplicate descriptions if processQueue races
+                    if (metadataContainer.querySelector('.custom-description')) return;
                     const descDiv = document.createElement('div');
                     descDiv.className = 'custom-description';
                     descDiv.textContent = content; // textContent prevents XSS

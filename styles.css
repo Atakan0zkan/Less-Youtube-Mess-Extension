@@ -193,10 +193,11 @@ html[hide_likes="true"] segmented-like-dislike-button-view-model .yt-spec-button
 
 
 /* ===== 5. HIDE ALL SHORTS ===== */
-/* Navigation and general shorts */
+/* Navigation and general shorts — title/aria-label in all supported locales */
 html[hide_shorts="true"] a[title="Shorts"],
 html[hide_shorts="true"] ytd-mini-guide-entry-renderer[aria-label="Shorts"],
 html[hide_shorts="true"] ytd-guide-entry-renderer:has(a[title="Shorts"]),
+html[hide_shorts="true"] ytd-mini-guide-entry-renderer:has(a[href*="/shorts"]),
 
 /* Shorts content markers */
 html[hide_shorts="true"] *[is-shorts],
@@ -332,7 +333,7 @@ html[hide_autoplay="true"] .ytp-autonav-toggle-button-container {
 
 
 /* ===== 14. HIDE CREATE BUTTON ===== */
-/* Hides the "+Oluştur" / "Create" upload button in the top-right navigation bar.
+/* Hides the "+Create" upload button in the top-right navigation bar.
    Uses aria-label for locale-specific targeting + href fallback.
    RISK-01 Tested: 2026-04 — aria-label values are locale-dependent */
 html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-label="Create"]),
@@ -340,6 +341,11 @@ html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-
 html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-label="Créer"]),
 html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-label="Erstellen"]),
 html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-label="Crear"]),
+html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-label="Criar"]),
+html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-label="Crea"]),
+html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-label="作成"]),
+html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-label="만들기"]),
+html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-label="बनाएं"]),
 html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(a[href*="/upload"]),
 html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(a[href*="studio.youtube.com"]) {
     display: none !important;
@@ -376,18 +382,32 @@ html[list_view="true"][compact_list_view="true"] ytd-browse[page-subtype="subscr
 /* ===== 15. THUMBNAIL BLUR ===== */
 /* Blurs all video thumbnails to reduce clickbait/distraction.
    Hover on the thumbnail area reveals the image with a smooth transition.
-   Works on: homepage grid, subscriptions (grid + list view), search results, sidebar. */
+   Works on: homepage grid, subscriptions (grid + list view), search results, sidebar.
+   IMPORTANT: Blur is applied to CONTAINER elements, NOT <img> directly.
+   YouTube's yt-img-shadow uses Shadow DOM — CSS cannot target <img> inside shadow roots.
+   Applying filter:blur() on the container blurs all visual children including shadow content. */
 
-html[blur_thumbnails="true"] ytd-thumbnail img,
-html[blur_thumbnails="true"] yt-thumbnail-view-model img {
-    filter: blur(15px) !important;
+/* Classic renderer (homepage, search, watch sidebar) */
+html[blur_thumbnails="true"] ytd-thumbnail {
+    filter: blur(8px) !important;
+    clip-path: inset(0) !important;
     transition: filter 0.3s ease !important;
 }
 
-/* Reveal on hover — target the PARENT container so the full thumbnail area triggers unblur,
-   not just the visible (unblurred) portion of the img element. */
-html[blur_thumbnails="true"] ytd-thumbnail:hover img,
-html[blur_thumbnails="true"] a:has(> yt-thumbnail-view-model):hover img,
-html[blur_thumbnails="true"] yt-thumbnail-view-model:hover img {
+/* New view model renderer (subscriptions page) — class-based + tag-based fallback */
+html[blur_thumbnails="true"] .ytLockupViewModelContentImage,
+html[blur_thumbnails="true"] yt-thumbnail-view-model {
+    filter: blur(8px) !important;
+    clip-path: inset(0) !important;
+    transition: filter 0.3s ease !important;
+}
+
+/* Reveal on hover — target the same containers */
+html[blur_thumbnails="true"] ytd-thumbnail:hover {
+    filter: blur(0) !important;
+}
+
+html[blur_thumbnails="true"] .ytLockupViewModelContentImage:hover,
+html[blur_thumbnails="true"] yt-thumbnail-view-model:hover {
     filter: blur(0) !important;
 }

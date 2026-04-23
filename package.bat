@@ -1,7 +1,7 @@
 @echo off
 echo [Less YouTube Mess] Packaging extension...
 
-powershell -Command "Compress-Archive -Path 'manifest.json', 'content.js', 'styles.css', 'popup.html', 'popup.js', 'popup.css', 'shared', 'icons' -DestinationPath 'extension.zip' -Force"
+powershell -Command "Compress-Archive -Path 'manifest.json', 'content.js', 'styles.css', 'popup.html', 'popup.js', 'popup.css', 'shared', 'icons', '_locales' -DestinationPath 'extension.zip' -Force"
 
 if %errorlevel% equ 0 (
     echo.
