@@ -1,57 +1,161 @@
 {
   "extDescription": {
-    "message": "Personalizza YouTube: nascondi Shorts, barra laterale, commenti, consigli e altro!"
+    "message": "Personalizza YouTube: Nascondi Shorts, barra laterale, commenti e molto altro!"
   },
-  "toggleThemeTitle": { "message": "Cambia tema" },
-  "toggleThemeAria": { "message": "Passa al tema chiaro/scuro" },
-  "powerToggleTitle": { "message": "Attiva/Disattiva estensione" },
-  "powerToggleAria": { "message": "Attiva o disattiva l'estensione" },
-  "groupBasicUI": { "message": "Interfaccia base" },
-  "groupLeftNav": { "message": "Navigazione sinistra" },
-  "groupVideoPlayer": { "message": "Lettore video" },
-  "groupMisc": { "message": "Varie" },
-  "labelYouTubeLogo": { "message": "Logo YouTube" },
-  "descYouTubeLogo": { "message": "Nascondi il logo YouTube in alto a sinistra" },
-  "labelSearchSuggestions": { "message": "Suggerimenti di ricerca" },
-  "descSearchSuggestions": { "message": "Nascondi il completamento automatico della barra di ricerca" },
-  "labelVoiceSearch": { "message": "Ricerca vocale" },
-  "descVoiceSearch": { "message": "Nascondi l'icona del microfono" },
-  "labelNotificationBell": { "message": "Campanella notifiche" },
-  "descNotificationBell": { "message": "Nascondi la campanella delle notifiche" },
-  "labelVideoSidebar": { "message": "Barra laterale video" },
-  "descVideoSidebar": { "message": "Nascondi il pannello dei video suggeriti" },
-  "labelCreateButton": { "message": "Pulsante Crea" },
-  "descCreateButton": { "message": "Nascondi il pulsante +Crea per il caricamento" },
-  "labelThumbnailBlur": { "message": "Sfocatura miniature" },
-  "descThumbnailBlur": { "message": "Sfoca le miniature dei video, passa il mouse per rivelare" },
-  "labelHideLeftNav": { "message": "Nascondi intera barra laterale" },
-  "descHideLeftNav": { "message": "Nascondi l'intera barra di navigazione sinistra" },
-  "labelSubscriptions": { "message": "Iscrizioni" },
-  "descSubscriptions": { "message": "Nascondi l'elenco dei canali iscritti" },
-  "labelYou": { "message": "Tu" },
-  "descYou": { "message": "Nascondi la sezione \"Tu\" (Cronologia, Playlist)" },
-  "labelExplore": { "message": "Esplora" },
-  "descExplore": { "message": "Nascondi la sezione Esplora" },
-  "labelMoreFromYT": { "message": "Altro da YouTube" },
-  "descMoreFromYT": { "message": "Nascondi i link Premium, Musica e Kids" },
-  "labelComments": { "message": "Commenti" },
-  "descComments": { "message": "Nascondi la sezione commenti del video" },
-  "labelLikes": { "message": "Mi piace" },
-  "descLikes": { "message": "Nascondi il conteggio dei Mi piace sui video" },
-  "labelEndScreen": { "message": "Schermata finale" },
-  "descEndScreen": { "message": "Nascondi le schede di suggerimenti della schermata finale" },
-  "labelAutoplay": { "message": "Riproduzione automatica" },
-  "descAutoplay": { "message": "Nascondi e disattiva la riproduzione automatica" },
-  "labelPremiumPopups": { "message": "Pop-up Premium" },
-  "descPremiumPopups": { "message": "Nascondi le promozioni di YouTube Premium" },
-  "labelPremieres": { "message": "Première" },
-  "descPremieres": { "message": "Nascondi le dirette e le anteprime imminenti" },
-  "labelShorts": { "message": "Shorts" },
-  "descShorts": { "message": "Nascondi tutti i contenuti Shorts" },
-  "labelDefaultSubs": { "message": "Iscrizioni predefinite" },
-  "descDefaultSubs": { "message": "Reindirizza automaticamente la home al feed" },
-  "labelListView": { "message": "Vista elenco" },
-  "descListView": { "message": "Mostra le iscrizioni come elenco" },
-  "labelCompactListView": { "message": "Vista elenco compatta" },
-  "descCompactListView": { "message": "Miniature più piccole (richiede Vista elenco)" }
+  "toggleThemeTitle": {
+    "message": "Cambia Tema"
+  },
+  "toggleThemeAria": {
+    "message": "Attiva tema chiaro/scuro"
+  },
+  "powerToggleTitle": {
+    "message": "Attiva/Disattiva estensione"
+  },
+  "powerToggleAria": {
+    "message": "Attiva o disattiva l'estensione"
+  },
+  "groupBasicUI": {
+    "message": "Aspetto Generale"
+  },
+  "groupLeftNav": {
+    "message": "Menu Laterale"
+  },
+  "groupVideoPlayer": {
+    "message": "Lettore Video"
+  },
+  "groupMisc": {
+    "message": "Varie"
+  },
+  "labelYouTubeLogo": {
+    "message": "Logo di YouTube"
+  },
+  "descYouTubeLogo": {
+    "message": "Nascondi il logo di YouTube in alto a sinistra"
+  },
+  "labelSearchSuggestions": {
+    "message": "Suggerimenti di Ricerca"
+  },
+  "descSearchSuggestions": {
+    "message": "Nascondi il completamento automatico nella barra di ricerca"
+  },
+  "labelVoiceSearch": {
+    "message": "Ricerca Vocale"
+  },
+  "descVoiceSearch": {
+    "message": "Nascondi l'icona del microfono"
+  },
+  "labelNotificationBell": {
+    "message": "Notifiche"
+  },
+  "descNotificationBell": {
+    "message": "Nascondi l'icona delle notifiche"
+  },
+  "labelVideoSidebar": {
+    "message": "Video Consigliati"
+  },
+  "descVideoSidebar": {
+    "message": "Nascondi la lista dei video consigliati a lato"
+  },
+  "labelCreateButton": {
+    "message": "Pulsante Crea"
+  },
+  "descCreateButton": {
+    "message": "Nascondi il pulsante '+Crea' per caricare video"
+  },
+  "labelThumbnailBlur": {
+    "message": "Sfoca Anteprime"
+  },
+  "descThumbnailBlur": {
+    "message": "Sfoca le anteprime dei video, passa il mouse per visualizzarle"
+  },
+  "labelHideLeftNav": {
+    "message": "Nascondi Menu Laterale"
+  },
+  "descHideLeftNav": {
+    "message": "Nascondi completamente il menu laterale sinistro"
+  },
+  "labelSubscriptions": {
+    "message": "Iscrizioni"
+  },
+  "descSubscriptions": {
+    "message": "Nascondi la lista dei canali iscritti nel menu"
+  },
+  "labelYou": {
+    "message": "Tu"
+  },
+  "descYou": {
+    "message": "Nascondi la sezione 'Tu' (Cronologia, Playlist)"
+  },
+  "labelExplore": {
+    "message": "Esplora"
+  },
+  "descExplore": {
+    "message": "Nascondi la sezione Esplora"
+  },
+  "labelMoreFromYT": {
+    "message": "Altro da YouTube"
+  },
+  "descMoreFromYT": {
+    "message": "Nascondi i link a Premium, Musica e Kids"
+  },
+  "labelComments": {
+    "message": "Commenti"
+  },
+  "descComments": {
+    "message": "Nascondi la sezione dei commenti sotto i video"
+  },
+  "labelLikes": {
+    "message": "Numero di Mi Piace"
+  },
+  "descLikes": {
+    "message": "Nascondi il contatore dei mi piace nei video"
+  },
+  "labelEndScreen": {
+    "message": "Suggerimenti Finali"
+  },
+  "descEndScreen": {
+    "message": "Nascondi i video suggeriti alla fine della riproduzione"
+  },
+  "labelAutoplay": {
+    "message": "Riproduzione Automatica"
+  },
+  "descAutoplay": {
+    "message": "Disattiva e nascondi la riproduzione automatica"
+  },
+  "labelPremiumPopups": {
+    "message": "Annunci Premium"
+  },
+  "descPremiumPopups": {
+    "message": "Nascondi i popup promozionali di YouTube Premium"
+  },
+  "labelPremieres": {
+    "message": "Live e Prime"
+  },
+  "descPremieres": {
+    "message": "Nascondi le dirette e le anteprime imminenti nelle Iscrizioni"
+  },
+  "labelShorts": {
+    "message": "Shorts"
+  },
+  "descShorts": {
+    "message": "Nascondi completamente i video Shorts"
+  },
+  "labelDefaultSubs": {
+    "message": "Iscrizioni all'Avvio"
+  },
+  "descDefaultSubs": {
+    "message": "Reindirizza automaticamente la homepage alle Iscrizioni"
+  },
+  "labelListView": {
+    "message": "Visualizzazione a Lista"
+  },
+  "descListView": {
+    "message": "Mostra le iscrizioni in formato lista"
+  },
+  "labelCompactListView": {
+    "message": "Lista Compatta"
+  },
+  "descCompactListView": {
+    "message": "Usa anteprime più piccole (richiede la Visualizzazione a Lista)"
+  }
 }

@@ -1,57 +1,161 @@
 {
   "extDescription": {
-    "message": "यूट्यूब कस्टमाइज़ करें: शॉर्ट्स, साइडबार, टिप्पणियाँ, सिफारिशें और बहुत कुछ छिपाएं!"
+    "message": "YouTube को कस्टमाइज़ करें: Shorts, साइडबार, टिप्पणियाँ और बहुत कुछ छिपाएं!"
   },
-  "toggleThemeTitle": { "message": "थीम बदलें" },
-  "toggleThemeAria": { "message": "लाइट/डार्क थीम स्विच करें" },
-  "powerToggleTitle": { "message": "एक्सटेंशन चालू/बंद करें" },
-  "powerToggleAria": { "message": "एक्सटेंशन चालू या बंद करें" },
-  "groupBasicUI": { "message": "बुनियादी यूआई" },
-  "groupLeftNav": { "message": "बायां नेविगेशन बार" },
-  "groupVideoPlayer": { "message": "वीडियो प्लेयर" },
-  "groupMisc": { "message": "विविध" },
-  "labelYouTubeLogo": { "message": "यूट्यूब लोगो" },
-  "descYouTubeLogo": { "message": "ऊपर बाईं ओर का यूट्यूब लोगो छिपाएं" },
-  "labelSearchSuggestions": { "message": "खोज सुझाव" },
-  "descSearchSuggestions": { "message": "सर्च बार का ऑटो-कम्प्लीट छिपाएं" },
-  "labelVoiceSearch": { "message": "वॉयस सर्च" },
-  "descVoiceSearch": { "message": "माइक्रोफ़ोन आइकन छिपाएं" },
-  "labelNotificationBell": { "message": "नोटिफिकेशन बेल" },
-  "descNotificationBell": { "message": "नोटिफिकेशन बेल छिपाएं" },
-  "labelVideoSidebar": { "message": "वीडियो साइडबार" },
-  "descVideoSidebar": { "message": "सुझाए गए वीडियो पैनल छिपाएं" },
-  "labelCreateButton": { "message": "'बनाएं' बटन" },
-  "descCreateButton": { "message": "+बनाएं अपलोड बटन छिपाएं" },
-  "labelThumbnailBlur": { "message": "थंबनेल धुंधला करें" },
-  "descThumbnailBlur": { "message": "वीडियो थंबनेल धुंधला करें, देखने के लिए होवर करें" },
-  "labelHideLeftNav": { "message": "पूरा बायां पैनल छिपाएं" },
-  "descHideLeftNav": { "message": "पूरा बायां साइडबार मेनू छिपाएं" },
-  "labelSubscriptions": { "message": "सदस्यता" },
-  "descSubscriptions": { "message": "सब्सक्राइब किए गए चैनलों की सूची छिपाएं" },
-  "labelYou": { "message": "आप" },
-  "descYou": { "message": "\"आप\" सेक्शन छिपाएं (इतिहास, प्लेलिस्ट)" },
-  "labelExplore": { "message": "एक्सप्लोर" },
-  "descExplore": { "message": "एक्सप्लोर सेक्शन छिपाएं" },
-  "labelMoreFromYT": { "message": "यूट्यूब से और भी बहुत कुछ" },
-  "descMoreFromYT": { "message": "Premium, म्यूज़िक और Kids लिंक छिपाएं" },
-  "labelComments": { "message": "टिप्पणियाँ" },
-  "descComments": { "message": "वीडियो टिप्पणी सेक्शन छिपाएं" },
-  "labelLikes": { "message": "लाइक" },
-  "descLikes": { "message": "वीडियो पर लाइक की संख्या छिपाएं" },
-  "labelEndScreen": { "message": "एंड स्क्रीन" },
-  "descEndScreen": { "message": "वीडियो के अंत में सुझाव कार्ड छिपाएं" },
-  "labelAutoplay": { "message": "ऑटोप्ले" },
-  "descAutoplay": { "message": "ऑटोप्ले छिपाएं और अक्षम करें" },
-  "labelPremiumPopups": { "message": "प्रीमियम पॉपअप" },
-  "descPremiumPopups": { "message": "YouTube Premium प्रमोशन छिपाएं" },
-  "labelPremieres": { "message": "प्रीमियर" },
-  "descPremieres": { "message": "आने वाली और लाइव स्ट्रीम छिपाएं" },
-  "labelShorts": { "message": "शॉर्ट्स" },
-  "descShorts": { "message": "सभी शॉर्ट्स कंटेंट छिपाएं" },
-  "labelDefaultSubs": { "message": "डिफॉल्ट सदस्यता" },
-  "descDefaultSubs": { "message": "होम पेज को ऑटो-रीडायरेक्ट फ़ीड पर भेजें" },
-  "labelListView": { "message": "सूची दृश्य" },
-  "descListView": { "message": "सदस्यता को सूची के रूप में दिखाएं" },
-  "labelCompactListView": { "message": "संक्षिप्त सूची दृश्य" },
-  "descCompactListView": { "message": "छोटे थंबनेल (सूची दृश्य आवश्यक)" }
+  "toggleThemeTitle": {
+    "message": "थीम बदलें"
+  },
+  "toggleThemeAria": {
+    "message": "लाइट/डार्क थीम चालू/बंद करें"
+  },
+  "powerToggleTitle": {
+    "message": "एक्सटेंशन चालू/बंद करें"
+  },
+  "powerToggleAria": {
+    "message": "एक्सटेंशन को सक्षम/अक्षम करें"
+  },
+  "groupBasicUI": {
+    "message": "सामान्य रूप"
+  },
+  "groupLeftNav": {
+    "message": "बायां मेनू"
+  },
+  "groupVideoPlayer": {
+    "message": "वीडियो प्लेयर"
+  },
+  "groupMisc": {
+    "message": "अन्य"
+  },
+  "labelYouTubeLogo": {
+    "message": "YouTube लोगो"
+  },
+  "descYouTubeLogo": {
+    "message": "ऊपर बाईं ओर YouTube लोगो छिपाएं"
+  },
+  "labelSearchSuggestions": {
+    "message": "खोज सुझाव"
+  },
+  "descSearchSuggestions": {
+    "message": "खोज बार में ऑटो-कम्प्लीट छिपाएं"
+  },
+  "labelVoiceSearch": {
+    "message": "वॉयस सर्च"
+  },
+  "descVoiceSearch": {
+    "message": "माइक्रोफ़ोन आइकन छिपाएं"
+  },
+  "labelNotificationBell": {
+    "message": "सूचनाएं"
+  },
+  "descNotificationBell": {
+    "message": "सूचना घंटी आइकन छिपाएं"
+  },
+  "labelVideoSidebar": {
+    "message": "सुझाए गए वीडियो"
+  },
+  "descVideoSidebar": {
+    "message": "वीडियो के बगल में सुझाए गए वीडियो सूची छिपाएं"
+  },
+  "labelCreateButton": {
+    "message": "बनाएं बटन"
+  },
+  "descCreateButton": {
+    "message": "वीडियो अपलोड करने वाला '+बनाएं' बटन छिपाएं"
+  },
+  "labelThumbnailBlur": {
+    "message": "थंबनेल ब्लर करें"
+  },
+  "descThumbnailBlur": {
+    "message": "वीडियो थंबनेल को ब्लर करें, देखने के लिए माउस घुमाएं"
+  },
+  "labelHideLeftNav": {
+    "message": "बायां मेनू छिपाएं"
+  },
+  "descHideLeftNav": {
+    "message": "बाएं नेविगेशन मेनू को पूरी तरह छिपाएं"
+  },
+  "labelSubscriptions": {
+    "message": "सदस्यताएं"
+  },
+  "descSubscriptions": {
+    "message": "सब्सक्राइब किए गए चैनलों की सूची छिपाएं"
+  },
+  "labelYou": {
+    "message": "आप"
+  },
+  "descYou": {
+    "message": "'आप' अनुभाग (इतिहास, प्लेलिस्ट) छिपाएं"
+  },
+  "labelExplore": {
+    "message": "एक्सप्लोर"
+  },
+  "descExplore": {
+    "message": "एक्सप्लोर अनुभाग छिपाएं"
+  },
+  "labelMoreFromYT": {
+    "message": "YouTube से और अधिक"
+  },
+  "descMoreFromYT": {
+    "message": "Premium, संगीत और Kids लिंक छिपाएं"
+  },
+  "labelComments": {
+    "message": "टिप्पणियां"
+  },
+  "descComments": {
+    "message": "वीडियो के नीचे टिप्पणी अनुभाग छिपाएं"
+  },
+  "labelLikes": {
+    "message": "लाइक की संख्या"
+  },
+  "descLikes": {
+    "message": "वीडियो पर लाइक की संख्या छिपाएं"
+  },
+  "labelEndScreen": {
+    "message": "अंत स्क्रीन सुझाव"
+  },
+  "descEndScreen": {
+    "message": "वीडियो के अंत में सुझाव कार्ड छिपाएं"
+  },
+  "labelAutoplay": {
+    "message": "ऑटोप्ले"
+  },
+  "descAutoplay": {
+    "message": "ऑटोप्ले को बंद करें और छिपाएं"
+  },
+  "labelPremiumPopups": {
+    "message": "प्रीमियम विज्ञापन"
+  },
+  "descPremiumPopups": {
+    "message": "YouTube Premium के प्रचार पॉपअप छिपाएं"
+  },
+  "labelPremieres": {
+    "message": "लाइव और प्रीमियर"
+  },
+  "descPremieres": {
+    "message": "सदस्यता फ़ीड में लाइव स्ट्रीम और आगामी वीडियो छिपाएं"
+  },
+  "labelShorts": {
+    "message": "Shorts"
+  },
+  "descShorts": {
+    "message": "सभी Shorts वीडियो पूरी तरह छिपाएं"
+  },
+  "labelDefaultSubs": {
+    "message": "होम के रूप में सदस्यताएं"
+  },
+  "descDefaultSubs": {
+    "message": "होमपेज को स्वचालित रूप से सदस्यताओं पर रीडायरेक्ट करें"
+  },
+  "labelListView": {
+    "message": "सूची दृश्य"
+  },
+  "descListView": {
+    "message": "सदस्यताओं को सूची के रूप में दिखाएं"
+  },
+  "labelCompactListView": {
+    "message": "कॉम्पैक्ट सूची"
+  },
+  "descCompactListView": {
+    "message": "सूची दृश्य में छोटे थंबनेल दिखाएं"
+  }
 }

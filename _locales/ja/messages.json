@@ -1,57 +1,161 @@
 {
   "extDescription": {
-    "message": "YouTubeをカスタマイズ：Shorts、サイドバー、コメント、おすすめなどを非表示に！"
+    "message": "YouTubeをカスタマイズ: ショート動画、サイドバー、コメント、おすすめなどを非表示！"
   },
-  "toggleThemeTitle": { "message": "テーマ切り替え" },
-  "toggleThemeAria": { "message": "ライト/ダークテーマの切り替え" },
-  "powerToggleTitle": { "message": "拡張機能の有効/無効" },
-  "powerToggleAria": { "message": "拡張機能のオン/オフ切り替え" },
-  "groupBasicUI": { "message": "基本UI" },
-  "groupLeftNav": { "message": "左ナビゲーション" },
-  "groupVideoPlayer": { "message": "ビデオプレーヤー" },
-  "groupMisc": { "message": "その他" },
-  "labelYouTubeLogo": { "message": "YouTubeロゴ" },
-  "descYouTubeLogo": { "message": "左上のYouTubeロゴを非表示にする" },
-  "labelSearchSuggestions": { "message": "検索候補" },
-  "descSearchSuggestions": { "message": "検索バーのオートコンプリートを非表示にする" },
-  "labelVoiceSearch": { "message": "音声検索" },
-  "descVoiceSearch": { "message": "マイクアイコンを非表示にする" },
-  "labelNotificationBell": { "message": "通知ベル" },
-  "descNotificationBell": { "message": "通知ベルを非表示にする" },
-  "labelVideoSidebar": { "message": "動画サイドバー" },
-  "descVideoSidebar": { "message": "おすすめ動画パネルを非表示にする" },
-  "labelCreateButton": { "message": "作成ボタン" },
-  "descCreateButton": { "message": "+作成アップロードボタンを非表示にする" },
-  "labelThumbnailBlur": { "message": "サムネイルのぼかし" },
-  "descThumbnailBlur": { "message": "動画のサムネイルをぼかし、ホバーで表示" },
-  "labelHideLeftNav": { "message": "左サイドバーをすべて隠す" },
-  "descHideLeftNav": { "message": "左サイドバー全体を非表示にする" },
-  "labelSubscriptions": { "message": "登録チャンネル" },
-  "descSubscriptions": { "message": "登録チャンネルリストを非表示にする" },
-  "labelYou": { "message": "あなた" },
-  "descYou": { "message": "「あなた」セクションを非表示にする（履歴、再生リスト）" },
-  "labelExplore": { "message": "探索" },
-  "descExplore": { "message": "探索セクションを非表示にする" },
-  "labelMoreFromYT": { "message": "YouTubeの他のサービス" },
-  "descMoreFromYT": { "message": "Premium、ミュージック、Kidsリンクを非表示にする" },
-  "labelComments": { "message": "コメント" },
-  "descComments": { "message": "動画のコメントセクションを非表示にする" },
-  "labelLikes": { "message": "いいね" },
-  "descLikes": { "message": "動画のいいね数を非表示にする" },
-  "labelEndScreen": { "message": "終了画面" },
-  "descEndScreen": { "message": "終了画面のおすすめカードを非表示にする" },
-  "labelAutoplay": { "message": "自動再生" },
-  "descAutoplay": { "message": "自動再生を非表示にして無効にする" },
-  "labelPremiumPopups": { "message": "Premiumのポップアップ" },
-  "descPremiumPopups": { "message": "YouTube Premiumのプロモーションを非表示にする" },
-  "labelPremieres": { "message": "プレミア公開" },
-  "descPremieres": { "message": "今後のライブ配信を非表示にする" },
-  "labelShorts": { "message": "Shorts" },
-  "descShorts": { "message": "すべてのShortsコンテンツを非表示にする" },
-  "labelDefaultSubs": { "message": "デフォルトの登録チャンネル" },
-  "descDefaultSubs": { "message": "ホームページを自動的にフィードにリダイレクト" },
-  "labelListView": { "message": "リスト表示" },
-  "descListView": { "message": "登録チャンネルをリスト形式で表示" },
-  "labelCompactListView": { "message": "コンパクトリスト表示" },
-  "descCompactListView": { "message": "小さいサムネイル（リスト表示が必要）" }
+  "toggleThemeTitle": {
+    "message": "テーマを切り替え"
+  },
+  "toggleThemeAria": {
+    "message": "ライト/ダークテーマの切り替え"
+  },
+  "powerToggleTitle": {
+    "message": "拡張機能をオン/オフ"
+  },
+  "powerToggleAria": {
+    "message": "拡張機能を有効または無効にする"
+  },
+  "groupBasicUI": {
+    "message": "基本表示"
+  },
+  "groupLeftNav": {
+    "message": "左側メニュー"
+  },
+  "groupVideoPlayer": {
+    "message": "動画プレーヤー"
+  },
+  "groupMisc": {
+    "message": "その他"
+  },
+  "labelYouTubeLogo": {
+    "message": "YouTubeロゴ"
+  },
+  "descYouTubeLogo": {
+    "message": "左上のYouTubeロゴを非表示"
+  },
+  "labelSearchSuggestions": {
+    "message": "検索候補"
+  },
+  "descSearchSuggestions": {
+    "message": "検索バーのオートコンプリートを非表示"
+  },
+  "labelVoiceSearch": {
+    "message": "音声検索"
+  },
+  "descVoiceSearch": {
+    "message": "マイクアイコンを非表示"
+  },
+  "labelNotificationBell": {
+    "message": "通知"
+  },
+  "descNotificationBell": {
+    "message": "通知ベルを非表示"
+  },
+  "labelVideoSidebar": {
+    "message": "おすすめ動画"
+  },
+  "descVideoSidebar": {
+    "message": "プレーヤー横のおすすめ動画リストを非表示"
+  },
+  "labelCreateButton": {
+    "message": "作成ボタン"
+  },
+  "descCreateButton": {
+    "message": "「+作成」アップロードボタンを非表示"
+  },
+  "labelThumbnailBlur": {
+    "message": "サムネイルをぼかす"
+  },
+  "descThumbnailBlur": {
+    "message": "サムネイルをぼかします。マウスホバーで表示されます"
+  },
+  "labelHideLeftNav": {
+    "message": "左側メニューをすべて非表示"
+  },
+  "descHideLeftNav": {
+    "message": "左側のナビゲーションメニューを完全に非表示"
+  },
+  "labelSubscriptions": {
+    "message": "登録チャンネル"
+  },
+  "descSubscriptions": {
+    "message": "左側メニューの登録チャンネルリストを非表示"
+  },
+  "labelYou": {
+    "message": "マイページ"
+  },
+  "descYou": {
+    "message": "「マイページ」セクション（履歴、再生リスト）を非表示"
+  },
+  "labelExplore": {
+    "message": "探索"
+  },
+  "descExplore": {
+    "message": "探索セクションを非表示"
+  },
+  "labelMoreFromYT": {
+    "message": "YouTubeの他のサービス"
+  },
+  "descMoreFromYT": {
+    "message": "Premium、Music、Kidsのリンクを非表示"
+  },
+  "labelComments": {
+    "message": "コメント"
+  },
+  "descComments": {
+    "message": "動画下のコメント欄を非表示"
+  },
+  "labelLikes": {
+    "message": "高評価数"
+  },
+  "descLikes": {
+    "message": "動画の高評価数を非表示"
+  },
+  "labelEndScreen": {
+    "message": "終了画面のおすすめ"
+  },
+  "descEndScreen": {
+    "message": "動画再生終了時のおすすめカードを非表示"
+  },
+  "labelAutoplay": {
+    "message": "自動再生"
+  },
+  "descAutoplay": {
+    "message": "自動再生を無効にしてボタンを非表示"
+  },
+  "labelPremiumPopups": {
+    "message": "Premiumのポップアップ"
+  },
+  "descPremiumPopups": {
+    "message": "YouTube Premiumのプロモーションを非表示"
+  },
+  "labelPremieres": {
+    "message": "ライブとプレミア公開"
+  },
+  "descPremieres": {
+    "message": "登録チャンネルのフィードからライブ配信やプレミア公開を非表示"
+  },
+  "labelShorts": {
+    "message": "ショート動画"
+  },
+  "descShorts": {
+    "message": "すべてのShortsコンテンツを非表示"
+  },
+  "labelDefaultSubs": {
+    "message": "デフォルトを登録チャンネルにする"
+  },
+  "descDefaultSubs": {
+    "message": "YouTubeのホームを自動的に登録チャンネルにリダイレクト"
+  },
+  "labelListView": {
+    "message": "リスト表示"
+  },
+  "descListView": {
+    "message": "登録チャンネルをリスト形式で表示"
+  },
+  "labelCompactListView": {
+    "message": "コンパクトリスト"
+  },
+  "descCompactListView": {
+    "message": "サムネイルを小さく表示（リスト表示の有効化が必要）"
+  }
 }

@@ -1,57 +1,161 @@
 {
   "extDescription": {
-    "message": "YouTube anpassen: Shorts, Seitenleiste, Kommentare, Empfehlungen und mehr ausblenden!"
+    "message": "YouTube Anpassen: Shorts, Seitenleiste, Kommentare, Empfehlungen und mehr ausblenden!"
   },
-  "toggleThemeTitle": { "message": "Design umschalten" },
-  "toggleThemeAria": { "message": "Helles/dunkles Design umschalten" },
-  "powerToggleTitle": { "message": "Erweiterung aktivieren/deaktivieren" },
-  "powerToggleAria": { "message": "Erweiterung ein- oder ausschalten" },
-  "groupBasicUI": { "message": "Basis-Benutzeroberfläche" },
-  "groupLeftNav": { "message": "Linke Navigation" },
-  "groupVideoPlayer": { "message": "Videoplayer" },
-  "groupMisc": { "message": "Verschiedenes" },
-  "labelYouTubeLogo": { "message": "YouTube-Logo" },
-  "descYouTubeLogo": { "message": "YouTube-Logo oben links ausblenden" },
-  "labelSearchSuggestions": { "message": "Suchvorschläge" },
-  "descSearchSuggestions": { "message": "Autovervollständigung der Suchleiste ausblenden" },
-  "labelVoiceSearch": { "message": "Sprachsuche" },
-  "descVoiceSearch": { "message": "Mikrofon-Symbol ausblenden" },
-  "labelNotificationBell": { "message": "Benachrichtigungsglocke" },
-  "descNotificationBell": { "message": "Benachrichtigungsglocke ausblenden" },
-  "labelVideoSidebar": { "message": "Video-Seitenleiste" },
-  "descVideoSidebar": { "message": "Panel mit vorgeschlagenen Videos ausblenden" },
-  "labelCreateButton": { "message": "Erstellen-Schaltfläche" },
-  "descCreateButton": { "message": "+Erstellen-Upload-Schaltfläche ausblenden" },
-  "labelThumbnailBlur": { "message": "Miniaturansichten verwischen" },
-  "descThumbnailBlur": { "message": "Video-Miniaturansichten verwischen, zum Anzeigen darüberfahren" },
-  "labelHideLeftNav": { "message": "Ganze Seitenleiste ausblenden" },
-  "descHideLeftNav": { "message": "Gesamte linke Navigationsleiste ausblenden" },
-  "labelSubscriptions": { "message": "Abos" },
-  "descSubscriptions": { "message": "Liste der abonnierten Kanäle ausblenden" },
-  "labelYou": { "message": "Du" },
-  "descYou": { "message": "\"Du\"-Bereich ausblenden (Verlauf, Playlists)" },
-  "labelExplore": { "message": "Entdecken" },
-  "descExplore": { "message": "Entdecken-Bereich ausblenden" },
-  "labelMoreFromYT": { "message": "Mehr von YouTube" },
-  "descMoreFromYT": { "message": "Premium-, Musik- und Kids-Links ausblenden" },
-  "labelComments": { "message": "Kommentare" },
-  "descComments": { "message": "Video-Kommentarbereich ausblenden" },
-  "labelLikes": { "message": "Likes" },
-  "descLikes": { "message": "Like-Anzahl bei Videos ausblenden" },
-  "labelEndScreen": { "message": "Abspann-Vorschläge" },
-  "descEndScreen": { "message": "Abspann-Overlay-Karten ausblenden" },
-  "labelAutoplay": { "message": "Autoplay" },
-  "descAutoplay": { "message": "Autoplay ausblenden und deaktivieren" },
-  "labelPremiumPopups": { "message": "Premium-Popups" },
-  "descPremiumPopups": { "message": "YouTube Premium-Werbung ausblenden" },
-  "labelPremieres": { "message": "Premieren" },
-  "descPremieres": { "message": "Bevorstehende und Live-Streams ausblenden" },
-  "labelShorts": { "message": "Shorts" },
-  "descShorts": { "message": "Alle Shorts-Inhalte ausblenden" },
-  "labelDefaultSubs": { "message": "Standard-Abos" },
-  "descDefaultSubs": { "message": "Startseite automatisch zum Feed weiterleiten" },
-  "labelListView": { "message": "Listenansicht" },
-  "descListView": { "message": "Abonnements als Liste anzeigen" },
-  "labelCompactListView": { "message": "Kompakte Listenansicht" },
-  "descCompactListView": { "message": "Kleinere Miniaturansichten (erfordert Listenansicht)" }
+  "toggleThemeTitle": {
+    "message": "Design umschalten"
+  },
+  "toggleThemeAria": {
+    "message": "Helles/dunkles Design umschalten"
+  },
+  "powerToggleTitle": {
+    "message": "Erweiterung Ein/Aus"
+  },
+  "powerToggleAria": {
+    "message": "Erweiterung aktivieren oder deaktivieren"
+  },
+  "groupBasicUI": {
+    "message": "Allgemeine Ansicht"
+  },
+  "groupLeftNav": {
+    "message": "Seitenmenü"
+  },
+  "groupVideoPlayer": {
+    "message": "Videoplayer"
+  },
+  "groupMisc": {
+    "message": "Sonstiges"
+  },
+  "labelYouTubeLogo": {
+    "message": "YouTube Logo"
+  },
+  "descYouTubeLogo": {
+    "message": "Das YouTube-Logo oben links ausblenden"
+  },
+  "labelSearchSuggestions": {
+    "message": "Suchvorschläge"
+  },
+  "descSearchSuggestions": {
+    "message": "Die Autovervollständigung in der Suchleiste ausblenden"
+  },
+  "labelVoiceSearch": {
+    "message": "Sprachsuche"
+  },
+  "descVoiceSearch": {
+    "message": "Das Mikrofon-Symbol ausblenden"
+  },
+  "labelNotificationBell": {
+    "message": "Benachrichtigungen"
+  },
+  "descNotificationBell": {
+    "message": "Das Glockensymbol für Benachrichtigungen ausblenden"
+  },
+  "labelVideoSidebar": {
+    "message": "Empfohlene Videos (Seite)"
+  },
+  "descVideoSidebar": {
+    "message": "Die Liste der empfohlenen Videos neben dem Player ausblenden"
+  },
+  "labelCreateButton": {
+    "message": "Erstellen-Button"
+  },
+  "descCreateButton": {
+    "message": "Den '+Erstellen'-Button zum Hochladen ausblenden"
+  },
+  "labelThumbnailBlur": {
+    "message": "Vorschaubilder unscharf machen"
+  },
+  "descThumbnailBlur": {
+    "message": "Vorschaubilder weichzeichnen, beim Darüberfahren scharf anzeigen"
+  },
+  "labelHideLeftNav": {
+    "message": "Gesamtes Seitenmenü ausblenden"
+  },
+  "descHideLeftNav": {
+    "message": "Das gesamte linke Menü komplett ausblenden"
+  },
+  "labelSubscriptions": {
+    "message": "Abos"
+  },
+  "descSubscriptions": {
+    "message": "Die Liste der abonnierten Kanäle ausblenden"
+  },
+  "labelYou": {
+    "message": "Sie"
+  },
+  "descYou": {
+    "message": "Den 'Sie'-Bereich ausblenden (Verlauf, Playlists etc.)"
+  },
+  "labelExplore": {
+    "message": "Entdecken"
+  },
+  "descExplore": {
+    "message": "Den Entdecken-Bereich ausblenden"
+  },
+  "labelMoreFromYT": {
+    "message": "Mehr von YouTube"
+  },
+  "descMoreFromYT": {
+    "message": "Links zu Premium, Music und Kids ausblenden"
+  },
+  "labelComments": {
+    "message": "Kommentare"
+  },
+  "descComments": {
+    "message": "Den Kommentarbereich unter dem Video ausblenden"
+  },
+  "labelLikes": {
+    "message": "Gefällt mir-Angaben"
+  },
+  "descLikes": {
+    "message": "Die Anzahl der Likes bei Videos ausblenden"
+  },
+  "labelEndScreen": {
+    "message": "Abspann-Empfehlungen"
+  },
+  "descEndScreen": {
+    "message": "Die Videoempfehlungen am Ende eines Videos ausblenden"
+  },
+  "labelAutoplay": {
+    "message": "Autoplay"
+  },
+  "descAutoplay": {
+    "message": "Automatische Wiedergabe deaktivieren und ausblenden"
+  },
+  "labelPremiumPopups": {
+    "message": "Premium-Werbung"
+  },
+  "descPremiumPopups": {
+    "message": "Pop-ups für YouTube Premium ausblenden"
+  },
+  "labelPremieres": {
+    "message": "Live & Premieren"
+  },
+  "descPremieres": {
+    "message": "Livestreams und anstehende Premieren im Abo-Feed ausblenden"
+  },
+  "labelShorts": {
+    "message": "Shorts"
+  },
+  "descShorts": {
+    "message": "Alle Shorts-Inhalte vollständig ausblenden"
+  },
+  "labelDefaultSubs": {
+    "message": "Startseite zu Abos umleiten"
+  },
+  "descDefaultSubs": {
+    "message": "Beim Öffnen von YouTube direkt die Abo-Seite anzeigen"
+  },
+  "labelListView": {
+    "message": "Listenansicht"
+  },
+  "descListView": {
+    "message": "Abonnements als vertikale Liste statt als Raster anzeigen"
+  },
+  "labelCompactListView": {
+    "message": "Kompakte Listenansicht"
+  },
+  "descCompactListView": {
+    "message": "Kleinere Vorschaubilder in der Listenansicht verwenden"
+  }
 }
