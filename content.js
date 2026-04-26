@@ -243,7 +243,7 @@ function markLiveAndPremieres(items) {
             const badges = item.querySelectorAll('.badge-shape-wiz__text, .yt-core-attributed-string');
             for (const badge of badges) {
                 const text = (badge.textContent || '');
-                if (/(yakında|canlı|live|premiere|upcoming|ilk gösterim|i̇lk gösterim|estreno|première|premieren|anteprima|프리미어|プレミア公開|próximamente|em breve|bald|prossimamente)/i.test(text)) {
+                if (/(yakında|canlı|live|premiere|upcoming|ilk gösterim|i̇lk gösterim|estreno|première|premieren|anteprima|프리미어|プレミア公開|próximamente|em breve|estreia|ao vivo|bald|prossimamente|прямой эфир|в эфире|премьера|скоро|siaran langsung|tayang perdana|مباشر|بث مباشر|العرض الأول|قريبًا|直播|首播|即将开始|即將開始|na żywo|wkrótce|trực tiếp|công chiếu|sắp diễn ra|สด|พรีเมียร์|เร็วๆ นี้|binnenkort|наживо|прем'єра|незабаром|زنده|پخش زنده|نمایش برتر|به‌زودی|লাইভ|প্রিমিয়ার|শীঘ্রই|langsung|tayangan perdana|akan datang)/i.test(text)) {
                     isLive = true;
                     break;
                 }

@@ -16,7 +16,7 @@ Less YouTube Mess is a lightweight Chrome extension for turning YouTube into a c
 - Hide the whole left navigation bar, or only specific sections such as Subscriptions, You, Explore, and More from YouTube.
 - Redirect the YouTube homepage to the Subscriptions feed when enabled.
 - Toggle the whole extension on or off from the popup.
-- Localized popup UI for EN, TR, ES, PT_BR, DE, FR, IT, JA, KO, and HI.
+- Localized popup UI for 24 Chrome locales: AR, BN, DE, EN, ES, FA, FR, HI, ID, IT, JA, KO, MS, NL, PL, PT_BR, PT_PT, RU, TH, TR, UK, VI, ZH_CN, and ZH_TW.
 
 ## Installation
 
@@ -43,10 +43,11 @@ styles.css             CSS hiding rules via html attributes and :has() selectors
 popup.html             Extension popup UI
 popup.css              Popup styling with dark/light themes
 popup.js               Popup settings, i18n, accordion state, power toggle
-_locales/              Chrome i18n messages for 10 locale folders
+_locales/              Chrome i18n messages for 24 locale folders
 icons/                 Extension icons
 package.bat            Release zip helper
 promo_generator.html   Local Chrome Web Store promo image generator
+STORE_LISTINGS.md      Chrome Web Store listing copy translations
 memory-bank/           Project memory and maintenance notes
 ```
 
