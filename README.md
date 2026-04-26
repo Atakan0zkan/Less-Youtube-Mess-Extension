@@ -1,76 +1,80 @@
-# <img width="48" height="48" alt="icon128" src="https://github.com/user-attachments/assets/5a8e60ec-6cfe-479a-ac9f-ba1603ac669c" /> **Less YouTube Mess**
+# Less YouTube Mess
 
+Customize YouTube by hiding Shorts, recommendations, comments, Premium prompts, noisy navigation sections, and other distracting UI.
 
-Customize YouTube: Hide Shorts, Sidebar, Comments, Recommendations, and More!
+Less YouTube Mess is a lightweight Chrome extension for turning YouTube into a cleaner, more intentional experience. It uses vanilla HTML, CSS, and JavaScript with no build step and no runtime dependencies.
 
-Take back your focus and enjoy YouTube the way it was meant to be: clean and simple. Stop the doomscrolling trap and reclaim your time.
+## Features
 
-This extension is ultra-lightweight and gives you full control over what you see through a modern, easy-to-use menu.
-
- **Features** 
-
-1️⃣ **Block Distractions:** Remove Shorts, comments and premieres.
-
-2️⃣ **Clean Video Player:** Disable Autoplay entirely and hide end-screen cards, video sidebars, and like counts for focused viewing. 
-
-3️⃣ **Zero Clutter:** Instantly hide annoying Premium popups, search suggestions, the notification bell, and the YouTube logo.
-
-4️⃣ **Navigation Control:** Hide the left menu completely, or selectively remove sections like "Explore", "You", and "More from YouTube". 
-
-5️⃣ **Smart Redirect:** Bypass the chaotic homepage and land directly on your Subscriptions feed every time you open YouTube.
-
-6️⃣ **List View:** Transform your Subscriptions grid into a clean, easy-to-read chronological list. Toggle on the new Compact Mode for smaller thumbnails.
-
-
-<img width="1280" height="800" alt="store3" src="https://github.com/user-attachments/assets/b4471f6b-1b13-4550-98d4-755ae834dad0" />
-
-📩 **For suggestions, please email me:** atakanozkanapps@gmail.com
-
-**UPDATES**
-
-*Version 1.0 – Initial release!*
-
-*Version 1.0.3 – Fixed minor bugs*
-
-*Version 1.1 – Major performance improvements and bug fixes*
-
-*Version 1.1.1 - Fixed minor bugs*
-
-*Version 1.2 - New features for Left Navigation Bar!*
-
-*Version 1.3 - Fixed minor bugs and extension menu is better now*
-
-*Version 1.4 - Fixed Left Navigation bugs, improved toggles to work in real-time without refreshing, option to disable Premium popups and added major performance optimizations*
-
-*Version 1.5 - Major optimization and security updates. This has been the biggest update so far*
-
-*Version 1.6 - Added Autoplay and Compact List View features. Smashed filthy bugs and performance upgrades as usual*
-
-*Version 1.6.3 - YouTube renamed ALL CSS class names from BEM format to camelCase. Updated all selectors.*
-
-*Version 1.6.6 - Fixed list view thumbnail scaling for good. No bug fixes; I couldn't find any.*
-
-*Version 1.7 - You can now hide the "+Create" button! I added a toggle to the popup menu and fixed the autoplay feature, along with some minor bugs.*
-
-<img width="1400" height="560" alt="kayanyazi" src="https://github.com/user-attachments/assets/dac7db96-5b21-40e6-91da-b8324a8dfb13" />
-
+- Hide Shorts across navigation, homepage shelves, subscriptions, search, and video lists.
+- Convert the Subscriptions feed into a clean list view, with optional compact thumbnails.
+- Blur thumbnails until hover to reduce clickbait and visual noise.
+- Hide comments, video sidebar recommendations, end-screen cards, like counts, and autoplay UI.
+- Disable autoplay by setting YouTube's autoplay state and clicking the player toggle off when needed.
+- Hide Premium popups, promotional mealbars, enforcement messages, and statement banners without hiding functional YouTube dialogs.
+- Hide the notification bell, voice search, YouTube logo, search suggestions, and Create button.
+- Hide the whole left navigation bar, or only specific sections such as Subscriptions, You, Explore, and More from YouTube.
+- Redirect the YouTube homepage to the Subscriptions feed when enabled.
+- Toggle the whole extension on or off from the popup.
+- Localized popup UI for EN, TR, ES, PT_BR, DE, FR, IT, JA, KO, and HI.
 
 ## Installation
 
+Chrome Web Store:
+
 https://chromewebstore.google.com/detail/less-youtube-mess/opoonnlbochomodkkaflhdfmghbbikkb
 
-## File Structure
+For local development:
 
-```
-manifest.json          Extension manifest (Manifest V3)
-content.js             Content script — settings, DOM manipulation, MutationObserver
-styles.css             CSS hiding rules via attribute selectors and :has()
-popup.html             Settings popup UI
-popup.css              Popup styling (dark / light theme)
-popup.js               Popup settings manager
-icons/                 Extension icons (16, 48, 128px)
+1. Open `chrome://extensions`.
+2. Enable Developer mode.
+3. Click "Load unpacked".
+4. Select this repository folder.
+
+## Architecture
+
+The extension follows a small Manifest V3 structure:
+
+```text
+manifest.json          Extension manifest, permissions, CSP, content script registration
+shared/constants.js    Shared settings keys, defaults, and centralized YouTube selectors
+content.js             YouTube content script: settings, DOM handling, navigation, observers
+styles.css             CSS hiding rules via html attributes and :has() selectors
+popup.html             Extension popup UI
+popup.css              Popup styling with dark/light themes
+popup.js               Popup settings, i18n, accordion state, power toggle
+_locales/              Chrome i18n messages for 10 locale folders
+icons/                 Extension icons
+package.bat            Release zip helper
+promo_generator.html   Local Chrome Web Store promo image generator
+memory-bank/           Project memory and maintenance notes
 ```
 
+The main pattern is:
+
+1. `popup.js` saves feature settings to `chrome.storage.sync`.
+2. `content.js` reads those settings and writes attributes onto `<html>`, such as `hide_shorts="true"`.
+3. `styles.css` uses those attributes to hide YouTube UI quickly.
+4. `content.js` supplements CSS where YouTube re-renders custom elements, such as likes, Premium backdrops, autoplay, and lazy-loaded subscription descriptions.
+
+## Technical Notes
+
+- The extension is intentionally dependency-free.
+- Most hiding is CSS-first for speed and low layout churn.
+- `shared/constants.js` is the source of truth for the 22 feature settings.
+- YouTube selectors are centralized so DOM updates can usually be fixed in one place.
+- Critical selectors prefer YouTube custom element tag names when possible, with class-based fallbacks.
+- Subscriptions list view avoids absolute positioning inside YouTube components because YouTube wrappers often use `contain`, `isolation`, and nested positioning.
+- Video descriptions in list view are fetched lazily with `IntersectionObserver`, concurrency limiting, origin validation, `credentials: "omit"`, and `DOMParser`.
+
+## Maintenance Watchlist
+
+- YouTube may rename custom element tags or classes. `selfDiagnose()` in `content.js` helps warn when critical selectors no longer match.
+- Large `:has()` selector groups are useful but can become expensive if expanded carelessly.
+- The list-view description fetch feature is the largest network/performance surface. Keep it lazy, bounded, and abortable.
+- The extension-disabled state is read from async local storage, so default attributes can briefly apply during page startup before the disabled state is known.
+- Some JS supplements use cache guards for performance; if YouTube renders matching controls late on the same URL, those guards may need a mutation-aware refresh path.
+- Popup saves settings as booleans, but content-side storage reads should be kept hardened against legacy or manually corrupted values.
 
 ## License
 

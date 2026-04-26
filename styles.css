@@ -1,6 +1,10 @@
 /* ========================================
    Less Youtube Mess - Content Styles
    CSS attribute-selector based toggle system
+
+   Selector maintenance policy:
+   Prefer stable tag, href, and attribute selectors first; keep class selectors as fallbacks.
+   Avoid broad wildcard :has() selectors when adding new rules.
    ======================================== */
 
 /* ===== 1. LEFT NAVIGATION BAR ===== */

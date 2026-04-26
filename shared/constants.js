@@ -57,18 +57,26 @@ self.DEFAULTS = {
 };
 
 // Centralized DOM selectors — used by content.js.
-// Tag/attribute selectors (yt-lockup-view-model, h3 > a) are resilient to YouTube's
-// frequent class name changes. Class selectors are fallbacks.
+// Selectors are ordered from more stable tag/structure/attribute forms to class fallbacks.
 // When YouTube renames classes, update ONLY this section.
 self.SELECTORS = {
-    // Video title link: id → tag-structure → class
-    TITLE_LINK: 'a#video-title-link, yt-lockup-metadata-view-model h3 > a, a.ytLockupMetadataViewModelTitle',
-    // Lockup container div (class-based, may change)
-    LOCKUP_HOST: '.ytLockupViewModelHost',
-    // Lockup custom element tag (stable fallback for LOCKUP_HOST)
-    LOCKUP_TAG: 'yt-lockup-view-model',
-    // Channel avatar wrapper div
-    AVATAR: '.ytLockupMetadataViewModelAvatar',
-    // Content metadata element (tag-based, stable)
-    CONTENT_METADATA: 'yt-content-metadata-view-model',
+    TITLE_LINK: [
+        'yt-lockup-metadata-view-model h3 > a[href*="/watch"]',
+        'a#video-title-link[href*="/watch"]',
+        'a[href^="/watch"][id="video-title-link"]',
+        'a.ytLockupMetadataViewModelTitle[href*="/watch"]'
+    ],
+    LOCKUP: [
+        'yt-lockup-view-model',
+        '.ytLockupViewModelHost'
+    ],
+    AVATAR: [
+        'yt-decorated-avatar-view-model',
+        'yt-avatar-shape',
+        '.ytLockupMetadataViewModelAvatar'
+    ],
+    CONTENT_METADATA: [
+        'yt-content-metadata-view-model',
+        '#metadata'
+    ],
 };
