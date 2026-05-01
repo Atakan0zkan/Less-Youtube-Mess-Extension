@@ -1,61 +1,179 @@
 {
-  "extDescription": { "message": "Personalize o YouTube: oculte Shorts, barra lateral, comentários, recomendações e muito mais!" },
-
-  "toggleThemeTitle": { "message": "Mudar tema" },
-  "toggleThemeAria": { "message": "Alternar entre tema claro e escuro" },
-  "powerToggleTitle": { "message": "Ativar/Desativar extensão" },
-  "powerToggleAria": { "message": "Ativar ou desativar a extensão" },
-
-  "groupBasicUI": { "message": "Aspeto geral" },
-  "groupLeftNav": { "message": "Navegação esquerda" },
-  "groupVideoPlayer": { "message": "Leitor de vídeo" },
-  "groupMisc": { "message": "Outros" },
-
-  "labelYouTubeLogo": { "message": "Logótipo do YouTube" },
-  "descYouTubeLogo": { "message": "Ocultar o logótipo do YouTube no canto superior esquerdo" },
-  "labelSearchSuggestions": { "message": "Sugestões de pesquisa" },
-  "descSearchSuggestions": { "message": "Ocultar o preenchimento automático na barra de pesquisa" },
-  "labelVoiceSearch": { "message": "Pesquisa por voz" },
-  "descVoiceSearch": { "message": "Ocultar o ícone do microfone" },
-  "labelNotificationBell": { "message": "Notificações" },
-  "descNotificationBell": { "message": "Ocultar o sino de notificações" },
-  "labelVideoSidebar": { "message": "Vídeos sugeridos" },
-  "descVideoSidebar": { "message": "Ocultar o painel de vídeos sugeridos ao lado do leitor" },
-  "labelCreateButton": { "message": "Botão Criar" },
-  "descCreateButton": { "message": "Ocultar o botão '+Criar' para carregar vídeos" },
-  "labelThumbnailBlur": { "message": "Desfocar miniaturas" },
-  "descThumbnailBlur": { "message": "Desfocar miniaturas dos vídeos; passe o rato para revelar" },
-
-  "labelHideLeftNav": { "message": "Ocultar navegação esquerda" },
-  "descHideLeftNav": { "message": "Ocultar todo o menu de navegação esquerdo" },
-  "labelSubscriptions": { "message": "Subscrições" },
-  "descSubscriptions": { "message": "Ocultar a lista de canais subscritos" },
-  "labelYou": { "message": "Tu" },
-  "descYou": { "message": "Ocultar a secção 'Tu' (Histórico, playlists e mais)" },
-  "labelExplore": { "message": "Explorar" },
-  "descExplore": { "message": "Ocultar a secção Explorar" },
-  "labelMoreFromYT": { "message": "Mais do YouTube" },
-  "descMoreFromYT": { "message": "Ocultar ligações para Premium, Music e Kids" },
-
-  "labelComments": { "message": "Comentários" },
-  "descComments": { "message": "Ocultar a secção de comentários por baixo do vídeo" },
-  "labelLikes": { "message": "Número de gostos" },
-  "descLikes": { "message": "Ocultar o número de gostos nos vídeos" },
-  "labelEndScreen": { "message": "Sugestões no fim do vídeo" },
-  "descEndScreen": { "message": "Ocultar cartões de recomendação no final dos vídeos" },
-  "labelAutoplay": { "message": "Reprodução automática" },
-  "descAutoplay": { "message": "Desativar e ocultar a reprodução automática do vídeo seguinte" },
-
-  "labelPremiumPopups": { "message": "Promoções Premium" },
-  "descPremiumPopups": { "message": "Ocultar pop-ups de promoção do YouTube Premium" },
-  "labelPremieres": { "message": "Diretos e estreias" },
-  "descPremieres": { "message": "Ocultar transmissões em direto e estreias no feed de Subscrições" },
-  "labelShorts": { "message": "Shorts" },
-  "descShorts": { "message": "Ocultar todo o conteúdo Shorts no YouTube" },
-  "labelDefaultSubs": { "message": "Ir direto para Subscrições" },
-  "descDefaultSubs": { "message": "Abrir o feed de Subscrições em vez da página inicial do YouTube" },
-  "labelListView": { "message": "Vista em lista" },
-  "descListView": { "message": "Mostrar vídeos das Subscrições numa lista clara e fácil de ler" },
-  "labelCompactListView": { "message": "Lista compacta" },
-  "descCompactListView": { "message": "Usar miniaturas mais pequenas (requer Vista em lista)" }
+  "extDescription": {
+    "message": "Personalize o YouTube: oculte Shorts, barra lateral, comentários, recomendações e muito mais!"
+  },
+  "toggleThemeTitle": {
+    "message": "Mudar tema"
+  },
+  "toggleThemeAria": {
+    "message": "Alternar entre tema claro e escuro"
+  },
+  "powerToggleTitle": {
+    "message": "Ativar/Desativar extensão"
+  },
+  "powerToggleAria": {
+    "message": "Ativar ou desativar a extensão"
+  },
+  "groupBasicUI": {
+    "message": "Aspeto geral"
+  },
+  "groupLeftNav": {
+    "message": "Navegação esquerda"
+  },
+  "groupVideoPlayer": {
+    "message": "Leitor de vídeo"
+  },
+  "groupMisc": {
+    "message": "Outros"
+  },
+  "labelYouTubeLogo": {
+    "message": "Logótipo do YouTube"
+  },
+  "descYouTubeLogo": {
+    "message": "Ocultar o logótipo do YouTube no canto superior esquerdo"
+  },
+  "labelSearchSuggestions": {
+    "message": "Sugestões de pesquisa"
+  },
+  "descSearchSuggestions": {
+    "message": "Ocultar o preenchimento automático na barra de pesquisa"
+  },
+  "labelVoiceSearch": {
+    "message": "Pesquisa por voz"
+  },
+  "descVoiceSearch": {
+    "message": "Ocultar o ícone do microfone"
+  },
+  "labelNotificationBell": {
+    "message": "Notificações"
+  },
+  "descNotificationBell": {
+    "message": "Ocultar o sino de notificações"
+  },
+  "labelVideoSidebar": {
+    "message": "Vídeos sugeridos"
+  },
+  "descVideoSidebar": {
+    "message": "Ocultar o painel de vídeos sugeridos ao lado do leitor"
+  },
+  "labelCreateButton": {
+    "message": "Botão Criar"
+  },
+  "descCreateButton": {
+    "message": "Ocultar o botão '+Criar' para carregar vídeos"
+  },
+  "labelThumbnailBlur": {
+    "message": "Desfocar miniaturas"
+  },
+  "descThumbnailBlur": {
+    "message": "Desfocar miniaturas dos vídeos; passe o rato para revelar"
+  },
+  "labelThumbnailPlayback": {
+    "message": "Reprodução ao passar nas miniaturas"
+  },
+  "descThumbnailPlayback": {
+    "message": "Impede que as pré-visualizações sejam reproduzidas ao passar o cursor nas miniaturas"
+  },
+  "labelHideLeftNav": {
+    "message": "Ocultar navegação esquerda"
+  },
+  "descHideLeftNav": {
+    "message": "Ocultar todo o menu de navegação esquerdo"
+  },
+  "labelSubscriptions": {
+    "message": "Subscrições"
+  },
+  "descSubscriptions": {
+    "message": "Ocultar a lista de canais subscritos"
+  },
+  "labelYou": {
+    "message": "Tu"
+  },
+  "descYou": {
+    "message": "Ocultar a secção 'Tu' (Histórico, playlists e mais)"
+  },
+  "labelExplore": {
+    "message": "Explorar"
+  },
+  "descExplore": {
+    "message": "Ocultar a secção Explorar"
+  },
+  "labelMoreFromYT": {
+    "message": "Mais do YouTube"
+  },
+  "descMoreFromYT": {
+    "message": "Ocultar ligações para Premium, Music e Kids"
+  },
+  "labelComments": {
+    "message": "Comentários"
+  },
+  "descComments": {
+    "message": "Ocultar a secção de comentários por baixo do vídeo"
+  },
+  "labelLikes": {
+    "message": "Número de gostos"
+  },
+  "descLikes": {
+    "message": "Ocultar o número de gostos nos vídeos"
+  },
+  "labelHypeButton": {
+    "message": "Botão Hype / Obrigado"
+  },
+  "descHypeButton": {
+    "message": "Oculta o botão de apoio Hype ou Obrigado por baixo dos vídeos"
+  },
+  "labelEndScreen": {
+    "message": "Sugestões no fim do vídeo"
+  },
+  "descEndScreen": {
+    "message": "Ocultar cartões de recomendação no final dos vídeos"
+  },
+  "labelAutoplay": {
+    "message": "Reprodução automática"
+  },
+  "descAutoplay": {
+    "message": "Desativar e ocultar a reprodução automática do vídeo seguinte"
+  },
+  "labelAutoDubbing": {
+    "message": "Dobragem automática"
+  },
+  "descAutoDubbing": {
+    "message": "Usa o áudio original quando possível"
+  },
+  "labelPremiumPopups": {
+    "message": "Promoções Premium"
+  },
+  "descPremiumPopups": {
+    "message": "Ocultar pop-ups de promoção do YouTube Premium"
+  },
+  "labelPremieres": {
+    "message": "Diretos e estreias"
+  },
+  "descPremieres": {
+    "message": "Ocultar transmissões em direto e estreias no feed de Subscrições"
+  },
+  "labelShorts": {
+    "message": "Shorts"
+  },
+  "descShorts": {
+    "message": "Ocultar todo o conteúdo Shorts no YouTube"
+  },
+  "labelDefaultSubs": {
+    "message": "Ir direto para Subscrições"
+  },
+  "descDefaultSubs": {
+    "message": "Abrir o feed de Subscrições em vez da página inicial do YouTube"
+  },
+  "labelListView": {
+    "message": "Vista em lista"
+  },
+  "descListView": {
+    "message": "Mostrar vídeos das Subscrições numa lista clara e fácil de ler"
+  },
+  "labelCompactListView": {
+    "message": "Lista compacta"
+  },
+  "descCompactListView": {
+    "message": "Usar miniaturas mais pequenas (requer Vista em lista)"
+  }
 }

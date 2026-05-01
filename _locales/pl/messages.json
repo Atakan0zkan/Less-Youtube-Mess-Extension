@@ -1,61 +1,179 @@
 {
-  "extDescription": { "message": "Dostosuj YouTube: ukryj Shorts, panel boczny, komentarze, rekomendacje i inne rozpraszacze!" },
-
-  "toggleThemeTitle": { "message": "Zmień motyw" },
-  "toggleThemeAria": { "message": "Przełącz jasny/ciemny motyw" },
-  "powerToggleTitle": { "message": "Włącz/wyłącz rozszerzenie" },
-  "powerToggleAria": { "message": "Włącz lub wyłącz rozszerzenie" },
-
-  "groupBasicUI": { "message": "Podstawowy wygląd" },
-  "groupLeftNav": { "message": "Lewa nawigacja" },
-  "groupVideoPlayer": { "message": "Odtwarzacz wideo" },
-  "groupMisc": { "message": "Inne" },
-
-  "labelYouTubeLogo": { "message": "Logo YouTube" },
-  "descYouTubeLogo": { "message": "Ukryj logo YouTube w lewym górnym rogu" },
-  "labelSearchSuggestions": { "message": "Sugestie wyszukiwania" },
-  "descSearchSuggestions": { "message": "Ukryj autouzupełnianie w pasku wyszukiwania" },
-  "labelVoiceSearch": { "message": "Wyszukiwanie głosowe" },
-  "descVoiceSearch": { "message": "Ukryj ikonę mikrofonu" },
-  "labelNotificationBell": { "message": "Powiadomienia" },
-  "descNotificationBell": { "message": "Ukryj dzwonek powiadomień" },
-  "labelVideoSidebar": { "message": "Polecane filmy z boku" },
-  "descVideoSidebar": { "message": "Ukryj panel polecanych filmów obok odtwarzacza" },
-  "labelCreateButton": { "message": "Przycisk Utwórz" },
-  "descCreateButton": { "message": "Ukryj przycisk '+Utwórz' do przesyłania filmów" },
-  "labelThumbnailBlur": { "message": "Rozmycie miniaturek" },
-  "descThumbnailBlur": { "message": "Rozmywaj miniaturki filmów; najedź kursorem, aby je zobaczyć" },
-
-  "labelHideLeftNav": { "message": "Ukryj lewą nawigację" },
-  "descHideLeftNav": { "message": "Ukryj cały lewy panel nawigacyjny" },
-  "labelSubscriptions": { "message": "Subskrypcje" },
-  "descSubscriptions": { "message": "Ukryj listę subskrybowanych kanałów" },
-  "labelYou": { "message": "Ty" },
-  "descYou": { "message": "Ukryj sekcję 'Ty' (historia, playlisty i inne)" },
-  "labelExplore": { "message": "Odkrywaj" },
-  "descExplore": { "message": "Ukryj sekcję Odkrywaj" },
-  "labelMoreFromYT": { "message": "Więcej z YouTube" },
-  "descMoreFromYT": { "message": "Ukryj linki do Premium, Music i Kids" },
-
-  "labelComments": { "message": "Komentarze" },
-  "descComments": { "message": "Ukryj komentarze pod filmem" },
-  "labelLikes": { "message": "Liczba polubień" },
-  "descLikes": { "message": "Ukryj liczbę polubień przy filmach" },
-  "labelEndScreen": { "message": "Sugestie na końcu filmu" },
-  "descEndScreen": { "message": "Ukryj karty rekomendacji wyświetlane po zakończeniu filmu" },
-  "labelAutoplay": { "message": "Autoodtwarzanie" },
-  "descAutoplay": { "message": "Wyłącz i ukryj automatyczne odtwarzanie następnego filmu" },
-
-  "labelPremiumPopups": { "message": "Promocje Premium" },
-  "descPremiumPopups": { "message": "Ukryj wyskakujące promocje YouTube Premium" },
-  "labelPremieres": { "message": "Transmisje i premiery" },
-  "descPremieres": { "message": "Ukryj transmisje na żywo i premiery w Subskrypcjach" },
-  "labelShorts": { "message": "Shorts" },
-  "descShorts": { "message": "Ukryj wszystkie treści Shorts w YouTube" },
-  "labelDefaultSubs": { "message": "Od razu do Subskrypcji" },
-  "descDefaultSubs": { "message": "Otwieraj kanał Subskrypcje zamiast strony głównej YouTube" },
-  "labelListView": { "message": "Widok listy" },
-  "descListView": { "message": "Pokazuj filmy z Subskrypcji jako czytelną listę" },
-  "labelCompactListView": { "message": "Kompaktowa lista" },
-  "descCompactListView": { "message": "Używaj mniejszych miniaturek (wymaga Widoku listy)" }
+  "extDescription": {
+    "message": "Dostosuj YouTube: ukryj Shorts, panel boczny, komentarze, rekomendacje i inne rozpraszacze!"
+  },
+  "toggleThemeTitle": {
+    "message": "Zmień motyw"
+  },
+  "toggleThemeAria": {
+    "message": "Przełącz jasny/ciemny motyw"
+  },
+  "powerToggleTitle": {
+    "message": "Włącz/wyłącz rozszerzenie"
+  },
+  "powerToggleAria": {
+    "message": "Włącz lub wyłącz rozszerzenie"
+  },
+  "groupBasicUI": {
+    "message": "Podstawowy wygląd"
+  },
+  "groupLeftNav": {
+    "message": "Lewa nawigacja"
+  },
+  "groupVideoPlayer": {
+    "message": "Odtwarzacz wideo"
+  },
+  "groupMisc": {
+    "message": "Inne"
+  },
+  "labelYouTubeLogo": {
+    "message": "Logo YouTube"
+  },
+  "descYouTubeLogo": {
+    "message": "Ukryj logo YouTube w lewym górnym rogu"
+  },
+  "labelSearchSuggestions": {
+    "message": "Sugestie wyszukiwania"
+  },
+  "descSearchSuggestions": {
+    "message": "Ukryj autouzupełnianie w pasku wyszukiwania"
+  },
+  "labelVoiceSearch": {
+    "message": "Wyszukiwanie głosowe"
+  },
+  "descVoiceSearch": {
+    "message": "Ukryj ikonę mikrofonu"
+  },
+  "labelNotificationBell": {
+    "message": "Powiadomienia"
+  },
+  "descNotificationBell": {
+    "message": "Ukryj dzwonek powiadomień"
+  },
+  "labelVideoSidebar": {
+    "message": "Polecane filmy z boku"
+  },
+  "descVideoSidebar": {
+    "message": "Ukryj panel polecanych filmów obok odtwarzacza"
+  },
+  "labelCreateButton": {
+    "message": "Przycisk Utwórz"
+  },
+  "descCreateButton": {
+    "message": "Ukryj przycisk '+Utwórz' do przesyłania filmów"
+  },
+  "labelThumbnailBlur": {
+    "message": "Rozmycie miniaturek"
+  },
+  "descThumbnailBlur": {
+    "message": "Rozmywaj miniaturki filmów; najedź kursorem, aby je zobaczyć"
+  },
+  "labelThumbnailPlayback": {
+    "message": "Odtwarzanie po najechaniu na miniaturę"
+  },
+  "descThumbnailPlayback": {
+    "message": "Zatrzymuje podglądy wideo uruchamiane po najechaniu na miniatury"
+  },
+  "labelHideLeftNav": {
+    "message": "Ukryj lewą nawigację"
+  },
+  "descHideLeftNav": {
+    "message": "Ukryj cały lewy panel nawigacyjny"
+  },
+  "labelSubscriptions": {
+    "message": "Subskrypcje"
+  },
+  "descSubscriptions": {
+    "message": "Ukryj listę subskrybowanych kanałów"
+  },
+  "labelYou": {
+    "message": "Ty"
+  },
+  "descYou": {
+    "message": "Ukryj sekcję 'Ty' (historia, playlisty i inne)"
+  },
+  "labelExplore": {
+    "message": "Odkrywaj"
+  },
+  "descExplore": {
+    "message": "Ukryj sekcję Odkrywaj"
+  },
+  "labelMoreFromYT": {
+    "message": "Więcej z YouTube"
+  },
+  "descMoreFromYT": {
+    "message": "Ukryj linki do Premium, Music i Kids"
+  },
+  "labelComments": {
+    "message": "Komentarze"
+  },
+  "descComments": {
+    "message": "Ukryj komentarze pod filmem"
+  },
+  "labelLikes": {
+    "message": "Liczba polubień"
+  },
+  "descLikes": {
+    "message": "Ukryj liczbę polubień przy filmach"
+  },
+  "labelHypeButton": {
+    "message": "Przycisk Hype / Dzięki"
+  },
+  "descHypeButton": {
+    "message": "Ukrywa przycisk wsparcia Hype lub Dzięki pod filmami"
+  },
+  "labelEndScreen": {
+    "message": "Sugestie na końcu filmu"
+  },
+  "descEndScreen": {
+    "message": "Ukryj karty rekomendacji wyświetlane po zakończeniu filmu"
+  },
+  "labelAutoplay": {
+    "message": "Autoodtwarzanie"
+  },
+  "descAutoplay": {
+    "message": "Wyłącz i ukryj automatyczne odtwarzanie następnego filmu"
+  },
+  "labelAutoDubbing": {
+    "message": "Automatyczny dubbing"
+  },
+  "descAutoDubbing": {
+    "message": "Używa oryginalnej ścieżki audio, gdy to możliwe"
+  },
+  "labelPremiumPopups": {
+    "message": "Promocje Premium"
+  },
+  "descPremiumPopups": {
+    "message": "Ukryj wyskakujące promocje YouTube Premium"
+  },
+  "labelPremieres": {
+    "message": "Transmisje i premiery"
+  },
+  "descPremieres": {
+    "message": "Ukryj transmisje na żywo i premiery w Subskrypcjach"
+  },
+  "labelShorts": {
+    "message": "Shorts"
+  },
+  "descShorts": {
+    "message": "Ukryj wszystkie treści Shorts w YouTube"
+  },
+  "labelDefaultSubs": {
+    "message": "Od razu do Subskrypcji"
+  },
+  "descDefaultSubs": {
+    "message": "Otwieraj kanał Subskrypcje zamiast strony głównej YouTube"
+  },
+  "labelListView": {
+    "message": "Widok listy"
+  },
+  "descListView": {
+    "message": "Pokazuj filmy z Subskrypcji jako czytelną listę"
+  },
+  "labelCompactListView": {
+    "message": "Kompaktowa lista"
+  },
+  "descCompactListView": {
+    "message": "Używaj mniejszych miniaturek (wymaga Widoku listy)"
+  }
 }

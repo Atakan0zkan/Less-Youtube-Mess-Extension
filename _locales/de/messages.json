@@ -68,6 +68,12 @@
   "descThumbnailBlur": {
     "message": "Vorschaubilder weichzeichnen, beim Darüberfahren scharf anzeigen"
   },
+  "labelThumbnailPlayback": {
+    "message": "Thumbnail-Vorschau bei Hover"
+  },
+  "descThumbnailPlayback": {
+    "message": "Verhindert, dass Videovorschauen beim Überfahren von Thumbnails abgespielt werden"
+  },
   "labelHideLeftNav": {
     "message": "Gesamtes Seitenmenü ausblenden"
   },
@@ -110,6 +116,12 @@
   "descLikes": {
     "message": "Die Anzahl der Likes bei Videos ausblenden"
   },
+  "labelHypeButton": {
+    "message": "Hype-/Danke-Button"
+  },
+  "descHypeButton": {
+    "message": "Blendet den Hype- bzw. Danke-Support-Button unter Videos aus"
+  },
   "labelEndScreen": {
     "message": "Abspann-Empfehlungen"
   },
@@ -121,6 +133,12 @@
   },
   "descAutoplay": {
     "message": "Automatische Wiedergabe deaktivieren und ausblenden"
+  },
+  "labelAutoDubbing": {
+    "message": "Automatische Synchronisation"
+  },
+  "descAutoDubbing": {
+    "message": "Verwendet nach Möglichkeit die Originaltonspur"
   },
   "labelPremiumPopups": {
     "message": "Premium-Werbung"

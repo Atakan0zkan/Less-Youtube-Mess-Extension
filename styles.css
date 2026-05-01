@@ -66,7 +66,12 @@ html[list_view="true"] ytd-browse[page-subtype="subscriptions"] #contents {
     max-width: 100% !important;
 }
 
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer > #contents > ytd-rich-item-renderer {
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer > #contents > ytd-rich-item-renderer,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer > #contents > ytd-rich-grid-media,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer > #contents > yt-lockup-view-model,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] #contents > yt-lockup-view-model,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-grid-video-renderer,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-video-renderer {
     width: 100% !important;
     max-width: 90% !important;
     padding-bottom: 16px !important;
@@ -74,13 +79,26 @@ html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-re
     border-bottom: 1px solid var(--yt-spec-10-percent-layer, rgba(128, 128, 128, 0.15)) !important;
 }
 
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer > #contents > ytd-rich-item-renderer:last-child {
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer > #contents > ytd-rich-item-renderer:last-child,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer > #contents > ytd-rich-grid-media:last-child,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer > #contents > yt-lockup-view-model:last-child,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] #contents > yt-lockup-view-model:last-child,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-grid-video-renderer:last-child,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-video-renderer:last-child {
     border-bottom: none !important;
 }
 
 /* Flex row layout — NO position:relative needed, avatar uses flow not absolute */
 html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer > #contents > ytd-rich-item-renderer .ytLockupViewModelHost,
-html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer > #contents > ytd-rich-item-renderer yt-lockup-view-model > div {
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer > #contents > ytd-rich-item-renderer yt-lockup-view-model > div,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer > #contents > ytd-rich-grid-media .ytLockupViewModelHost,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer > #contents > ytd-rich-grid-media yt-lockup-view-model > div,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer > #contents > yt-lockup-view-model .ytLockupViewModelHost,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-rich-grid-renderer > #contents > yt-lockup-view-model > div,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] #contents > yt-lockup-view-model .ytLockupViewModelHost,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] #contents > yt-lockup-view-model > div,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-grid-video-renderer yt-lockup-view-model > div,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-video-renderer yt-lockup-view-model > div {
     display: flex !important;
     flex-direction: row !important;
     align-items: flex-start !important;
@@ -156,8 +174,24 @@ html[list_view="true"] ytd-browse[page-subtype="subscriptions"] ytd-reel-shelf-r
 html[hide_live_premiere="true"] ytd-rich-item-renderer:has([overlay-style="LIVE"]),
 html[hide_live_premiere="true"] ytd-rich-item-renderer:has([overlay-style="UPCOMING"]),
 html[hide_live_premiere="true"] ytd-rich-item-renderer:has([aria-label*="Remind me"]),
+html[hide_live_premiere="true"] ytd-rich-grid-media:has([overlay-style="LIVE"]),
+html[hide_live_premiere="true"] ytd-rich-grid-media:has([overlay-style="UPCOMING"]),
+html[hide_live_premiere="true"] ytd-rich-grid-media:has([aria-label*="Remind me"]),
+html[hide_live_premiere="true"] yt-lockup-view-model:has([overlay-style="LIVE"]),
+html[hide_live_premiere="true"] yt-lockup-view-model:has([overlay-style="UPCOMING"]),
+html[hide_live_premiere="true"] yt-lockup-view-model:has([aria-label*="Remind me"]),
+html[hide_live_premiere="true"] ytd-grid-video-renderer:has([overlay-style="LIVE"]),
+html[hide_live_premiere="true"] ytd-grid-video-renderer:has([overlay-style="UPCOMING"]),
+html[hide_live_premiere="true"] ytd-grid-video-renderer:has([aria-label*="Remind me"]),
+html[hide_live_premiere="true"] ytd-video-renderer:has([overlay-style="LIVE"]),
+html[hide_live_premiere="true"] ytd-video-renderer:has([overlay-style="UPCOMING"]),
+html[hide_live_premiere="true"] ytd-video-renderer:has([aria-label*="Remind me"]),
 /* JS-marked elements via data-live-premiere attribute */
-html[hide_live_premiere="true"] ytd-rich-item-renderer[data-live-premiere="true"] {
+html[hide_live_premiere="true"] ytd-rich-item-renderer[data-live-premiere="true"],
+html[hide_live_premiere="true"] ytd-rich-grid-media[data-live-premiere="true"],
+html[hide_live_premiere="true"] yt-lockup-view-model[data-live-premiere="true"],
+html[hide_live_premiere="true"] ytd-grid-video-renderer[data-live-premiere="true"],
+html[hide_live_premiere="true"] ytd-video-renderer[data-live-premiere="true"] {
     display: none !important;
 }
 
@@ -192,6 +226,27 @@ html[hide_likes="true"] ytd-toggle-button-renderer a yt-formatted-string[aria-la
 html[hide_likes="true"] ytd-toggle-button-renderer a yt-formatted-string[aria-label*="like" i],
 html[hide_likes="true"] like-button-view-model .yt-spec-button-shape-next__button-text-content,
 html[hide_likes="true"] segmented-like-dislike-button-view-model .yt-spec-button-shape-next__button-text-content {
+    display: none !important;
+}
+
+
+/* ===== 4.2. HIDE HYPE / THANKS BUTTON ===== */
+/* CSS catches aria/label-based variants; content.js also hides late-rendered text variants. */
+html[hide_hype_button="true"] ytd-watch-metadata #actions ytd-button-renderer:has(button[aria-label*="thanks" i]),
+html[hide_hype_button="true"] ytd-watch-metadata #actions ytd-button-renderer:has(a[aria-label*="thanks" i]),
+html[hide_hype_button="true"] ytd-watch-metadata #actions ytd-button-renderer:has(button[aria-label*="hype" i]),
+html[hide_hype_button="true"] ytd-watch-metadata #actions ytd-button-renderer:has(a[aria-label*="hype" i]),
+html[hide_hype_button="true"] ytd-watch-metadata #actions ytd-button-renderer:has(button[aria-label*="teşekkür" i]),
+html[hide_hype_button="true"] ytd-watch-metadata #actions ytd-button-renderer:has(a[aria-label*="teşekkür" i]),
+html[hide_hype_button="true"] ytd-watch-metadata #actions yt-button-view-model:has(button[aria-label*="thanks" i]),
+html[hide_hype_button="true"] ytd-watch-metadata #actions yt-button-view-model:has(a[aria-label*="thanks" i]),
+html[hide_hype_button="true"] ytd-watch-metadata #actions yt-button-view-model:has(button[aria-label*="hype" i]),
+html[hide_hype_button="true"] ytd-watch-metadata #actions yt-button-view-model:has(a[aria-label*="hype" i]),
+html[hide_hype_button="true"] ytd-watch-metadata #actions yt-button-view-model:has(button[aria-label*="teşekkür" i]),
+html[hide_hype_button="true"] ytd-watch-metadata #actions yt-button-view-model:has(a[aria-label*="teşekkür" i]),
+html[hide_hype_button="true"] #top-level-buttons-computed ytd-button-renderer:has(yt-formatted-string[title*="thanks" i]),
+html[hide_hype_button="true"] #top-level-buttons-computed ytd-button-renderer:has(yt-formatted-string[title*="hype" i]),
+html[hide_hype_button="true"] #top-level-buttons-computed ytd-button-renderer:has(yt-formatted-string[title*="teşekkür" i]) {
     display: none !important;
 }
 
@@ -338,8 +393,20 @@ html[hide_autoplay="true"] .ytp-autonav-toggle-button-container {
 
 /* ===== 14. HIDE CREATE BUTTON ===== */
 /* Hides the "+Create" upload button in the top-right navigation bar.
-   Uses aria-label for locale-specific targeting + href fallback.
-   RISK-01 Tested: 2026-04 — aria-label values are locale-dependent */
+   Uses upload/studio href first, then scoped aria-label fallbacks.
+   content.js also catches late-rendered topbar variants by text/target. */
+html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(a[href*="/upload"]),
+html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(a[href*="studio.youtube.com"]),
+html[hide_create_button="true"] ytd-masthead #buttons ytd-button-renderer:has(a[href*="/upload"]),
+html[hide_create_button="true"] ytd-masthead #buttons ytd-button-renderer:has(a[href*="studio.youtube.com"]),
+html[hide_create_button="true"] ytd-masthead #buttons yt-button-view-model:has(a[href*="/upload"]),
+html[hide_create_button="true"] ytd-masthead #buttons yt-button-view-model:has(a[href*="studio.youtube.com"]),
+html[hide_create_button="true"] ytd-masthead #buttons button-view-model:has(a[href*="/upload"]),
+html[hide_create_button="true"] ytd-masthead #buttons button-view-model:has(a[href*="studio.youtube.com"]),
+html[hide_create_button="true"] ytd-masthead #buttons ytd-topbar-menu-button-renderer:has(button[aria-label*="Create" i]),
+html[hide_create_button="true"] ytd-masthead #buttons ytd-topbar-menu-button-renderer:has(a[aria-label*="Create" i]),
+html[hide_create_button="true"] ytd-masthead #buttons ytd-topbar-menu-button-renderer:has(button[aria-label*="Oluştur" i]),
+html[hide_create_button="true"] ytd-masthead #buttons ytd-topbar-menu-button-renderer:has(a[aria-label*="Oluştur" i]),
 html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-label="Create"]),
 html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-label="Oluştur"]),
 html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-label="Créer"]),
@@ -362,9 +429,7 @@ html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-
 html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-label="Створити"]),
 html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-label="ایجاد"]),
 html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-label="তৈরি করুন"]),
-html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-label="Cipta"]),
-html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(a[href*="/upload"]),
-html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(a[href*="studio.youtube.com"]) {
+html[hide_create_button="true"] ytd-topbar-menu-button-renderer:has(button[aria-label="Cipta"]) {
     display: none !important;
 }
 
@@ -427,4 +492,19 @@ html[blur_thumbnails="true"] ytd-thumbnail:hover {
 html[blur_thumbnails="true"] .ytLockupViewModelContentImage:hover,
 html[blur_thumbnails="true"] yt-thumbnail-view-model:hover {
     filter: blur(0) !important;
+}
+
+
+/* ===== 16. DISABLE THUMBNAIL HOVER PLAYBACK ===== */
+/* CSS hides preview renderers; content.js also pauses preview videos after lazy render. */
+html[disable_thumbnail_playback="true"] ytd-video-preview,
+html[disable_thumbnail_playback="true"] inline-preview-player,
+html[disable_thumbnail_playback="true"] ytd-thumbnail ytd-video-preview,
+html[disable_thumbnail_playback="true"] yt-thumbnail-view-model inline-preview-player,
+html[disable_thumbnail_playback="true"] ytd-thumbnail-overlay-playing-renderer,
+html[disable_thumbnail_playback="true"] ytd-video-preview video,
+html[disable_thumbnail_playback="true"] inline-preview-player video,
+html[disable_thumbnail_playback="true"] ytd-thumbnail video,
+html[disable_thumbnail_playback="true"] yt-thumbnail-view-model video {
+    display: none !important;
 }

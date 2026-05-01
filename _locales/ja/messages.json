@@ -68,6 +68,12 @@
   "descThumbnailBlur": {
     "message": "サムネイルをぼかします。マウスホバーで表示されます"
   },
+  "labelThumbnailPlayback": {
+    "message": "サムネイルのホバー再生"
+  },
+  "descThumbnailPlayback": {
+    "message": "サムネイルにカーソルを合わせたときの動画プレビュー再生を止めます"
+  },
   "labelHideLeftNav": {
     "message": "左側メニューをすべて非表示"
   },
@@ -110,6 +116,12 @@
   "descLikes": {
     "message": "動画の高評価数を非表示"
   },
+  "labelHypeButton": {
+    "message": "Hype / Thanks ボタン"
+  },
+  "descHypeButton": {
+    "message": "動画の下にある Hype または Thanks の応援ボタンを非表示にします"
+  },
   "labelEndScreen": {
     "message": "終了画面のおすすめ"
   },
@@ -121,6 +133,12 @@
   },
   "descAutoplay": {
     "message": "自動再生を無効にしてボタンを非表示"
+  },
+  "labelAutoDubbing": {
+    "message": "自動吹き替え"
+  },
+  "descAutoDubbing": {
+    "message": "可能な場合は元の音声を使います"
   },
   "labelPremiumPopups": {
     "message": "Premiumのポップアップ"

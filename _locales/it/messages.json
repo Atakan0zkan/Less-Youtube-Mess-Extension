@@ -68,6 +68,12 @@
   "descThumbnailBlur": {
     "message": "Sfoca le anteprime dei video, passa il mouse per visualizzarle"
   },
+  "labelThumbnailPlayback": {
+    "message": "Riproduzione al passaggio sulle miniature"
+  },
+  "descThumbnailPlayback": {
+    "message": "Impedisce l'avvio delle anteprime quando passi sulle miniature"
+  },
   "labelHideLeftNav": {
     "message": "Nascondi Menu Laterale"
   },
@@ -110,6 +116,12 @@
   "descLikes": {
     "message": "Nascondi il contatore dei mi piace nei video"
   },
+  "labelHypeButton": {
+    "message": "Pulsante Hype / Grazie"
+  },
+  "descHypeButton": {
+    "message": "Nasconde il pulsante di supporto Hype o Grazie sotto i video"
+  },
   "labelEndScreen": {
     "message": "Suggerimenti Finali"
   },
@@ -121,6 +133,12 @@
   },
   "descAutoplay": {
     "message": "Disattiva e nascondi la riproduzione automatica"
+  },
+  "labelAutoDubbing": {
+    "message": "Doppiaggio automatico"
+  },
+  "descAutoDubbing": {
+    "message": "Usa l’audio originale quando possibile"
   },
   "labelPremiumPopups": {
     "message": "Annunci Premium"

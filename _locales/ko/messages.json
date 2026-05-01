@@ -68,6 +68,12 @@
   "descThumbnailBlur": {
     "message": "썸네일을 흐리게 처리하고 마우스를 올리면 표시합니다"
   },
+  "labelThumbnailPlayback": {
+    "message": "썸네일 호버 재생"
+  },
+  "descThumbnailPlayback": {
+    "message": "썸네일에 마우스를 올렸을 때 미리보기가 재생되지 않게 합니다"
+  },
   "labelHideLeftNav": {
     "message": "왼쪽 메뉴 전체 숨기기"
   },
@@ -110,6 +116,12 @@
   "descLikes": {
     "message": "동영상의 좋아요 개수 숨기기"
   },
+  "labelHypeButton": {
+    "message": "Hype / Thanks 버튼"
+  },
+  "descHypeButton": {
+    "message": "동영상 아래의 Hype 또는 Thanks 후원 버튼을 숨깁니다"
+  },
   "labelEndScreen": {
     "message": "종료 화면 추천"
   },
@@ -121,6 +133,12 @@
   },
   "descAutoplay": {
     "message": "자동재생 기능을 끄고 버튼 숨기기"
+  },
+  "labelAutoDubbing": {
+    "message": "자동 더빙"
+  },
+  "descAutoDubbing": {
+    "message": "가능하면 원본 오디오를 사용합니다"
   },
   "labelPremiumPopups": {
     "message": "Premium 팝업"

@@ -4,7 +4,7 @@
 // Assigned to 'self' explicitly to guarantee global accessibility across Chrome content script files.
 
 // RISK-02 NOTE: chrome.storage.sync stores each key individually (8KB/key limit, 100KB total).
-// Current usage is well within quota. If the feature count grows past ~25 keys, consolidate
+// Current usage is well within quota. If the feature count grows past ~30 keys, consolidate
 // all settings under a single 'lym_settings' object key to be safe.
 self.SETTINGS_KEYS = [
     'hide_left_nav',
@@ -21,14 +21,17 @@ self.SETTINGS_KEYS = [
     'hide_youtube_logo',
     'default_subscriptions',
     'hide_likes',
+    'hide_hype_button',
     'hide_autoplay',
+    'disable_auto_dubbing',
     'hide_explore',
     'hide_more_from_youtube',
     'hide_subscriptions_section',
     'hide_you_section',
     'hide_premium_popups',
     'hide_create_button',
-    'blur_thumbnails'
+    'blur_thumbnails',
+    'disable_thumbnail_playback'
 ];
 
 self.DEFAULTS = {
@@ -46,20 +49,31 @@ self.DEFAULTS = {
     hide_youtube_logo: false,
     default_subscriptions: false,
     hide_likes: false,
+    hide_hype_button: false,
     hide_autoplay: false,
+    disable_auto_dubbing: false,
     hide_explore: false,
     hide_more_from_youtube: false,
     hide_subscriptions_section: false,
     hide_you_section: false,
     hide_premium_popups: false,
     hide_create_button: false,
-    blur_thumbnails: false
+    blur_thumbnails: false,
+    disable_thumbnail_playback: false
 };
 
 // Centralized DOM selectors — used by content.js.
 // Selectors are ordered from more stable tag/structure/attribute forms to class fallbacks.
 // When YouTube renames classes, update ONLY this section.
 self.SELECTORS = {
+    SUBSCRIPTION_ITEM: [
+        'ytd-browse ytd-rich-grid-renderer > #contents > ytd-rich-item-renderer',
+        'ytd-browse ytd-rich-grid-renderer > #contents > ytd-rich-grid-media',
+        'ytd-browse ytd-rich-grid-renderer > #contents > yt-lockup-view-model',
+        'ytd-browse #contents > yt-lockup-view-model',
+        'ytd-browse ytd-grid-video-renderer',
+        'ytd-browse ytd-video-renderer'
+    ],
     TITLE_LINK: [
         'yt-lockup-metadata-view-model h3 > a[href*="/watch"]',
         'a#video-title-link[href*="/watch"]',

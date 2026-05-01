@@ -2,62 +2,178 @@
   "extDescription": {
     "message": "Customize YouTube: Hide Shorts, Sidebar, Comments, Recommendations, and More!"
   },
-
-  "toggleThemeTitle": { "message": "Toggle Theme" },
-  "toggleThemeAria": { "message": "Toggle light/dark theme" },
-  "powerToggleTitle": { "message": "Enable/Disable Extension" },
-  "powerToggleAria": { "message": "Toggle extension on/off" },
-
-  "groupBasicUI": { "message": "Basic UI" },
-  "groupLeftNav": { "message": "Left Navigation Bar" },
-  "groupVideoPlayer": { "message": "Video Player" },
-  "groupMisc": { "message": "Misc" },
-
-  "labelYouTubeLogo": { "message": "YouTube Logo" },
-  "descYouTubeLogo": { "message": "Hide the top-left YouTube logo" },
-  "labelSearchSuggestions": { "message": "Search Suggestions" },
-  "descSearchSuggestions": { "message": "Hide search bar autocomplete" },
-  "labelVoiceSearch": { "message": "Voice Search" },
-  "descVoiceSearch": { "message": "Hide the microphone icon" },
-  "labelNotificationBell": { "message": "Notification Bell" },
-  "descNotificationBell": { "message": "Hide the notification bell" },
-  "labelVideoSidebar": { "message": "Video Sidebar" },
-  "descVideoSidebar": { "message": "Hide the suggested videos panel" },
-  "labelCreateButton": { "message": "Create Button" },
-  "descCreateButton": { "message": "Hide the +Create upload button" },
-  "labelThumbnailBlur": { "message": "Thumbnail Blur" },
-  "descThumbnailBlur": { "message": "Blur video thumbnails, hover to reveal" },
-
-  "labelHideLeftNav": { "message": "Hide Entire Left Navigation Bar" },
-  "descHideLeftNav": { "message": "Hide the entire left sidebar menu" },
-  "labelSubscriptions": { "message": "Subscriptions" },
-  "descSubscriptions": { "message": "Hide subscribed channels list" },
-  "labelYou": { "message": "You" },
-  "descYou": { "message": "Hide \"You\" section (History, Playlists)" },
-  "labelExplore": { "message": "Explore" },
-  "descExplore": { "message": "Hide the Explore section" },
-  "labelMoreFromYT": { "message": "More from YouTube" },
-  "descMoreFromYT": { "message": "Hide Premium, Music, Kids links" },
-
-  "labelComments": { "message": "Comments" },
-  "descComments": { "message": "Hide video comments section" },
-  "labelLikes": { "message": "Likes" },
-  "descLikes": { "message": "Hide like counts on videos" },
-  "labelEndScreen": { "message": "End Screen Suggestions" },
-  "descEndScreen": { "message": "Hide end-of-video overlay cards" },
-  "labelAutoplay": { "message": "Autoplay" },
-  "descAutoplay": { "message": "Hide & disable video autoplay" },
-
-  "labelPremiumPopups": { "message": "Premium Popups" },
-  "descPremiumPopups": { "message": "Hide YouTube Premium promotions" },
-  "labelPremieres": { "message": "Premieres" },
-  "descPremieres": { "message": "Hide upcoming/live streams" },
-  "labelShorts": { "message": "Shorts" },
-  "descShorts": { "message": "Hide all Shorts content" },
-  "labelDefaultSubs": { "message": "Default Subscriptions" },
-  "descDefaultSubs": { "message": "Auto-redirect homepage to feed" },
-  "labelListView": { "message": "List View" },
-  "descListView": { "message": "Show subscriptions as a list" },
-  "labelCompactListView": { "message": "Compact List View" },
-  "descCompactListView": { "message": "Smaller thumbnails (requires List View)" }
+  "toggleThemeTitle": {
+    "message": "Toggle Theme"
+  },
+  "toggleThemeAria": {
+    "message": "Toggle light/dark theme"
+  },
+  "powerToggleTitle": {
+    "message": "Enable/Disable Extension"
+  },
+  "powerToggleAria": {
+    "message": "Toggle extension on/off"
+  },
+  "groupBasicUI": {
+    "message": "Basic UI"
+  },
+  "groupLeftNav": {
+    "message": "Left Navigation Bar"
+  },
+  "groupVideoPlayer": {
+    "message": "Video Player"
+  },
+  "groupMisc": {
+    "message": "Misc"
+  },
+  "labelYouTubeLogo": {
+    "message": "YouTube Logo"
+  },
+  "descYouTubeLogo": {
+    "message": "Hide the top-left YouTube logo"
+  },
+  "labelSearchSuggestions": {
+    "message": "Search Suggestions"
+  },
+  "descSearchSuggestions": {
+    "message": "Hide search bar autocomplete"
+  },
+  "labelVoiceSearch": {
+    "message": "Voice Search"
+  },
+  "descVoiceSearch": {
+    "message": "Hide the microphone icon"
+  },
+  "labelNotificationBell": {
+    "message": "Notification Bell"
+  },
+  "descNotificationBell": {
+    "message": "Hide the notification bell"
+  },
+  "labelVideoSidebar": {
+    "message": "Video Sidebar"
+  },
+  "descVideoSidebar": {
+    "message": "Hide the suggested videos panel"
+  },
+  "labelCreateButton": {
+    "message": "Create Button"
+  },
+  "descCreateButton": {
+    "message": "Hide the +Create upload button"
+  },
+  "labelThumbnailBlur": {
+    "message": "Thumbnail Blur"
+  },
+  "descThumbnailBlur": {
+    "message": "Blur video thumbnails, hover to reveal"
+  },
+  "labelThumbnailPlayback": {
+    "message": "Thumbnail Hover Playback"
+  },
+  "descThumbnailPlayback": {
+    "message": "Stop video previews from playing when hovering thumbnails"
+  },
+  "labelHideLeftNav": {
+    "message": "Hide Entire Left Navigation Bar"
+  },
+  "descHideLeftNav": {
+    "message": "Hide the entire left sidebar menu"
+  },
+  "labelSubscriptions": {
+    "message": "Subscriptions"
+  },
+  "descSubscriptions": {
+    "message": "Hide subscribed channels list"
+  },
+  "labelYou": {
+    "message": "You"
+  },
+  "descYou": {
+    "message": "Hide \"You\" section (History, Playlists)"
+  },
+  "labelExplore": {
+    "message": "Explore"
+  },
+  "descExplore": {
+    "message": "Hide the Explore section"
+  },
+  "labelMoreFromYT": {
+    "message": "More from YouTube"
+  },
+  "descMoreFromYT": {
+    "message": "Hide Premium, Music, Kids links"
+  },
+  "labelComments": {
+    "message": "Comments"
+  },
+  "descComments": {
+    "message": "Hide video comments section"
+  },
+  "labelLikes": {
+    "message": "Likes"
+  },
+  "descLikes": {
+    "message": "Hide like counts on videos"
+  },
+  "labelHypeButton": {
+    "message": "Hype / Thanks Button"
+  },
+  "descHypeButton": {
+    "message": "Hide the Hype or Thanks support button under videos"
+  },
+  "labelEndScreen": {
+    "message": "End Screen Suggestions"
+  },
+  "descEndScreen": {
+    "message": "Hide end-of-video overlay cards"
+  },
+  "labelAutoplay": {
+    "message": "Autoplay"
+  },
+  "descAutoplay": {
+    "message": "Hide & disable video autoplay"
+  },
+  "labelAutoDubbing": {
+    "message": "Automatic Dubbing"
+  },
+  "descAutoDubbing": {
+    "message": "Use original audio when possible"
+  },
+  "labelPremiumPopups": {
+    "message": "Premium Popups"
+  },
+  "descPremiumPopups": {
+    "message": "Hide YouTube Premium promotions"
+  },
+  "labelPremieres": {
+    "message": "Premieres"
+  },
+  "descPremieres": {
+    "message": "Hide upcoming/live streams"
+  },
+  "labelShorts": {
+    "message": "Shorts"
+  },
+  "descShorts": {
+    "message": "Hide all Shorts content"
+  },
+  "labelDefaultSubs": {
+    "message": "Default Subscriptions"
+  },
+  "descDefaultSubs": {
+    "message": "Auto-redirect homepage to feed"
+  },
+  "labelListView": {
+    "message": "List View"
+  },
+  "descListView": {
+    "message": "Show subscriptions as a list"
+  },
+  "labelCompactListView": {
+    "message": "Compact List View"
+  },
+  "descCompactListView": {
+    "message": "Smaller thumbnails (requires List View)"
+  }
 }

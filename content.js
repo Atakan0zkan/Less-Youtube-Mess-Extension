@@ -14,8 +14,10 @@ let extensionEnabled = true;
 const TRUE_SETTING_VALUES = new Set(['true', '1', 'yes', 'on']);
 const FALSE_SETTING_VALUES = new Set(['false', '0', 'no', 'off']);
 const YOUTUBE_VIDEO_ID_RE = /^[A-Za-z0-9_-]{11}$/;
+const FORCE_ORIGINAL_AUDIO_EVENT = 'less-youtube-mess:force-original-audio';
+const ORIGINAL_AUDIO_RETRY_DELAYS_MS = [0, 600, 1500, 3500, 6000];
 
-function coerceSettingValue(key, value) {
+function coerceBooleanLike(value, fallback) {
     if (typeof value === 'boolean') return value;
 
     if (typeof value === 'string') {
@@ -24,7 +26,15 @@ function coerceSettingValue(key, value) {
         if (FALSE_SETTING_VALUES.has(normalized)) return false;
     }
 
-    return DEFAULTS[key];
+    return fallback;
+}
+
+function coerceSettingValue(key, value) {
+    return coerceBooleanLike(value, DEFAULTS[key]);
+}
+
+function normalizeExtensionEnabled(value) {
+    return coerceBooleanLike(value, true);
 }
 
 function normalizeSettings(raw = {}) {
@@ -68,6 +78,18 @@ function matchesAny(el, selectors) {
     return toSelectorList(selectors).some(selector => el.matches(selector));
 }
 
+function getSubscriptionItems(root = document) {
+    const candidates = queryAll(root, SELECTORS.SUBSCRIPTION_ITEM);
+    const candidateSet = new Set(candidates);
+
+    return candidates.filter(item => {
+        for (let parent = item.parentElement; parent; parent = parent.parentElement) {
+            if (candidateSet.has(parent)) return false;
+        }
+        return true;
+    });
+}
+
 function getCanonicalWatchUrl(href) {
     try {
         const url = new URL(href, window.location.origin);
@@ -92,6 +114,24 @@ function shouldRedirectToSubscriptions(currentUrl = window.location.href) {
     }
 }
 
+let _pageAudioBridgeInjected = false;
+
+function injectPageAudioBridge() {
+    if (_pageAudioBridgeInjected || !isExtensionValid()) return;
+
+    const script = document.createElement('script');
+    script.src = chrome.runtime.getURL('page-audio-bridge.js');
+    script.async = false;
+    script.onload = () => script.remove();
+    script.onerror = () => {
+        _pageAudioBridgeInjected = false;
+        script.remove();
+    };
+
+    _pageAudioBridgeInjected = true;
+    (document.head || document.documentElement).appendChild(script);
+}
+
 // ===================== APPLY SETTINGS TO HTML =====================
 
 function applySettings(settings) {
@@ -104,6 +144,8 @@ function applySettings(settings) {
         for (const key of SETTINGS_KEYS) {
             html.removeAttribute(key);
         }
+        clearRuntimeStyles();
+        clearOriginalAudioTrackTimers();
         return;
     }
 
@@ -126,6 +168,8 @@ function isExtensionValid() {
     }
 }
 
+injectPageAudioBridge();
+
 // ===================== INITIAL LOAD =====================
 
 if (isExtensionValid()) {
@@ -136,7 +180,7 @@ if (isExtensionValid()) {
                 console.warn('[Less YouTube Mess]', chrome.runtime.lastError.message);
                 return;
             }
-            extensionEnabled = res.extension_enabled !== false;
+            extensionEnabled = normalizeExtensionEnabled(res.extension_enabled);
 
             // Now load sync settings and apply
             chrome.storage.sync.get(DEFAULTS, (settings) => {
@@ -166,7 +210,7 @@ if (isExtensionValid()) {
 
             // React to extension_enabled changes from local storage
             if (area === 'local' && 'extension_enabled' in changes) {
-                extensionEnabled = changes.extension_enabled.newValue !== false;
+                extensionEnabled = normalizeExtensionEnabled(changes.extension_enabled.newValue);
                 applySettings(cachedSettings);
                 if (extensionEnabled) {
                     scheduleRunFeatures();
@@ -179,6 +223,9 @@ if (isExtensionValid()) {
             for (const key of SETTINGS_KEYS) {
                 if (key in changes) {
                     cachedSettings[key] = coerceSettingValue(key, changes[key].newValue);
+                    if (key === 'disable_auto_dubbing') {
+                        _lastOriginalAudioRequestUrl = null;
+                    }
                     needsUpdate = true;
                 }
             }
@@ -295,6 +342,181 @@ const AUTOPLAY_MUTATION_SELECTORS = [
     'button.ytp-button[data-tooltip-target-id="ytp-autonav-toggle-button"]',
     '.ytp-autonav-toggle-button-container'
 ];
+
+const CONTROL_HIDE_MARKER = 'data-lym-control-hidden';
+const THUMBNAIL_PLAYBACK_MARKER = 'data-lym-thumbnail-playback-disabled';
+
+const CREATE_CONTROL_SELECTORS = [
+    'ytd-masthead #buttons ytd-topbar-menu-button-renderer',
+    'ytd-masthead #buttons ytd-button-renderer',
+    'ytd-masthead #buttons yt-button-view-model',
+    'ytd-masthead #buttons button-view-model',
+    'ytd-masthead #end ytd-topbar-menu-button-renderer',
+    'ytd-masthead #end ytd-button-renderer',
+    'ytd-masthead #end yt-button-view-model',
+    'ytd-masthead #end button-view-model'
+];
+
+const HYPE_CONTROL_SELECTORS = [
+    'ytd-watch-metadata #actions ytd-button-renderer',
+    'ytd-watch-metadata #actions yt-button-view-model',
+    'ytd-watch-metadata #actions button-view-model',
+    'ytd-watch-metadata #actions button',
+    'ytd-watch-metadata #actions a',
+    '#top-level-buttons-computed ytd-button-renderer',
+    '#top-level-buttons-computed yt-button-view-model',
+    '#top-level-buttons-computed button-view-model'
+];
+
+const THUMBNAIL_PREVIEW_CONTAINER_SELECTORS = [
+    'ytd-video-preview',
+    'inline-preview-player',
+    'ytd-thumbnail ytd-video-preview',
+    'yt-thumbnail-view-model inline-preview-player',
+    'ytd-thumbnail-overlay-playing-renderer'
+];
+
+const THUMBNAIL_PREVIEW_VIDEO_SELECTORS = [
+    'ytd-video-preview video',
+    'inline-preview-player video',
+    'ytd-thumbnail video',
+    'yt-thumbnail-view-model video'
+];
+
+const CREATE_TEXT_RE = /(\+?\s*create|oluştur|créer|erstellen|crear|criar|crea|maken|maak|utwórz|создать|створити|buat|cipta|tạo|สร้าง|إنشاء|ایجاد|बनाएं|作成|만들기|创建|建立|তৈরি)/i;
+const HYPE_TEXT_RE = /(hype|super thanks|thanks|teşekkür|teşekkürler|alkış|applaud)/i;
+
+let _lastOriginalAudioRequestUrl = null;
+let _originalAudioTrackTimers = [];
+
+function getControlText(el) {
+    if (!el) return '';
+    const attrs = [
+        el.getAttribute('aria-label'),
+        el.getAttribute('title'),
+        el.getAttribute('tooltip'),
+        el.getAttribute('data-tooltip-text')
+    ].filter(Boolean);
+    attrs.push(el.textContent || '');
+    return attrs.join(' ');
+}
+
+function controlHasCreateTarget(el) {
+    if (!el || !el.querySelector) return false;
+    if (el.matches?.('a[href*="/upload"], a[href*="studio.youtube.com"]')) return true;
+    return !!el.querySelector('a[href*="/upload"], a[href*="studio.youtube.com"]');
+}
+
+function clearHiddenControls(markerValue) {
+    document.querySelectorAll(`[${CONTROL_HIDE_MARKER}="${markerValue}"]`).forEach(el => {
+        el.style.removeProperty('display');
+        el.removeAttribute(CONTROL_HIDE_MARKER);
+    });
+}
+
+function hideMatchedControls(enabled, selectors, markerValue, predicate) {
+    if (!enabled) {
+        clearHiddenControls(markerValue);
+        return;
+    }
+
+    for (const el of queryAll(document, selectors)) {
+        if (el.getAttribute(CONTROL_HIDE_MARKER) === markerValue) continue;
+        if (!predicate(el)) continue;
+
+        el.style.setProperty('display', 'none', 'important');
+        el.setAttribute(CONTROL_HIDE_MARKER, markerValue);
+    }
+}
+
+function hideCreateButtonSupplement() {
+    hideMatchedControls(
+        cachedSettings.hide_create_button,
+        CREATE_CONTROL_SELECTORS,
+        'create',
+        el => controlHasCreateTarget(el) || CREATE_TEXT_RE.test(getControlText(el))
+    );
+}
+
+function hideHypeButton() {
+    hideMatchedControls(
+        cachedSettings.hide_hype_button,
+        HYPE_CONTROL_SELECTORS,
+        'hype',
+        el => HYPE_TEXT_RE.test(getControlText(el))
+    );
+}
+
+function clearOriginalAudioTrackTimers() {
+    _originalAudioTrackTimers.forEach(timer => clearTimeout(timer));
+    _originalAudioTrackTimers = [];
+}
+
+function scheduleOriginalAudioTrackSelection(force = false) {
+    if (!extensionEnabled || !cachedSettings.disable_auto_dubbing) {
+        clearOriginalAudioTrackTimers();
+        _lastOriginalAudioRequestUrl = null;
+        return;
+    }
+
+    const canonicalWatchUrl = getCanonicalWatchUrl(window.location.href);
+    if (!canonicalWatchUrl) {
+        clearOriginalAudioTrackTimers();
+        _lastOriginalAudioRequestUrl = null;
+        return;
+    }
+
+    if (!force && _lastOriginalAudioRequestUrl === canonicalWatchUrl) return;
+
+    _lastOriginalAudioRequestUrl = canonicalWatchUrl;
+    clearOriginalAudioTrackTimers();
+
+    for (const delay of ORIGINAL_AUDIO_RETRY_DELAYS_MS) {
+        const timer = setTimeout(() => {
+            window.dispatchEvent(new CustomEvent(FORCE_ORIGINAL_AUDIO_EVENT));
+        }, delay);
+        _originalAudioTrackTimers.push(timer);
+    }
+}
+
+function clearThumbnailPlaybackMarkers() {
+    document.querySelectorAll(`[${THUMBNAIL_PLAYBACK_MARKER}]`).forEach(el => {
+        el.style.removeProperty('display');
+        el.removeAttribute(THUMBNAIL_PLAYBACK_MARKER);
+    });
+}
+
+function disableThumbnailPlayback() {
+    if (!cachedSettings.disable_thumbnail_playback) {
+        clearThumbnailPlaybackMarkers();
+        return;
+    }
+
+    for (const video of queryAll(document, THUMBNAIL_PREVIEW_VIDEO_SELECTORS)) {
+        try {
+            video.pause();
+            video.muted = true;
+        } catch (e) { /* YouTube may recycle the media element during hover */ }
+
+        video.style.setProperty('display', 'none', 'important');
+        video.setAttribute(THUMBNAIL_PLAYBACK_MARKER, 'true');
+    }
+
+    for (const el of queryAll(document, THUMBNAIL_PREVIEW_CONTAINER_SELECTORS)) {
+        el.style.setProperty('display', 'none', 'important');
+        el.setAttribute(THUMBNAIL_PLAYBACK_MARKER, 'true');
+    }
+}
+
+function clearRuntimeStyles() {
+    document.querySelectorAll('[data-lym-likes-applied="hidden"]').forEach(el => {
+        el.style.removeProperty('display');
+        el.removeAttribute('data-lym-likes-applied');
+    });
+    clearHiddenControls('create');
+    clearHiddenControls('hype');
+    clearThumbnailPlaybackMarkers();
+}
 
 function forceLikesVisibility() {
     const shouldHide = cachedSettings.hide_likes;
@@ -456,7 +678,7 @@ function processQueue() {
         if (!linkEl || !linkEl.href || !metadataContainer) continue;
 
         // BUG-07: Verify the item hasn't been recycled since it was queued.
-        // YouTube's ytd-rich-item-renderer reuse is async; the href may have changed by the time
+        // YouTube's subscription item reuse is async; the href may have changed by the time
         // we dequeue. If the current href no longer matches our mark, skip this stale entry.
         const currentVideoId = getCanonicalWatchUrl(linkEl.href);
         if (!currentVideoId) continue;
@@ -557,10 +779,10 @@ function scheduleOuterStructureDiagnostic() {
         _diagnoseTimer = null;
         if (!extensionEnabled || _outerStructureWarned || _diagnosed || !isSubscriptionsPage()) return;
 
-        const items = document.querySelectorAll('ytd-rich-item-renderer');
+        const items = getSubscriptionItems();
         if (items.length === 0) {
             _outerStructureWarned = true;
-            console.warn('[Less YouTube Mess] YouTube outer structure changed: no subscription item containers found after delay.');
+            console.warn('[Less YouTube Mess] YouTube outer structure changed: no subscription item or lockup containers found after delay.');
         }
     }, DIAGNOSE_OUTER_DELAY_MS);
 }
@@ -569,7 +791,7 @@ function selfDiagnose() {
     if (_diagnosed) return;
     if (!isSubscriptionsPage()) return;
 
-    const items = document.querySelectorAll('ytd-rich-item-renderer');
+    const items = getSubscriptionItems();
     if (items.length === 0) {
         scheduleOuterStructureDiagnostic();
         return;
@@ -577,7 +799,7 @@ function selfDiagnose() {
 
     clearDiagnoseTimer();
 
-    const item = [...items].find(el => queryOne(el, SELECTORS.LOCKUP)) || items[0];
+    const item = [...items].find(el => nodeMatchesOrContains(el, SELECTORS.LOCKUP)) || items[0];
     _diagnosed = true;
 
     const checks = [
@@ -585,7 +807,7 @@ function selfDiagnose() {
         ['title link', SELECTORS.TITLE_LINK],
         ['metadata', SELECTORS.CONTENT_METADATA],
     ];
-    const missing = checks.filter(([, sel]) => !queryOne(item, sel));
+    const missing = checks.filter(([, sel]) => !nodeMatchesOrContains(item, sel));
     if (missing.length === 0) {
         console.log('[Less YouTube Mess] \u2705 All selectors verified');
     } else {
@@ -623,7 +845,7 @@ function runFeatures() {
         // Query items once, share across functions that need them
         let items = null;
         const getItems = () => {
-            if (!items) items = document.querySelectorAll('ytd-rich-item-renderer');
+            if (!items) items = getSubscriptionItems();
             return items;
         };
 
@@ -650,6 +872,10 @@ function runFeatures() {
         }
 
         forceLikesVisibility();
+        hideCreateButtonSupplement();
+        hideHypeButton();
+        scheduleOriginalAudioTrackSelection();
+        disableThumbnailPlayback();
         dismissPremiumPopups();
         applyAutoplay(); // IMPROVE-01
         selfDiagnose();
@@ -692,6 +918,8 @@ function handleNavigation(currentUrl) {
     // OPT-1: Reset autoplay-tracking so the new page re-applies the setting.
     _lastHideAutoplay = undefined;
     autoplayDirty = true;
+    _lastOriginalAudioRequestUrl = null;
+    clearOriginalAudioTrackTimers();
     _diagnosed = false; // Reset diagnostic for new page
     _outerStructureWarned = false;
     clearDiagnoseTimer();

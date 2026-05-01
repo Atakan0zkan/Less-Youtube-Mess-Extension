@@ -68,6 +68,12 @@
   "descThumbnailBlur": {
     "message": "वीडियो थंबनेल को ब्लर करें, देखने के लिए माउस घुमाएं"
   },
+  "labelThumbnailPlayback": {
+    "message": "थंबनेल पर होवर प्लेबैक"
+  },
+  "descThumbnailPlayback": {
+    "message": "थंबनेल पर होवर करने पर वीडियो प्रीव्यू चलना रोकें"
+  },
   "labelHideLeftNav": {
     "message": "बायां मेनू छिपाएं"
   },
@@ -110,6 +116,12 @@
   "descLikes": {
     "message": "वीडियो पर लाइक की संख्या छिपाएं"
   },
+  "labelHypeButton": {
+    "message": "Hype / धन्यवाद बटन"
+  },
+  "descHypeButton": {
+    "message": "वीडियो के नीचे Hype या धन्यवाद सपोर्ट बटन छिपाएं"
+  },
   "labelEndScreen": {
     "message": "अंत स्क्रीन सुझाव"
   },
@@ -121,6 +133,12 @@
   },
   "descAutoplay": {
     "message": "ऑटोप्ले को बंद करें और छिपाएं"
+  },
+  "labelAutoDubbing": {
+    "message": "ऑटोमैटिक डबिंग"
+  },
+  "descAutoDubbing": {
+    "message": "जहां संभव हो मूल ऑडियो चलाएं"
   },
   "labelPremiumPopups": {
     "message": "प्रीमियम विज्ञापन"
