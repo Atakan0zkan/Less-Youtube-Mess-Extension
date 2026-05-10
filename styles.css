@@ -221,11 +221,42 @@ html[hide_end_suggestions="true"] .ytp-fullscreen-grid-stills-container {
 /* ===== 4.1. HIDE LIKES ===== */
 /* RISK-01 Tested: 2026-04 — like button selectors rely on view-model class names */
 html[hide_likes="true"] like-button-view-model .yt-core-attributed-string,
+html[hide_likes="true"] like-button-view-model .ytCoreAttributedString,
 html[hide_likes="true"] document-like-button-view-model .yt-core-attributed-string,
+html[hide_likes="true"] document-like-button-view-model .ytCoreAttributedString,
+html[hide_likes="true"] ytd-watch-metadata #segmented-like-button .yt-core-attributed-string,
+html[hide_likes="true"] ytd-watch-metadata #segmented-like-button .ytCoreAttributedString,
+html[hide_likes="true"] ytd-watch-metadata #segmented-like-button .yt-spec-button-shape-next__button-text-content,
+html[hide_likes="true"] ytd-watch-metadata #segmented-like-button .ytSpecButtonShapeNextButtonTextContent,
+html[hide_likes="true"] ytd-watch-metadata #segmented-like-button [class*="button-text-content" i],
+html[hide_likes="true"] ytd-watch-metadata #segmented-like-button [class*="buttonTextContent" i],
+html[hide_likes="true"] ytd-watch-metadata #segmented-like-button [class*="attributed-string" i],
+html[hide_likes="true"] ytd-watch-metadata #segmented-like-button [class*="AttributedString" i],
+html[hide_likes="true"] ytd-watch-metadata #segmented-like-button span[role="text"],
+html[hide_likes="true"] ytd-watch-metadata like-button-view-model button .yt-core-attributed-string,
+html[hide_likes="true"] ytd-watch-metadata like-button-view-model button .ytCoreAttributedString,
+html[hide_likes="true"] ytd-watch-metadata like-button-view-model button .yt-spec-button-shape-next__button-text-content,
+html[hide_likes="true"] ytd-watch-metadata like-button-view-model button .ytSpecButtonShapeNextButtonTextContent,
+html[hide_likes="true"] ytd-watch-metadata like-button-view-model button [class*="button-text-content" i],
+html[hide_likes="true"] ytd-watch-metadata like-button-view-model button [class*="buttonTextContent" i],
+html[hide_likes="true"] ytd-watch-metadata like-button-view-model button [class*="attributed-string" i],
+html[hide_likes="true"] ytd-watch-metadata like-button-view-model button [class*="AttributedString" i],
+html[hide_likes="true"] ytd-watch-metadata like-button-view-model button span[role="text"],
+html[hide_likes="true"] ytd-watch-metadata segmented-like-dislike-button-view-model button .yt-core-attributed-string,
+html[hide_likes="true"] ytd-watch-metadata segmented-like-dislike-button-view-model button .ytCoreAttributedString,
+html[hide_likes="true"] ytd-watch-metadata segmented-like-dislike-button-view-model button .yt-spec-button-shape-next__button-text-content,
+html[hide_likes="true"] ytd-watch-metadata segmented-like-dislike-button-view-model button .ytSpecButtonShapeNextButtonTextContent,
+html[hide_likes="true"] ytd-watch-metadata segmented-like-dislike-button-view-model button [class*="button-text-content" i],
+html[hide_likes="true"] ytd-watch-metadata segmented-like-dislike-button-view-model button [class*="buttonTextContent" i],
+html[hide_likes="true"] ytd-watch-metadata segmented-like-dislike-button-view-model button [class*="attributed-string" i],
+html[hide_likes="true"] ytd-watch-metadata segmented-like-dislike-button-view-model button [class*="AttributedString" i],
+html[hide_likes="true"] ytd-watch-metadata segmented-like-dislike-button-view-model button span[role="text"],
 html[hide_likes="true"] ytd-toggle-button-renderer a yt-formatted-string[aria-label*="beğen" i],
 html[hide_likes="true"] ytd-toggle-button-renderer a yt-formatted-string[aria-label*="like" i],
 html[hide_likes="true"] like-button-view-model .yt-spec-button-shape-next__button-text-content,
-html[hide_likes="true"] segmented-like-dislike-button-view-model .yt-spec-button-shape-next__button-text-content {
+html[hide_likes="true"] like-button-view-model .ytSpecButtonShapeNextButtonTextContent,
+html[hide_likes="true"] segmented-like-dislike-button-view-model .yt-spec-button-shape-next__button-text-content,
+html[hide_likes="true"] segmented-like-dislike-button-view-model .ytSpecButtonShapeNextButtonTextContent {
     display: none !important;
 }
 
@@ -460,6 +491,45 @@ html[list_view="true"][compact_list_view="true"] ytd-browse[page-subtype="subscr
     top: 30px !important;
 }
 
+/* Keep YouTube's native thumbnail hover preview sized after List View resizes thumbnails.
+   Scope this to preview layers only so watched/resume progress overlays remain visible. */
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage ytd-video-preview,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage inline-preview-player,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) ytd-video-preview,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) inline-preview-player {
+    width: 260px !important;
+    height: 146px !important;
+    max-width: 260px !important;
+    max-height: 146px !important;
+}
+
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage ytd-video-preview video,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage inline-preview-player video,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) ytd-video-preview video,
+html[list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) inline-preview-player video {
+    width: 260px !important;
+    height: 146px !important;
+    object-fit: cover !important;
+}
+
+html[list_view="true"][compact_list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage ytd-video-preview,
+html[list_view="true"][compact_list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage inline-preview-player,
+html[list_view="true"][compact_list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) ytd-video-preview,
+html[list_view="true"][compact_list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) inline-preview-player {
+    width: 180px !important;
+    height: 101px !important;
+    max-width: 180px !important;
+    max-height: 101px !important;
+}
+
+html[list_view="true"][compact_list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage ytd-video-preview video,
+html[list_view="true"][compact_list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage inline-preview-player video,
+html[list_view="true"][compact_list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) ytd-video-preview video,
+html[list_view="true"][compact_list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) inline-preview-player video {
+    width: 180px !important;
+    height: 101px !important;
+}
+
 
 /* ===== 15. THUMBNAIL BLUR ===== */
 /* Blurs all video thumbnails to reduce clickbait/distraction.
@@ -506,5 +576,16 @@ html[disable_thumbnail_playback="true"] ytd-video-preview video,
 html[disable_thumbnail_playback="true"] inline-preview-player video,
 html[disable_thumbnail_playback="true"] ytd-thumbnail video,
 html[disable_thumbnail_playback="true"] yt-thumbnail-view-model video {
+    display: none !important;
+}
+
+html[disable_thumbnail_playback="true"][list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage ytd-video-preview,
+html[disable_thumbnail_playback="true"][list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage inline-preview-player,
+html[disable_thumbnail_playback="true"][list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage ytd-video-preview video,
+html[disable_thumbnail_playback="true"][list_view="true"] ytd-browse[page-subtype="subscriptions"] .ytLockupViewModelContentImage inline-preview-player video,
+html[disable_thumbnail_playback="true"][list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) ytd-video-preview,
+html[disable_thumbnail_playback="true"][list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) inline-preview-player,
+html[disable_thumbnail_playback="true"][list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) ytd-video-preview video,
+html[disable_thumbnail_playback="true"][list_view="true"] ytd-browse[page-subtype="subscriptions"] yt-lockup-view-model a:has(> yt-thumbnail-view-model) inline-preview-player video {
     display: none !important;
 }

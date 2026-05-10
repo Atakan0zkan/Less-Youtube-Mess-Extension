@@ -2,7 +2,8 @@
   "manifest_version": 3,
   "name": "Less Youtube Mess",
   "description": "__MSG_extDescription__",
-  "version": "1.7.8",
+  "version": "1.8",
+  "minimum_chrome_version": "105",
   "default_locale": "en",
   "icons": {
     "16": "icons/icon16.png",
@@ -21,7 +22,7 @@
   "content_scripts": [
     {
       "matches": [
-        "*://www.youtube.com/*"
+        "https://www.youtube.com/*"
       ],
       "css": [
         "styles.css"
@@ -39,7 +40,7 @@
         "page-audio-bridge.js"
       ],
       "matches": [
-        "*://www.youtube.com/*"
+        "https://www.youtube.com/*"
       ]
     }
   ],

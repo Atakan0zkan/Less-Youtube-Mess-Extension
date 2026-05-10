@@ -36,9 +36,9 @@ self.SETTINGS_KEYS = [
 
 self.DEFAULTS = {
     hide_left_nav: false,
-    list_view: true,
+    list_view: false,
     compact_list_view: false,
-    hide_live_premiere: true,
+    hide_live_premiere: false,
     hide_shorts: false,
     hide_sidebar: false,
     hide_comments: false,
@@ -72,7 +72,10 @@ self.SELECTORS = {
         'ytd-browse ytd-rich-grid-renderer > #contents > yt-lockup-view-model',
         'ytd-browse #contents > yt-lockup-view-model',
         'ytd-browse ytd-grid-video-renderer',
-        'ytd-browse ytd-video-renderer'
+        'ytd-browse ytd-video-renderer',
+        'ytd-browse ytd-rich-grid-renderer yt-lockup-view-model',
+        'ytd-browse #contents yt-lockup-view-model',
+        'ytd-browse yt-lockup-view-model'
     ],
     TITLE_LINK: [
         'yt-lockup-metadata-view-model h3 > a[href*="/watch"]',
@@ -93,4 +96,13 @@ self.SELECTORS = {
         'yt-content-metadata-view-model',
         '#metadata'
     ],
+};
+
+// Locale/text fallbacks for live and premiere detection.
+// Structural signals in content.js must run before these regexes because YouTube
+// can change localized badge wording without changing the underlying component.
+self.LIVE_PREMIERE_PATTERNS = {
+    reminderButton: /(remind me|notify me|bana hatırlat|recuérdame|rappelle-moi|erinnere mich|ricordami|リマインダー|알림 설정|मुझे याद दिलाएं)/i,
+    badgeText: /(yakında|canlı|live|premiere|upcoming|ilk gösterim|i̇lk gösterim|estreno|première|premieren|anteprima|프리미어|プレミア公開|próximamente|em breve|estreia|ao vivo|bald|prossimamente|прямой эфир|в эфире|премьера|скоро|siaran langsung|tayang perdana|مباشر|بث مباشر|العرض الأول|قريبًا|直播|首播|即将开始|即將開始|na żywo|wkrótce|trực tiếp|công chiếu|sắp diễn ra|สด|พรีเมียร์|เร็วๆ นี้|binnenkort|наживо|прем'єра|незабаром|زنده|پخش زنده|نمایش برتر|به‌زودی|লাইভ|প্রিমিয়ার|শীঘ্রই|langsung|tayangan perdana|akan datang)/i,
+    scheduledText: /(planlandı|scheduled for|programado|programmé|geplant|programmato|予定|예정|निर्धारित)/i
 };

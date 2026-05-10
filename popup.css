@@ -103,6 +103,7 @@ body {
   gap: 6px;
 }
 
+.language-btn,
 .theme-btn,
 .power-btn {
   background: var(--bg-card);
@@ -115,15 +116,32 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 18px;
+  line-height: 1;
   transition: all 0.2s ease;
   box-shadow: var(--card-shadow);
 }
 
+.language-btn:hover,
 .theme-btn:hover,
 .power-btn:hover {
   background: var(--bg-hover);
   transform: scale(1.08);
   border-color: var(--accent);
+}
+
+.language-btn {
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0;
+  font-family: inherit;
+}
+
+.language-btn[aria-pressed="true"] {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow), var(--card-shadow);
 }
 
 /* Power button — enabled (default) */

@@ -4,6 +4,42 @@
 'use strict';
 
 // SETTINGS_KEYS and DEFAULTS are loaded from shared/constants.js
+const LANGUAGE_OVERRIDE_KEY = 'popup_language_override';
+const ENGLISH_LANGUAGE_OVERRIDE = 'en';
+
+let activeLanguageOverride = '';
+let englishMessagesPromise = null;
+
+const TRUE_SETTING_VALUES = new Set(['true', '1', 'yes', 'on']);
+const FALSE_SETTING_VALUES = new Set(['false', '0', 'no', 'off']);
+
+function coerceBooleanLike(value, fallback) {
+  if (typeof value === 'boolean') return value;
+
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase();
+    if (TRUE_SETTING_VALUES.has(normalized)) return true;
+    if (FALSE_SETTING_VALUES.has(normalized)) return false;
+  }
+
+  return fallback;
+}
+
+function normalizeSettings(raw = {}) {
+  const normalized = {};
+  SETTINGS_KEYS.forEach(key => {
+    normalized[key] = coerceBooleanLike(raw[key], DEFAULTS[key]);
+  });
+  return normalized;
+}
+
+function normalizeLocalPrefs(raw = {}) {
+  const theme = raw.theme === 'light' ? 'light' : 'dark';
+  return {
+    theme,
+    extension_enabled: coerceBooleanLike(raw.extension_enabled, true)
+  };
+}
 
 function loadSettings() {
   chrome.storage.sync.get(DEFAULTS, (settings) => {
@@ -12,13 +48,14 @@ function loadSettings() {
       return;
     }
 
+    const normalizedSettings = normalizeSettings(settings);
     SETTINGS_KEYS.forEach(key => {
       const el = document.getElementById(key);
-      if (el) el.checked = settings[key];
+      if (el) el.checked = normalizedSettings[key];
     });
 
     // Initialise the compact toggle's enabled/disabled state based on loaded list_view
-    updateCompactRowState(settings.list_view);
+    updateCompactRowState(normalizedSettings.list_view);
   });
 
   // BUG-05: Theme is a UI preference — store in local storage, not sync.
@@ -30,11 +67,11 @@ function loadSettings() {
       console.warn('[Less YouTube Mess]', chrome.runtime.lastError.message);
       return;
     }
-    document.body.setAttribute('data-theme', res.theme || 'dark');
+    const localPrefs = normalizeLocalPrefs(res || {});
+    document.body.setAttribute('data-theme', localPrefs.theme);
 
     // Power toggle state — apply both button state and disabled UI
-    const enabled = res.extension_enabled !== false; // default true
-    applyExtensionDisabledState(enabled);
+    applyExtensionDisabledState(localPrefs.extension_enabled);
   });
 }
 
@@ -76,77 +113,157 @@ function setupCollapsibleGroups() {
   });
 }
 
+function loadEnglishMessages() {
+  if (!englishMessagesPromise) {
+    englishMessagesPromise = fetch(chrome.runtime.getURL('_locales/en/messages.json'))
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`English messages failed to load: ${response.status}`);
+        }
+        return response.json();
+      })
+      .catch(error => {
+        console.warn('[Less YouTube Mess]', error.message);
+        return null;
+      });
+  }
+
+  return englishMessagesPromise;
+}
+
+function getLocalizedMessage(key, englishMessages) {
+  const englishMessage = englishMessages?.[key]?.message;
+  if (typeof englishMessage === 'string' && englishMessage) {
+    return englishMessage;
+  }
+
+  return chrome.i18n.getMessage(key);
+}
+
+function updateLanguageToggleButton() {
+  const languageBtn = document.getElementById('language-toggle');
+  if (!languageBtn) return;
+
+  const useEnglish = activeLanguageOverride === ENGLISH_LANGUAGE_OVERRIDE;
+  languageBtn.setAttribute('aria-pressed', String(useEnglish));
+  languageBtn.title = useEnglish ? 'Use browser language' : 'Use English';
+  languageBtn.setAttribute(
+    'aria-label',
+    useEnglish
+      ? 'Switch popup menu back to browser language'
+      : 'Switch popup menu to English'
+  );
+}
+
+function setupLanguageToggleButton() {
+  const languageBtn = document.getElementById('language-toggle');
+  if (!languageBtn) return;
+
+  updateLanguageToggleButton();
+  languageBtn.addEventListener('click', async () => {
+    const nextOverride = activeLanguageOverride === ENGLISH_LANGUAGE_OVERRIDE
+      ? ''
+      : ENGLISH_LANGUAGE_OVERRIDE;
+    const appliedOverride = await applyI18n(nextOverride);
+    chrome.storage.local.set({ [LANGUAGE_OVERRIDE_KEY]: appliedOverride });
+  });
+}
+
 // i18n: Apply translations from _locales/ to all elements with data-i18n attributes.
 // data-i18n="key"       → sets textContent
 // data-i18n-title="key" → sets title attribute
 // data-i18n-aria="key"  → sets aria-label attribute
-function applyI18n() {
+async function applyI18n(languageOverride = '') {
+  const useEnglish = languageOverride === ENGLISH_LANGUAGE_OVERRIDE;
+  const englishMessages = useEnglish ? await loadEnglishMessages() : null;
+  activeLanguageOverride = useEnglish && englishMessages ? ENGLISH_LANGUAGE_OVERRIDE : '';
+
   document.querySelectorAll('[data-i18n]').forEach(el => {
-    const msg = chrome.i18n.getMessage(el.getAttribute('data-i18n'));
+    const msg = getLocalizedMessage(el.getAttribute('data-i18n'), englishMessages);
     if (msg) el.textContent = msg;
   });
   document.querySelectorAll('[data-i18n-title]').forEach(el => {
-    const msg = chrome.i18n.getMessage(el.getAttribute('data-i18n-title'));
+    const msg = getLocalizedMessage(el.getAttribute('data-i18n-title'), englishMessages);
     if (msg) el.title = msg;
   });
   document.querySelectorAll('[data-i18n-aria]').forEach(el => {
-    const msg = chrome.i18n.getMessage(el.getAttribute('data-i18n-aria'));
+    const msg = getLocalizedMessage(el.getAttribute('data-i18n-aria'), englishMessages);
     if (msg) el.setAttribute('aria-label', msg);
   });
+
+  const browserLanguage = typeof chrome.i18n.getUILanguage === 'function'
+    ? chrome.i18n.getUILanguage()
+    : 'en';
+  document.documentElement.lang = activeLanguageOverride || browserLanguage || 'en';
+  updateLanguageToggleButton();
+
+  return activeLanguageOverride;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  applyI18n();
-  loadSettings();
-  setupCollapsibleGroups();
+  chrome.storage.local.get({ [LANGUAGE_OVERRIDE_KEY]: '' }, async (res) => {
+    if (chrome.runtime.lastError) {
+      console.warn('[Less YouTube Mess]', chrome.runtime.lastError.message);
+    }
 
-  // IMPROVE-08: Read version from manifest so only manifest.json needs updating per release.
-  const versionEl = document.getElementById('version-display');
-  if (versionEl) {
-    versionEl.textContent = 'v' + chrome.runtime.getManifest().version;
-  }
+    const safeRes = res || {};
+    const storedLanguageOverride = safeRes[LANGUAGE_OVERRIDE_KEY] === ENGLISH_LANGUAGE_OVERRIDE
+      ? ENGLISH_LANGUAGE_OVERRIDE
+      : '';
 
-  SETTINGS_KEYS.forEach(key => {
-    const el = document.getElementById(key);
-    if (el) {
-      el.addEventListener('change', (e) => {
-        saveSetting(key, e.target.checked);
-        // Compact list view depends on list_view being enabled.
-        // Update the compact row's visual state whenever list_view changes.
-        if (key === 'list_view') {
-          updateCompactRowState(e.target.checked);
-          // OPT-3: If list_view is turned off, also clear compact_list_view in storage
-          // so it doesn't silently remain true while the CSS guard (html[list_view="true"])
-          // prevents it from taking effect. Keeps storage consistent with UI state.
-          if (!e.target.checked) {
-            const compactEl = document.getElementById('compact_list_view');
-            if (compactEl && compactEl.checked) {
-              compactEl.checked = false;
-              saveSetting('compact_list_view', false);
+    await applyI18n(storedLanguageOverride);
+    setupLanguageToggleButton();
+    loadSettings();
+    setupCollapsibleGroups();
+
+    // IMPROVE-08: Read version from manifest so only manifest.json needs updating per release.
+    const versionEl = document.getElementById('version-display');
+    if (versionEl) {
+      versionEl.textContent = 'v' + chrome.runtime.getManifest().version;
+    }
+
+    SETTINGS_KEYS.forEach(key => {
+      const el = document.getElementById(key);
+      if (el) {
+        el.addEventListener('change', (e) => {
+          saveSetting(key, e.target.checked);
+          // Compact list view depends on list_view being enabled.
+          // Update the compact row's visual state whenever list_view changes.
+          if (key === 'list_view') {
+            updateCompactRowState(e.target.checked);
+            // OPT-3: If list_view is turned off, also clear compact_list_view in storage
+            // so it doesn't silently remain true while the CSS guard (html[list_view="true"])
+            // prevents it from taking effect. Keeps storage consistent with UI state.
+            if (!e.target.checked) {
+              const compactEl = document.getElementById('compact_list_view');
+              if (compactEl && compactEl.checked) {
+                compactEl.checked = false;
+                saveSetting('compact_list_view', false);
+              }
             }
           }
-        }
-      });
-    }
-  });
+        });
+      }
+    });
 
-  // --- Power toggle: enable/disable the entire extension ---
-  document.getElementById('power-toggle').addEventListener('click', () => {
-    const powerBtn = document.getElementById('power-toggle');
-    const currentlyEnabled = powerBtn.getAttribute('aria-pressed') === 'true';
-    const newState = !currentlyEnabled;
-    applyExtensionDisabledState(newState);
-    // Persist to local storage — content script reacts via storage.onChanged
-    chrome.storage.local.set({ extension_enabled: newState });
-  });
+    // --- Power toggle: enable/disable the entire extension ---
+    document.getElementById('power-toggle').addEventListener('click', () => {
+      const powerBtn = document.getElementById('power-toggle');
+      const currentlyEnabled = powerBtn.getAttribute('aria-pressed') === 'true';
+      const newState = !currentlyEnabled;
+      applyExtensionDisabledState(newState);
+      // Persist to local storage — content script reacts via storage.onChanged
+      chrome.storage.local.set({ extension_enabled: newState });
+    });
 
-  // --- Theme toggle ---
-  document.getElementById('theme-toggle').addEventListener('click', () => {
-    const current = document.body.getAttribute('data-theme') || 'dark';
-    const next = current === 'dark' ? 'light' : 'dark';
-    document.body.setAttribute('data-theme', next);
-    // BUG-05: Theme stored in local storage (UI preference, not a sync setting)
-    chrome.storage.local.set({ theme: next });
+    // --- Theme toggle ---
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      const current = document.body.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.body.setAttribute('data-theme', next);
+      // BUG-05: Theme stored in local storage (UI preference, not a sync setting)
+      chrome.storage.local.set({ theme: next });
+    });
   });
 });
 
