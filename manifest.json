@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Less Youtube Mess",
   "description": "__MSG_extDescription__",
-  "version": "1.8",
+  "version": "1.8.1",
   "minimum_chrome_version": "105",
   "default_locale": "en",
   "icons": {
