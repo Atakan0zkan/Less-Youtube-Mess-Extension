@@ -326,6 +326,8 @@ let likesDirty = true;
 let _lastHideAutoplay = undefined;
 let autoplayDirty = true;
 
+let _lastHidePremiumPopups = undefined;
+
 const LIKE_TEXT_SELECTORS = [
     'ytd-watch-metadata #segmented-like-button .yt-core-attributed-string',
     'ytd-watch-metadata #segmented-like-button .ytCoreAttributedString',
@@ -401,6 +403,8 @@ const AUTOPLAY_MUTATION_SELECTORS = [
 
 const CONTROL_HIDE_MARKER = 'data-lym-control-hidden';
 const THUMBNAIL_PLAYBACK_MARKER = 'data-lym-thumbnail-playback-disabled';
+const PREMIUM_DIALOG_MARKER = 'data-lym-premium-hidden';
+const PREMIUM_BACKDROP_MARKER = 'data-lym-premium-backdrop-hidden';
 
 const CREATE_CONTROL_SELECTORS = [
     'ytd-masthead #buttons ytd-topbar-menu-button-renderer',
@@ -590,6 +594,7 @@ function clearRuntimeStyles() {
     clearHiddenControls('create');
     clearHiddenControls('hype');
     clearThumbnailPlaybackMarkers();
+    clearPremiumPopupMarkers();
 }
 
 function hideLikeTextElement(el) {
@@ -657,15 +662,37 @@ function hasVisibleNonPremiumDialog(currentPremiumDialog) {
     return false;
 }
 
+function clearPremiumPopupMarkers() {
+    document.querySelectorAll(`[${PREMIUM_DIALOG_MARKER}], [data-premium-hidden]`).forEach(el => {
+        el.style.removeProperty('display');
+        el.removeAttribute(PREMIUM_DIALOG_MARKER);
+        el.removeAttribute('data-premium-hidden');
+    });
+
+    document.querySelectorAll(`[${PREMIUM_BACKDROP_MARKER}]`).forEach(el => {
+        el.style.removeProperty('display');
+        el.removeAttribute(PREMIUM_BACKDROP_MARKER);
+    });
+}
+
 function dismissPremiumPopups() {
-    if (!cachedSettings.hide_premium_popups) return;
+    const shouldHide = cachedSettings.hide_premium_popups;
+
+    if (shouldHide !== _lastHidePremiumPopups) {
+        if (!shouldHide) clearPremiumPopupMarkers();
+        _lastHidePremiumPopups = shouldHide;
+    }
+
+    if (!shouldHide) {
+        return;
+    }
 
     // PERF-02: Only query dialogs not yet processed, avoiding redundant work.
-    const dialogs = document.querySelectorAll('tp-yt-paper-dialog:not([data-premium-hidden])');
+    const dialogs = document.querySelectorAll(`tp-yt-paper-dialog:not([${PREMIUM_DIALOG_MARKER}]):not([data-premium-hidden])`);
     for (const dialog of dialogs) {
         const isUpsell = dialog.querySelector('yt-upsell-dialog-renderer');
         if (isUpsell) {
-            dialog.setAttribute('data-premium-hidden', 'true');
+            dialog.setAttribute(PREMIUM_DIALOG_MARKER, 'true');
             dialog.style.setProperty('display', 'none', 'important');
 
             // BUG-04: Use a global query for open backdrops instead of fragile
@@ -674,7 +701,10 @@ function dismissPremiumPopups() {
             // non-premium dialog (Share, Save, playlist, etc.) is visibly open.
             if (!hasVisibleNonPremiumDialog(dialog)) {
                 const openBackdrops = document.querySelectorAll('tp-yt-iron-overlay-backdrop[opened]');
-                openBackdrops.forEach(b => b.style.setProperty('display', 'none', 'important'));
+                openBackdrops.forEach(backdrop => {
+                    backdrop.style.setProperty('display', 'none', 'important');
+                    backdrop.setAttribute(PREMIUM_BACKDROP_MARKER, 'true');
+                });
             }
         }
     }
