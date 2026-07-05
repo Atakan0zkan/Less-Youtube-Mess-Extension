@@ -49,6 +49,11 @@ function loadSettings() {
     }
 
     const normalizedSettings = normalizeSettings(settings);
+    if (!normalizedSettings.list_view && normalizedSettings.compact_list_view) {
+      normalizedSettings.compact_list_view = false;
+      saveSetting('compact_list_view', false);
+    }
+
     SETTINGS_KEYS.forEach(key => {
       const el = document.getElementById(key);
       if (el) el.checked = normalizedSettings[key];
@@ -87,7 +92,10 @@ function setupCollapsibleGroups() {
       return;
     }
 
-    const collapsed = res.collapsed_groups || {};
+    const safeRes = res || {};
+    const collapsed = safeRes.collapsed_groups && typeof safeRes.collapsed_groups === 'object'
+      ? safeRes.collapsed_groups
+      : {};
     
     document.querySelectorAll('.settings-group').forEach(group => {
       const id = group.getAttribute('data-group');
@@ -247,23 +255,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Power toggle: enable/disable the entire extension ---
-    document.getElementById('power-toggle').addEventListener('click', () => {
-      const powerBtn = document.getElementById('power-toggle');
-      const currentlyEnabled = powerBtn.getAttribute('aria-pressed') === 'true';
-      const newState = !currentlyEnabled;
-      applyExtensionDisabledState(newState);
-      // Persist to local storage — content script reacts via storage.onChanged
-      chrome.storage.local.set({ extension_enabled: newState });
-    });
+    const powerToggle = document.getElementById('power-toggle');
+    if (powerToggle) {
+      powerToggle.addEventListener('click', () => {
+        const currentlyEnabled = powerToggle.getAttribute('aria-pressed') === 'true';
+        const newState = !currentlyEnabled;
+        applyExtensionDisabledState(newState);
+        // Persist to local storage — content script reacts via storage.onChanged
+        chrome.storage.local.set({ extension_enabled: newState });
+      });
+    }
 
     // --- Theme toggle ---
-    document.getElementById('theme-toggle').addEventListener('click', () => {
-      const current = document.body.getAttribute('data-theme') || 'dark';
-      const next = current === 'dark' ? 'light' : 'dark';
-      document.body.setAttribute('data-theme', next);
-      // BUG-05: Theme stored in local storage (UI preference, not a sync setting)
-      chrome.storage.local.set({ theme: next });
-    });
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const current = document.body.getAttribute('data-theme') || 'dark';
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.body.setAttribute('data-theme', next);
+        // BUG-05: Theme stored in local storage (UI preference, not a sync setting)
+        chrome.storage.local.set({ theme: next });
+      });
+    }
   });
 });
 

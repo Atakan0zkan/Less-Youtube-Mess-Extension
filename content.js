@@ -211,6 +211,9 @@ if (isExtensionValid()) {
             // React to extension_enabled changes from local storage
             if (area === 'local' && 'extension_enabled' in changes) {
                 extensionEnabled = normalizeExtensionEnabled(changes.extension_enabled.newValue);
+                if (!extensionEnabled) {
+                    resetDescriptionPipeline({ clearDom: true });
+                }
                 applySettings(cachedSettings);
                 if (extensionEnabled) {
                     scheduleRunFeatures();
@@ -223,6 +226,9 @@ if (isExtensionValid()) {
             for (const key of SETTINGS_KEYS) {
                 if (key in changes) {
                     cachedSettings[key] = coerceSettingValue(key, changes[key].newValue);
+                    if (key === 'list_view' && cachedSettings[key] === false) {
+                        resetDescriptionPipeline({ clearDom: true });
+                    }
                     if (key === 'disable_auto_dubbing') {
                         _lastOriginalAudioRequestUrl = null;
                     }
@@ -760,9 +766,34 @@ let activeFetches = 0;
 const fetchQueue = [];
 const queuedDescriptionItems = new Set();
 const descriptionCache = new Map();
+let descriptionQueueGeneration = 0;
 
 // PERF-04: Track all active AbortControllers so in-flight fetches can be cancelled on navigation.
 const activeControllers = new Set();
+let descriptionObserver = null;
+
+function clearDescriptionDom() {
+    queryAll(document, '.custom-description').forEach(desc => desc.remove());
+    queryAll(document, '[data-desc-done]').forEach(item => item.removeAttribute('data-desc-done'));
+}
+
+function resetDescriptionPipeline({ clearDom = false } = {}) {
+    descriptionQueueGeneration++;
+    activeControllers.forEach(controller => controller.abort());
+    activeControllers.clear();
+    activeFetches = 0;
+    fetchQueue.length = 0;
+    queuedDescriptionItems.clear();
+
+    if (descriptionObserver) {
+        descriptionObserver.disconnect();
+        descriptionObserver = null;
+    }
+
+    if (clearDom) {
+        clearDescriptionDom();
+    }
+}
 
 function rememberDescription(canonicalHref, content) {
     if (descriptionCache.size >= MAX_DESCRIPTION_CACHE_ENTRIES) {
@@ -830,6 +861,8 @@ async function fetchVideoDescription(href) {
 // OPT-2: Iterative processQueue to avoid call stack overflow when the queue contains
 // many consecutive stale items (e.g. after rapid scroll + SPA navigation).
 function processQueue() {
+    if (!extensionEnabled || !cachedSettings.list_view || !isSubscriptionsPage()) return;
+
     // Avoid starting new description requests while the tab is hidden.
     // Active requests are allowed to finish; visibilitychange resumes the queue.
     if (document.hidden) return;
@@ -850,9 +883,14 @@ function processQueue() {
         if (!currentVideoId) continue;
         if (item.getAttribute('data-desc-done') !== currentVideoId) continue; // Stale — skip
 
+        const generation = descriptionQueueGeneration;
         activeFetches++;
         fetchVideoDescription(linkEl.href)
             .then(content => {
+                if (generation !== descriptionQueueGeneration) return;
+                if (!extensionEnabled || !cachedSettings.list_view || !isSubscriptionsPage()) return;
+                if (!item.isConnected || !metadataContainer.isConnected) return;
+                if (item.getAttribute('data-desc-done') !== currentVideoId) return;
                 if (content) {
                     // BUG-09: Prevent duplicate descriptions if processQueue races
                     if (metadataContainer.querySelector('.custom-description')) return;
@@ -863,7 +901,8 @@ function processQueue() {
                 }
             })
             .finally(() => {
-                activeFetches--;
+                if (generation !== descriptionQueueGeneration) return;
+                activeFetches = Math.max(0, activeFetches - 1);
                 processQueue(); // Re-enter to fill the freed slot
             });
         // One fetch per loop iteration — finally() handles the rest
@@ -872,8 +911,6 @@ function processQueue() {
 }
 
 // Lazy-initialized IntersectionObserver for video descriptions
-let descriptionObserver = null;
-
 function getDescriptionObserver() {
     if (!descriptionObserver) {
         descriptionObserver = new IntersectionObserver((entries, observer) => {
@@ -1086,24 +1123,9 @@ function handleNavigation(currentUrl) {
     if (currentUrl === lastUrl) return false;
     lastUrl = currentUrl;
 
-    // PERF-04 + BUG-02: Cancel all in-flight description fetches and reset the counter.
-    // Without this, completed fetches call processQueue() on a different page,
-    // and activeFetches never reaches 0 so new fetches are blocked.
-    activeControllers.forEach(c => c.abort());
-    activeControllers.clear();
-    activeFetches = 0;
-    fetchQueue.length = 0;
-    queuedDescriptionItems.clear();
-
-    // BUG-01 + RISK-03 + BUG-C/OPT-5: Always disconnect and null the observer on
-    // ANY navigation — not just when leaving /feed/subscriptions.
-    // This prevents stale IntersectionObserver entries from accumulating when the user
-    // navigates between subscription filters or internal sub-pages within subscriptions.
-    // The observer is lazily re-created by getDescriptionObserver() on the next runFeatures().
-    if (descriptionObserver) {
-        descriptionObserver.disconnect();
-        descriptionObserver = null;
-    }
+    // Cancel the current description pipeline. The generation token prevents stale
+    // fetch finally() handlers from mutating the new page's queue accounting.
+    resetDescriptionPipeline();
 
     // PERF-01: Reset likes-tracking so the new page re-applies the setting.
     _lastHideLikes = undefined;
