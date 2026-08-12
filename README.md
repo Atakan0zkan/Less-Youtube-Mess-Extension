@@ -4,6 +4,8 @@ Customize YouTube by hiding Shorts, recommendations, comments, Premium prompts, 
 
 Less YouTube Mess is a lightweight Chrome extension for turning YouTube into a cleaner, more intentional experience. It uses vanilla HTML, CSS, and JavaScript with no build step and no runtime dependencies.
 
+See this project in my [software developer portfolio](https://atakanozkan.com/en/extension), alongside its product role, implementation details, and related browser-extension work.
+
 ## Features
 
 - Hide Shorts across navigation, homepage shelves, subscriptions, search, and video lists.
