@@ -16,6 +16,33 @@ const FALSE_SETTING_VALUES = new Set(['false', '0', 'no', 'off']);
 const YOUTUBE_VIDEO_ID_RE = /^[A-Za-z0-9_-]{11}$/;
 const FORCE_ORIGINAL_AUDIO_EVENT = 'less-youtube-mess:force-original-audio';
 const ORIGINAL_AUDIO_RETRY_DELAYS_MS = [0, 600, 1500, 3500, 6000];
+const TRANSCRIPT_SIDEBAR_MARKER = 'data-lym-transcript-active';
+const TRANSCRIPT_OPEN_GRACE_MS = 5000;
+const TRANSCRIPT_TRIGGER_SELECTORS = [
+    'ytd-video-description-transcript-section-renderer',
+    'yt-video-description-transcript-section-renderer',
+    'button[aria-label*="transcript" i]',
+    'button[aria-label*="transkript" i]',
+    '[role="button"][aria-label*="transcript" i]',
+    '[role="button"][aria-label*="transkript" i]'
+];
+const TRANSCRIPT_SURFACE_SELECTORS = [
+    '#secondary [target-id*="transcript" i]',
+    '#secondary ytd-transcript-renderer',
+    '#secondary yt-transcript-renderer',
+    '#secondary [class*="transcript" i]'
+];
+const TRANSCRIPT_NATIVE_ACTIVE_SELECTORS = [
+    '#secondary [target-id*="transcript" i][visibility="ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"]',
+    '#secondary [target-id*="transcript" i][visibility="ENGAGEMENT_PANEL_VISIBILITY_VISIBLE"]'
+];
+const TRANSCRIPT_PANEL_CANDIDATE_SELECTORS = [
+    '#secondary [visibility*="EXPANDED"]',
+    '#secondary [visibility$="_VISIBLE"]'
+];
+let transcriptOpenGraceTimer = null;
+let transcriptOpenGraceActive = false;
+let transcriptPanelCandidate = null;
 
 function coerceBooleanLike(value, fallback) {
     if (typeof value === 'boolean') return value;
@@ -137,6 +164,7 @@ function injectPageAudioBridge() {
 function applySettings(settings) {
     cachedSettings = normalizeSettings(settings);
     const html = document.documentElement;
+    const preserveVisibleTranscript = cachedSettings.hide_sidebar && isTranscriptSurfaceVisible();
 
     // If extension is disabled, strip all attributes and return early.
     // YouTube reverts to its normal appearance.
@@ -151,6 +179,12 @@ function applySettings(settings) {
 
     for (const key of SETTINGS_KEYS) {
         html.setAttribute(key, String(cachedSettings[key]));
+    }
+
+    if (preserveVisibleTranscript) {
+        html.setAttribute(TRANSCRIPT_SIDEBAR_MARKER, 'true');
+    } else if (!cachedSettings.hide_sidebar) {
+        clearTranscriptSidebarOverride();
     }
 }
 
@@ -629,6 +663,118 @@ function disableThumbnailPlayback() {
     }
 }
 
+function clearTranscriptSidebarOverride() {
+    transcriptOpenGraceActive = false;
+    transcriptPanelCandidate = null;
+    if (transcriptOpenGraceTimer !== null) {
+        clearTimeout(transcriptOpenGraceTimer);
+        transcriptOpenGraceTimer = null;
+    }
+    document.documentElement.removeAttribute(TRANSCRIPT_SIDEBAR_MARKER);
+}
+
+function isVisibleElement(element) {
+    if (!element?.isConnected) return false;
+    const style = window.getComputedStyle(element);
+    const rect = element.getBoundingClientRect();
+    return style.display !== 'none' &&
+        style.visibility !== 'hidden' &&
+        style.opacity !== '0' &&
+        rect.width > 0 &&
+        rect.height > 0;
+}
+
+function captureTranscriptPanelCandidate() {
+    if (transcriptPanelCandidate && isVisibleElement(transcriptPanelCandidate)) return;
+    transcriptPanelCandidate = queryAll(document, TRANSCRIPT_PANEL_CANDIDATE_SELECTORS)
+        .find(isVisibleElement) || null;
+}
+
+function isTranscriptSurfaceVisible() {
+    if (transcriptPanelCandidate && isVisibleElement(transcriptPanelCandidate)) return true;
+
+    for (const surface of queryAll(document, TRANSCRIPT_SURFACE_SELECTORS)) {
+        if (isVisibleElement(surface)) return true;
+    }
+    return false;
+}
+
+function syncTranscriptSidebarOverride() {
+    if (!extensionEnabled || !cachedSettings.hide_sidebar) {
+        clearTranscriptSidebarOverride();
+        return;
+    }
+
+    if (transcriptOpenGraceActive) {
+        // The click itself identifies the feature. Remember only the panel that
+        // opens during this short window so unrelated secondary panels stay hidden.
+        captureTranscriptPanelCandidate();
+    }
+
+    if (queryOne(document, TRANSCRIPT_NATIVE_ACTIVE_SELECTORS)) {
+        // CSS can now preserve the panel from YouTube's own expanded state.
+        clearTranscriptSidebarOverride();
+        return;
+    }
+
+    if (isTranscriptSurfaceVisible()) {
+        document.documentElement.setAttribute(TRANSCRIPT_SIDEBAR_MARKER, 'true');
+        return;
+    }
+
+    if (!transcriptOpenGraceActive) {
+        clearTranscriptSidebarOverride();
+    }
+}
+
+function beginTranscriptSidebarOverride() {
+    if (!extensionEnabled || !cachedSettings.hide_sidebar) return;
+
+    transcriptOpenGraceActive = true;
+    transcriptPanelCandidate = null;
+    document.documentElement.setAttribute(TRANSCRIPT_SIDEBAR_MARKER, 'true');
+
+    if (transcriptOpenGraceTimer !== null) {
+        clearTimeout(transcriptOpenGraceTimer);
+    }
+    transcriptOpenGraceTimer = setTimeout(() => {
+        transcriptOpenGraceTimer = null;
+        captureTranscriptPanelCandidate();
+        transcriptOpenGraceActive = false;
+        syncTranscriptSidebarOverride();
+    }, TRANSCRIPT_OPEN_GRACE_MS);
+}
+
+function eventPathMatches(event, selectors) {
+    const path = typeof event.composedPath === 'function' ? event.composedPath() : [];
+    return path.some(node => node?.nodeType === Node.ELEMENT_NODE && matchesAny(node, selectors));
+}
+
+document.addEventListener('click', (event) => {
+    if (!extensionEnabled || !cachedSettings.hide_sidebar) return;
+
+    if (eventPathMatches(event, TRANSCRIPT_TRIGGER_SELECTORS)) {
+        // Capture phase runs before YouTube's click handler, so the secondary
+        // column exists when experiments try to mount the transcript panel.
+        beginTranscriptSidebarOverride();
+        return;
+    }
+
+    if (document.documentElement.hasAttribute(TRANSCRIPT_SIDEBAR_MARKER)) {
+        if (eventPathMatches(event, TRANSCRIPT_SURFACE_SELECTORS)) {
+            transcriptOpenGraceActive = false;
+        }
+        setTimeout(syncTranscriptSidebarOverride, 300);
+    }
+}, true);
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && document.documentElement.hasAttribute(TRANSCRIPT_SIDEBAR_MARKER)) {
+        transcriptOpenGraceActive = false;
+        setTimeout(syncTranscriptSidebarOverride, 300);
+    }
+});
+
 function clearRuntimeStyles() {
     document.querySelectorAll('[data-lym-likes-applied="hidden"]').forEach(el => {
         el.style.removeProperty('display');
@@ -638,6 +784,7 @@ function clearRuntimeStyles() {
     clearHiddenControls('hype');
     clearThumbnailPlaybackMarkers();
     clearPremiumPopupMarkers();
+    clearTranscriptSidebarOverride();
 }
 
 function hideLikeTextElement(el) {
@@ -1165,6 +1312,7 @@ function runFeatures() {
         scheduleOriginalAudioTrackSelection();
         disableThumbnailPlayback();
         dismissPremiumPopups();
+        syncTranscriptSidebarOverride();
         applyAutoplay(); // IMPROVE-01
         selfDiagnose();
     } catch (e) {
@@ -1194,6 +1342,7 @@ function handleNavigation(currentUrl) {
     autoplayDirty = true;
     _lastOriginalAudioRequestUrl = null;
     clearOriginalAudioTrackTimers();
+    clearTranscriptSidebarOverride();
     _diagnosed = false; // Reset diagnostic for new page
     _outerStructureWarned = false;
     clearDiagnoseTimer();
