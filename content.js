@@ -411,6 +411,43 @@ const CONTROL_HIDE_MARKER = 'data-lym-control-hidden';
 const THUMBNAIL_PLAYBACK_MARKER = 'data-lym-thumbnail-playback-disabled';
 const PREMIUM_DIALOG_MARKER = 'data-lym-premium-hidden';
 const PREMIUM_BACKDROP_MARKER = 'data-lym-premium-backdrop-hidden';
+const PREMIUM_PROMO_MARKER = 'data-lym-premium-promo-hidden';
+
+const PREMIUM_DIALOG_CONTENT_SELECTORS = [
+    'yt-upsell-dialog-renderer',
+    'ytd-upsell-dialog-renderer',
+    'yt-premium-upsell-dialog-renderer',
+    'ytd-premium-upsell-dialog-renderer'
+];
+
+const PREMIUM_PROMO_SURFACE_SELECTORS = [
+    'ytd-mealbar-promo-renderer',
+    'yt-mealbar-promo-renderer',
+    'yt-mealbar-promo-view-model',
+    'ytd-enforcement-message-view-model',
+    'yt-enforcement-message-view-model',
+    'ytd-statement-banner-renderer',
+    'yt-statement-banner-renderer',
+    'yt-statement-banner-view-model',
+    'yt-premium-upsell-renderer',
+    'ytd-premium-upsell-renderer',
+    ...PREMIUM_DIALOG_CONTENT_SELECTORS
+];
+
+const PREMIUM_TEXT_GATED_PROMO_SURFACE_SELECTORS = [
+    'ytd-upsell-banner-renderer',
+    'yt-upsell-banner-renderer'
+];
+
+const PREMIUM_UNMARKED_PROMO_SURFACE_SELECTORS = PREMIUM_PROMO_SURFACE_SELECTORS.map(
+    selector => `${selector}:not([${PREMIUM_PROMO_MARKER}])`
+);
+
+const PREMIUM_UNMARKED_TEXT_GATED_PROMO_SURFACE_SELECTORS = PREMIUM_TEXT_GATED_PROMO_SURFACE_SELECTORS.map(
+    selector => `${selector}:not([${PREMIUM_PROMO_MARKER}])`
+);
+
+const PREMIUM_TEXT_RE = /\b(youtube\s*)?premium\b/i;
 
 const CREATE_CONTROL_SELECTORS = [
     'ytd-masthead #buttons ytd-topbar-menu-button-renderer',
@@ -662,16 +699,28 @@ function hasVisibleNonPremiumDialog(currentPremiumDialog) {
     const dialogs = document.querySelectorAll('tp-yt-paper-dialog');
     for (const dialog of dialogs) {
         if (dialog === currentPremiumDialog) continue;
-        if (dialog.querySelector('yt-upsell-dialog-renderer')) continue;
+        if (queryOne(dialog, PREMIUM_DIALOG_CONTENT_SELECTORS)) continue;
         if (isVisibleDialog(dialog)) return true;
     }
     return false;
 }
 
+function hasPremiumPromoSignal(el) {
+    if (!el || !el.querySelector) return false;
+    if (PREMIUM_TEXT_RE.test(el.textContent || '')) return true;
+    return !!el.querySelector('a[href*="/premium" i], a[href*="youtube.com/premium" i]');
+}
+
+function hidePremiumPromoSurface(surface) {
+    surface.setAttribute(PREMIUM_PROMO_MARKER, 'true');
+    surface.style.setProperty('display', 'none', 'important');
+}
+
 function clearPremiumPopupMarkers() {
-    document.querySelectorAll(`[${PREMIUM_DIALOG_MARKER}], [data-premium-hidden]`).forEach(el => {
+    document.querySelectorAll(`[${PREMIUM_DIALOG_MARKER}], [${PREMIUM_PROMO_MARKER}], [data-premium-hidden]`).forEach(el => {
         el.style.removeProperty('display');
         el.removeAttribute(PREMIUM_DIALOG_MARKER);
+        el.removeAttribute(PREMIUM_PROMO_MARKER);
         el.removeAttribute('data-premium-hidden');
     });
 
@@ -693,10 +742,20 @@ function dismissPremiumPopups() {
         return;
     }
 
+    for (const surface of queryAll(document, PREMIUM_UNMARKED_PROMO_SURFACE_SELECTORS)) {
+        hidePremiumPromoSurface(surface);
+    }
+
+    for (const surface of queryAll(document, PREMIUM_UNMARKED_TEXT_GATED_PROMO_SURFACE_SELECTORS)) {
+        if (hasPremiumPromoSignal(surface)) {
+            hidePremiumPromoSurface(surface);
+        }
+    }
+
     // PERF-02: Only query dialogs not yet processed, avoiding redundant work.
     const dialogs = document.querySelectorAll(`tp-yt-paper-dialog:not([${PREMIUM_DIALOG_MARKER}]):not([data-premium-hidden])`);
     for (const dialog of dialogs) {
-        const isUpsell = dialog.querySelector('yt-upsell-dialog-renderer');
+        const isUpsell = queryOne(dialog, PREMIUM_DIALOG_CONTENT_SELECTORS);
         if (isUpsell) {
             dialog.setAttribute(PREMIUM_DIALOG_MARKER, 'true');
             dialog.style.setProperty('display', 'none', 'important');

@@ -318,32 +318,35 @@ html[hide_shorts="true"] ytd-browse[page-subtype="subscriptions"] ytd-grid-video
 
 
 /* ===== 6. SIDEBAR (SUGGESTED VIDEOS PANEL) ===== */
-html[hide_sidebar="true"] ytd-watch-flexy #secondary,
+/* Keep an expanded transcript panel available in YouTube's secondary column.
+   Suggested videos stay hidden while the transcript is open. */
+html[hide_sidebar="true"] ytd-watch-flexy #secondary:not(:has(ytd-engagement-panel-section-list-renderer[target-id*="transcript" i][visibility="ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"])),
 html[hide_sidebar="true"] ytd-watch-flexy #related {
     display: none !important;
 }
 
 /* Center and expand the video player when sidebar is hidden.
    Keep the normal watch layout inside its own available width so the browser
-   does not show a horizontal scrollbar in default mode. */
-html[hide_sidebar="true"] ytd-watch-flexy[flexy][is-two-columns_]:not([fullscreen]):not([theater]) {
+   does not show a horizontal scrollbar in default mode. Restore YouTube's
+   native columns while a transcript is expanded. */
+html[hide_sidebar="true"] ytd-watch-flexy[flexy][is-two-columns_]:not([fullscreen]):not([theater]):not(:has(#secondary ytd-engagement-panel-section-list-renderer[target-id*="transcript" i][visibility="ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"])) {
     --ytd-watch-flexy-max-player-width: min(calc(var(--ytd-watch-flexy-chat-max-height) * var(--ytd-watch-flexy-width-ratio) / var(--ytd-watch-flexy-height-ratio)), 100%) !important;
     overflow-x: clip !important;
 }
 
-html[hide_sidebar="true"] ytd-watch-flexy:not([fullscreen]) #columns {
+html[hide_sidebar="true"] ytd-watch-flexy:not([fullscreen]):not(:has(#secondary ytd-engagement-panel-section-list-renderer[target-id*="transcript" i][visibility="ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"])) #columns {
     min-width: 0 !important;
     justify-content: center !important;
     box-sizing: border-box !important;
 }
 
-html[hide_sidebar="true"] ytd-watch-flexy:not([fullscreen]):not([theater]) #columns {
+html[hide_sidebar="true"] ytd-watch-flexy:not([fullscreen]):not([theater]):not(:has(#secondary ytd-engagement-panel-section-list-renderer[target-id*="transcript" i][visibility="ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"])) #columns {
     width: 100% !important;
     max-width: 100% !important;
     overflow-x: clip !important;
 }
 
-html[hide_sidebar="true"] ytd-watch-flexy:not([fullscreen]) #primary {
+html[hide_sidebar="true"] ytd-watch-flexy:not([fullscreen]):not(:has(#secondary ytd-engagement-panel-section-list-renderer[target-id*="transcript" i][visibility="ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"])) #primary {
     max-width: none !important;
     min-width: 0 !important;
     box-sizing: border-box !important;
@@ -387,23 +390,39 @@ html[hide_youtube_logo="true"] #logo[href="/"] {
    Those are used by Watch Later, Share, Playlist, and other functional features. */
 
 /* Mealbar promotional banners (bottom/top promo strips) */
-html[hide_premium_popups="true"] ytd-mealbar-promo-renderer {
+html[hide_premium_popups="true"] ytd-mealbar-promo-renderer,
+html[hide_premium_popups="true"] yt-mealbar-promo-renderer,
+html[hide_premium_popups="true"] yt-mealbar-promo-view-model {
     display: none !important;
 }
 
 /* Premium enforcement messages */
-html[hide_premium_popups="true"] ytd-enforcement-message-view-model {
+html[hide_premium_popups="true"] ytd-enforcement-message-view-model,
+html[hide_premium_popups="true"] yt-enforcement-message-view-model {
     display: none !important;
 }
 
 /* Statement banners (premium/music promotional banners) */
-html[hide_premium_popups="true"] ytd-statement-banner-renderer {
+html[hide_premium_popups="true"] ytd-statement-banner-renderer,
+html[hide_premium_popups="true"] yt-statement-banner-renderer,
+html[hide_premium_popups="true"] yt-statement-banner-view-model,
+html[hide_premium_popups="true"] yt-premium-upsell-renderer,
+html[hide_premium_popups="true"] ytd-premium-upsell-renderer,
+html[hide_premium_popups="true"] ytd-upsell-banner-renderer:has(a[href*="/premium" i]),
+html[hide_premium_popups="true"] yt-upsell-banner-renderer:has(a[href*="/premium" i]) {
     display: none !important;
 }
 
 /* Premium upsell dialogs — CSS targets the dialog; JS cleans up the shared backdrop */
 /* RISK-01 Tested: 2026-04 — upsell dialog class name */
-html[hide_premium_popups="true"] tp-yt-paper-dialog:has(yt-upsell-dialog-renderer) {
+html[hide_premium_popups="true"] yt-upsell-dialog-renderer,
+html[hide_premium_popups="true"] ytd-upsell-dialog-renderer,
+html[hide_premium_popups="true"] yt-premium-upsell-dialog-renderer,
+html[hide_premium_popups="true"] ytd-premium-upsell-dialog-renderer,
+html[hide_premium_popups="true"] tp-yt-paper-dialog:has(yt-upsell-dialog-renderer),
+html[hide_premium_popups="true"] tp-yt-paper-dialog:has(ytd-upsell-dialog-renderer),
+html[hide_premium_popups="true"] tp-yt-paper-dialog:has(yt-premium-upsell-dialog-renderer),
+html[hide_premium_popups="true"] tp-yt-paper-dialog:has(ytd-premium-upsell-dialog-renderer) {
     display: none !important;
 }
 
