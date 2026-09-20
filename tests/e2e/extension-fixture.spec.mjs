@@ -44,8 +44,10 @@ test.afterAll(() => {
 });
 
 async function launchWithFixture() {
+  // Headed under xvfb on Linux CI: headless Chromium does not run MV3
+  // content scripts from --load-extension reliably. Workflow wraps with xvfb-run.
   const context = await chromium.launchPersistentContext(userDataDir, {
-    headless: true,
+    headless: false,
     args: [`--load-extension=${extensionDir}`, `--disable-extensions-except=${extensionDir}`, '--no-first-run', '--no-default-browser-check'],
   });
   const page = context.pages()[0] || (await context.newPage());
