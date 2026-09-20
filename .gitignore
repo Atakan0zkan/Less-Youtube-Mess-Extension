@@ -13,3 +13,8 @@ memory-bank/
 AGENTS.md
 promo_generator.html
 package.bat
+
+# Node / CI artifacts (AI-free test deps, local only)
+node_modules/
+playwright-report/
+test-results/
