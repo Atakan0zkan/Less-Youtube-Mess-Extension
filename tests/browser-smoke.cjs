@@ -381,4 +381,3 @@ main().catch(error => { console.error(error); process.exitCode = 1; }).finally(a
         catch (error) { console.warn(`Temporary profile retained: ${resolved}: ${error.message}`); }
     }
 });
-
