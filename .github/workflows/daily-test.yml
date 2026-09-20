@@ -165,7 +165,8 @@ jobs:
 
             Do exactly this, once:
             1. Read the first 100 lines of the failed log with `gh run view <this-run-id> --log-failed` (resolve the current run id from the GitHub context, do not guess).
-            2. If the log cannot be fetched (rate limit / 429 / auth error / empty output), exit SILENTLY: do NOT open an issue, do NOT comment, do nothing.
+            2. If the FAILURE log cannot be fetched (run still in progress / empty output), exit SILENTLY: do NOT open an issue, do NOT comment, do nothing.
+            3. If YOU (the triage model) hit an auth/credits/429/rate-limit error, do NOT stay silent: open ONE `[CI-TRIAGE]` issue in Turkish stating the triage infrastructure itself is broken (provider error text included) so a human fixes billing/quota. This is the only case where the issue is about triage, not the test failure.
             3. Identify the single most likely failing layer: syntax/whitespace, unit/DOM (regression vs comprehensive), or infra (runner/Node/npm).
             4. Open exactly ONE new GitHub Issue in Turkish with title prefix `[CI-TRIAGE]`, containing: failing job + step, short log excerpt (max 40 lines), likely cause (repo code vs fixture vs infra), and the single next command to reproduce locally (`npm test`). Do not blame live YouTube; live-smoke is a separate non-blocking job.
             5. Exit. If an identical open `[CI-TRIAGE]` issue already exists for the same failure signature, comment there instead of opening a duplicate.
