@@ -288,7 +288,7 @@ function updateCompactRowState(listViewEnabled) {
   if (!compactItem || !compactInput) return;
   if (listViewEnabled) {
     compactItem.removeAttribute('data-disabled');
-    compactInput.disabled = false;
+    compactInput.disabled = document.body.hasAttribute('data-extension-disabled');
   } else {
     compactItem.setAttribute('data-disabled', 'true');
     compactInput.disabled = true;

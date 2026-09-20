@@ -8,7 +8,6 @@
     window.__lessYoutubeMessAudioBridge = true;
 
     const FORCE_ORIGINAL_AUDIO_EVENT = 'less-youtube-mess:force-original-audio';
-    const RETRY_DELAYS_MS = [0, 400, 1200, 2500];
 
     const ORIGINAL_AUDIO_RE = /(original|original audio|orijinal|audio original|áudio original|son original|audio originale|ton original|originalton|originele audio|oryginal|oryginalny|оригинал|оригінал|原始|原文|原聲|原声|オリジナル|원본|मूल|اصلي|اصلی|الأصلي|ต้นฉบับ|gốc|asal|প্রধান)/i;
     const DUBBED_AUDIO_RE = /(dubbed|auto.?dubbed|dubbing|automatic dubbing|dublaj|seslendirme|doblaje|doublage|synchronisation|doppiaggio|dublagem|dobragem|дубляж|дубльовано|配音|吹き替え|더빙|डब|مدبلج|พากย์|lồng tiếng|alih suara|ডাব)/i;
@@ -84,7 +83,9 @@
 
     function isExplicitOriginal(track) {
         const info = readLanguageInfo(track);
-        if (info && (info.isOriginal === true || info.original === true || info.isDefault === true)) {
+        if (DUBBED_AUDIO_RE.test(getTrackText(track))) return false;
+        if (track?.isOriginal === true || track?.original === true ||
+            info?.isOriginal === true || info?.original === true) {
             return true;
         }
         return ORIGINAL_AUDIO_RE.test(getTrackText(track));
@@ -154,11 +155,13 @@
         }
     }
 
-    function forceOriginalAudioTrackWithRetries() {
-        for (const delay of RETRY_DELAYS_MS) {
-            window.setTimeout(forceOriginalAudioTrack, delay);
+    // Retry ownership stays in the isolated content script so disabling the
+    // feature or navigating can cancel every outstanding request.
+    window.addEventListener(FORCE_ORIGINAL_AUDIO_EVENT, () => {
+        try {
+            forceOriginalAudioTrack();
+        } catch (e) {
+            // Internal player objects may change while YouTube navigates.
         }
-    }
-
-    window.addEventListener(FORCE_ORIGINAL_AUDIO_EVENT, forceOriginalAudioTrackWithRetries);
+    });
 })();

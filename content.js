@@ -210,23 +210,27 @@ if (isExtensionValid()) {
     try {
         // Load extension_enabled from local storage first
         chrome.storage.local.get({ extension_enabled: true }, (res) => {
+            if (!isExtensionValid()) return;
             if (chrome.runtime.lastError) {
                 console.warn('[Less YouTube Mess]', chrome.runtime.lastError.message);
                 return;
             }
-            extensionEnabled = normalizeExtensionEnabled(res.extension_enabled);
+            extensionEnabled = normalizeExtensionEnabled(res?.extension_enabled);
 
             // Now load sync settings and apply
             chrome.storage.sync.get(DEFAULTS, (settings) => {
+                if (!isExtensionValid()) return;
                 if (chrome.runtime.lastError) {
                     console.warn('[Less YouTube Mess]', chrome.runtime.lastError.message);
                     return;
                 }
-                applySettings(settings);
+                applySettings(settings || {});
 
                 if (extensionEnabled && cachedSettings.default_subscriptions && shouldRedirectToSubscriptions()) {
                     window.location.replace('https://www.youtube.com/feed/subscriptions');
+                    return;
                 }
+                scheduleRunFeatures();
             });
         });
     } catch (e) {
@@ -265,6 +269,7 @@ if (isExtensionValid()) {
                     }
                     if (key === 'disable_auto_dubbing') {
                         _lastOriginalAudioRequestUrl = null;
+                        clearOriginalAudioTrackTimers();
                     }
                     if (key === 'disable_thumbnail_playback' && cachedSettings[key] === false) {
                         clearThumbnailPlaybackMarkers();
@@ -587,6 +592,7 @@ function hideHypeButton() {
 function clearOriginalAudioTrackTimers() {
     _originalAudioTrackTimers.forEach(timer => clearTimeout(timer));
     _originalAudioTrackTimers = [];
+    _lastOriginalAudioRequestUrl = null;
 }
 
 function scheduleOriginalAudioTrackSelection(force = false) {
@@ -605,11 +611,13 @@ function scheduleOriginalAudioTrackSelection(force = false) {
 
     if (!force && _lastOriginalAudioRequestUrl === canonicalWatchUrl) return;
 
-    _lastOriginalAudioRequestUrl = canonicalWatchUrl;
     clearOriginalAudioTrackTimers();
+    _lastOriginalAudioRequestUrl = canonicalWatchUrl;
 
     for (const delay of ORIGINAL_AUDIO_RETRY_DELAYS_MS) {
         const timer = setTimeout(() => {
+            if (!isExtensionValid() || !extensionEnabled || !cachedSettings.disable_auto_dubbing) return;
+            if (getCanonicalWatchUrl(window.location.href) !== canonicalWatchUrl) return;
             window.dispatchEvent(new CustomEvent(FORCE_ORIGINAL_AUDIO_EVENT));
         }, delay);
         _originalAudioTrackTimers.push(timer);
@@ -842,16 +850,6 @@ function isVisibleDialog(el) {
         el.getClientRects().length > 0;
 }
 
-function hasVisibleNonPremiumDialog(currentPremiumDialog) {
-    const dialogs = document.querySelectorAll('tp-yt-paper-dialog');
-    for (const dialog of dialogs) {
-        if (dialog === currentPremiumDialog) continue;
-        if (queryOne(dialog, PREMIUM_DIALOG_CONTENT_SELECTORS)) continue;
-        if (isVisibleDialog(dialog)) return true;
-    }
-    return false;
-}
-
 function hasPremiumPromoSignal(el) {
     if (!el || !el.querySelector) return false;
     if (PREMIUM_TEXT_RE.test(el.textContent || '')) return true;
@@ -899,26 +897,38 @@ function dismissPremiumPopups() {
         }
     }
 
-    // PERF-02: Only query dialogs not yet processed, avoiding redundant work.
-    const dialogs = document.querySelectorAll(`tp-yt-paper-dialog:not([${PREMIUM_DIALOG_MARKER}]):not([data-premium-hidden])`);
+    // YouTube reuses both dialog hosts and backdrops. Re-evaluate ownership
+    // when content changes, including hosts we previously hid.
+    const dialogs = document.querySelectorAll('tp-yt-paper-dialog');
+    let hasOpenPremiumDialog = false;
+    let hasFunctionalDialog = false;
     for (const dialog of dialogs) {
         const isUpsell = queryOne(dialog, PREMIUM_DIALOG_CONTENT_SELECTORS);
         if (isUpsell) {
             dialog.setAttribute(PREMIUM_DIALOG_MARKER, 'true');
             dialog.style.setProperty('display', 'none', 'important');
-
-            // BUG-04: Use a global query for open backdrops instead of fragile
-            // previousElementSibling position-based detection.
-            // Hardened: do not hide the shared backdrop while a functional
-            // non-premium dialog (Share, Save, playlist, etc.) is visibly open.
-            if (!hasVisibleNonPremiumDialog(dialog)) {
-                const openBackdrops = document.querySelectorAll('tp-yt-iron-overlay-backdrop[opened]');
-                openBackdrops.forEach(backdrop => {
-                    backdrop.style.setProperty('display', 'none', 'important');
-                    backdrop.setAttribute(PREMIUM_BACKDROP_MARKER, 'true');
-                });
+            if (dialog.hasAttribute('opened')) hasOpenPremiumDialog = true;
+        } else {
+            if (dialog.hasAttribute(PREMIUM_DIALOG_MARKER) || dialog.hasAttribute('data-premium-hidden')) {
+                dialog.style.removeProperty('display');
+                dialog.removeAttribute(PREMIUM_DIALOG_MARKER);
+                dialog.removeAttribute('data-premium-hidden');
             }
+            if (isVisibleDialog(dialog)) hasFunctionalDialog = true;
         }
+    }
+
+    const hideBackdrop = hasOpenPremiumDialog && !hasFunctionalDialog;
+    document.querySelectorAll(`[${PREMIUM_BACKDROP_MARKER}]`).forEach(backdrop => {
+        if (hideBackdrop && backdrop.hasAttribute('opened')) return;
+        backdrop.style.removeProperty('display');
+        backdrop.removeAttribute(PREMIUM_BACKDROP_MARKER);
+    });
+    if (hideBackdrop) {
+        document.querySelectorAll('tp-yt-iron-overlay-backdrop[opened]').forEach(backdrop => {
+            backdrop.style.setProperty('display', 'none', 'important');
+            backdrop.setAttribute(PREMIUM_BACKDROP_MARKER, 'true');
+        });
     }
 }
 
@@ -968,6 +978,7 @@ function applyAutoplay() {
 const MAX_CONCURRENT_FETCHES = 3;
 const MAX_DESCRIPTION_QUEUE = 100;
 const MAX_DESCRIPTION_CACHE_ENTRIES = 250;
+const MAX_DESCRIPTION_HEAD_BYTES = 15000;
 let activeFetches = 0;
 const fetchQueue = [];
 const queuedDescriptionItems = new Set();
@@ -1020,29 +1031,32 @@ async function fetchVideoDescription(href) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000);
     activeControllers.add(controller); // PERF-04: Register for potential cancellation
+    let reader;
 
     try {
         // SEC-01: credentials: 'omit' — description fetch does not need auth cookies
         const response = await fetch(canonicalHref, {
             signal: controller.signal,
             credentials: 'omit',
-            mode: 'same-origin'
+            mode: 'same-origin',
+            redirect: 'error',
+            referrerPolicy: 'no-referrer'
         });
         // BUG-08: Check response status before reading body — 4xx/5xx have no useful meta
-        if (!response.ok) return null;
-        const reader = response.body.getReader();
+        if (!response.ok || !response.body) return null;
+        reader = response.body.getReader();
         const decoder = new TextDecoder();
         let accumulated = '';
+        let bytesRead = 0;
 
         while (true) {
             const { done, value } = await reader.read();
             if (done) break;
-            accumulated += decoder.decode(value, { stream: true });
-            // Meta tags are in <head>; stop after </head> or 15KB to save bandwidth
-            if (accumulated.includes('</head>') || accumulated.length > 15000) {
-                reader.cancel().catch(() => {});
-                break;
-            }
+            const chunk = value.subarray(0, MAX_DESCRIPTION_HEAD_BYTES - bytesRead);
+            bytesRead += chunk.byteLength;
+            accumulated += decoder.decode(chunk, { stream: true });
+            // A single network chunk may exceed the budget. Bound decoding too.
+            if (/<\/head\s*>/i.test(accumulated) || bytesRead >= MAX_DESCRIPTION_HEAD_BYTES) break;
         }
 
         // Parse safely with DOMParser (no script execution, handles all HTML entities natively)
@@ -1060,6 +1074,8 @@ async function fetchVideoDescription(href) {
         // BUG-C FIX: clearTimeout moved to finally block so it ALWAYS runs,
         // even if reader.cancel() throws or an unexpected error occurs.
         clearTimeout(timeoutId);
+        if (reader) reader.cancel().catch(() => {});
+        controller.abort();
         activeControllers.delete(controller); // PERF-04: Deregister when done
     }
 }
@@ -1097,6 +1113,7 @@ function processQueue() {
                 if (!extensionEnabled || !cachedSettings.list_view || !isSubscriptionsPage()) return;
                 if (!item.isConnected || !metadataContainer.isConnected) return;
                 if (item.getAttribute('data-desc-done') !== currentVideoId) return;
+                if (getCanonicalWatchUrl(queryOne(item, SELECTORS.TITLE_LINK)?.href) !== currentVideoId) return;
                 if (content) {
                     // BUG-09: Prevent duplicate descriptions if processQueue races
                     if (metadataContainer.querySelector('.custom-description')) return;
@@ -1424,7 +1441,9 @@ function observeMutations(target) {
     if (observerTarget === target && target.isConnected) return true;
 
     observer.disconnect();
-    observer.observe(target, { childList: true, subtree: true, attributes: false });
+    // Paper dialogs/backdrops can open or close without adding any children.
+    // Do not observe style/class changes or our own data markers.
+    observer.observe(target, { childList: true, subtree: true, attributeFilter: ['opened'] });
     observerTarget = target;
     return true;
 }
@@ -1440,8 +1459,6 @@ function startObserver() {
     // PERF-03: Prefer ytd-app over document.body for a tighter subtree —
     // avoids triggering on browser-chrome or extension mutations outside the YT app root.
     if (ensureObserverConnected()) {
-        // OPT-4: attributes: false is the default but stated explicitly for clarity —
-        // we only need to react to DOM structure changes, not attribute mutations.
         // OPT-A: Use scheduleRunFeatures() instead of direct runFeatures() to coalesce
         // with the yt-navigate-finish event that fires shortly after page load.
         scheduleRunFeatures();

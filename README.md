@@ -78,9 +78,9 @@ The main pattern is:
 - YouTube selectors are centralized so DOM updates can usually be fixed in one place. Critical selectors prefer tag, href, structure, and attribute selectors before class-based fallbacks.
 - Subscription feed item discovery goes through `SELECTORS.SUBSCRIPTION_ITEM` and `getSubscriptionItems()` so diagnostics, List View descriptions, and live/premiere marking use the same outer-container model.
 - Subscriptions list view avoids absolute positioning inside YouTube components because YouTube wrappers often use `contain`, `isolation`, and nested positioning.
-- List View preserves YouTube's watched/resume red progress bars. Native hover preview playback inside List View is currently conservative and may not start reliably; progress visibility has priority over forcing preview layers.
+- List View preserves native hover previews and watched/resume red progress bars together. Both were user-confirmed working on 2026-08-18; do not force thumbnail host sizing/display.
 - Video descriptions in list view are fetched lazily with `IntersectionObserver`, session caching, a high queue cap, concurrency limiting, origin validation, `credentials: "omit"`, and `DOMParser`. New description fetches pause while the tab is hidden.
-- Description fetches are restricted to canonical `https://www.youtube.com/watch?v=VIDEO_ID` URLs with valid 11-character YouTube IDs.
+- Description fetches are restricted to canonical `https://www.youtube.com/watch?v=VIDEO_ID` URLs with valid 11-character YouTube IDs. Redirects are rejected, referrers omitted, and decoded input is capped at 15,000 bytes. If metadata is outside this budget, descriptions are omitted rather than downloading the entire page.
 - `page-audio-bridge.js` is a minimal web-accessible resource that runs in YouTube's page context only to request original audio through YouTube's internal player methods. The audio-track/dubbing menu remains visible for manual selection.
 - Popup UI localization currently covers 24 Chrome locale folders, each with the same 59 message keys.
 - The popup `ENG` override is stored in `chrome.storage.local` as a UI preference. It only loads `_locales/en/messages.json` inside the popup and does not affect YouTube content scripts or sync settings.
@@ -100,6 +100,25 @@ The main pattern is:
 - Likes, topbar controls, and thumbnail preview suppression use extension-owned data markers for cleanup. New JS supplements should follow the same marker-and-cleanup pattern.
 - Original audio selection is best-effort because it depends on YouTube internal player methods and audio-track labels. Re-test it on videos with multiple audio tracks after YouTube player updates.
 - The automatic dubbing setting should keep YouTube's audio-track/dubbing menu visible unless the product decision changes.
+
+## Development Checks
+
+Run the dependency-free regression suite with Node 22 or newer:
+
+```sh
+node --test tests/regression.test.cjs
+```
+
+For browser smoke tests, set `BROWSER_PATH` to an installed Brave/Chromium executable, then run:
+
+```sh
+node tests/browser-smoke.cjs
+node tests/browser-smoke.cjs --live
+```
+
+The browser harness copies runtime files to a temporary path without spaces, uses a fresh signed-out profile, and closes/removes only its own test session. The default run uses controlled fixtures; `--live` additionally checks a public YouTube transcript and compares old/new bounded description fetching. No existing browser profile or unpacked installation is modified.
+
+See [the September audit](docs/audit-2026-09-13.md) for fixes, research sources, and remaining test gaps.
 
 ## License
 

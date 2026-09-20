@@ -4,8 +4,8 @@
 // Assigned to 'self' explicitly to guarantee global accessibility across Chrome content script files.
 
 // RISK-02 NOTE: chrome.storage.sync stores each key individually (8KB/key limit, 100KB total).
-// Current usage is well within quota. If the feature count grows past ~30 keys, consolidate
-// all settings under a single 'lym_settings' object key to be safe.
+// Current usage is well within the 512-item quota. Consolidation is only needed
+// if measured item/byte usage approaches Chrome's limits.
 self.SETTINGS_KEYS = [
     'hide_left_nav',
     'list_view',
