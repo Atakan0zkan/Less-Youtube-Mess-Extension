@@ -91,15 +91,20 @@ let browser;
 let browserClient;
 let browserClosed = false;
 async function main() {
+    // CI containers (GitHub ubuntu runners) have tiny /dev/shm and restricted
+    // sandboxing: allow opt-in via BROWSER_NO_SANDBOX=1. Local runs unaffected.
+    const ciArgs = process.env.BROWSER_NO_SANDBOX === '1'
+        ? ['--no-sandbox', '--disable-dev-shm-usage']
+        : [];
     browser = spawn(browserPath, [
         `--user-data-dir=${profile}`, '--remote-debugging-port=0',
         `--load-extension=${extension}`, `--disable-extensions-except=${extension}`,
         '--no-first-run', '--no-default-browser-check', '--disable-sync',
-        '--window-size=1280,900', 'about:blank'
+        '--window-size=1280,900', ...ciArgs, 'about:blank'
     ], { windowsHide: true, stdio: 'ignore' });
     browser.on('error', error => console.error(error));
     const activePort = path.join(profile, 'DevToolsActivePort');
-    await until(() => fs.existsSync(activePort), 'Brave DevTools endpoint');
+    await until(() => fs.existsSync(activePort), 'Brave DevTools endpoint', 60000);
     const [port, endpoint] = fs.readFileSync(activePort, 'utf8').trim().split(/\r?\n/);
     browserClient = new CDP(`ws://127.0.0.1:${port}${endpoint}`);
     console.log('Browser:', (await browserClient.send('Browser.getVersion')).product);

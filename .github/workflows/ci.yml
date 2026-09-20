@@ -61,6 +61,7 @@ jobs:
       - name: Fixture E2E (AI-free, deterministic)
         env:
           BROWSER_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          BROWSER_NO_SANDBOX: '1'
         run: xvfb-run -a node tests/browser-smoke.cjs
 
   live:
@@ -97,6 +98,7 @@ jobs:
         continue-on-error: true
         env:
           BROWSER_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          BROWSER_NO_SANDBOX: '1'
         run: xvfb-run -a node tests/browser-smoke.cjs --live
 
       - name: Open informational issue on live failure (no code blame)
