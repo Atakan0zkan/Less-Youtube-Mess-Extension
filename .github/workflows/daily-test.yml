@@ -119,54 +119,58 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const title = `Live YouTube sinyali başarısız — ${new Date().toISOString().slice(0,10)} (bilgilendirme, build'i kırmaz)`;
+            const title = `Live YouTube signal failed — ${new Date().toISOString().slice(0,10)} (informational, does not block builds)`;
             const body = [
-              'Bu Issue **live-smoke** job\'undan otomatik açıldı.',
+              'This issue was opened automatically by the **live-smoke** job.',
               '',
-              '- Fixture job\'lar yeşilse kod suçlanmaz; dış dünya (kota, kaldırılan video, bölge, ağ) ölçülür.',
+              '- If fixture jobs are green, do not blame the code; the outside world is measured here (quota, removed video, region, network).',
               `- Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
-              '- Yapılacak: log\'a bak, gerekirse haftalık ritimde izle. Kodu değiştirme.',
+              '- Next step: check the log, watch the weekly rhythm if needed. Do not change code.',
             ].join('\n');
             await github.rest.issues.create({ ...context.repo, title, body });
 
   ai-triage:
-    name: ai-triage (fail-only, 1.3 Spark)
-    # All test jobs: triage must read FINISHED logs. Reading while the run is
-    # still in progress makes `gh run view --log-failed` fail and the agent
-    # exits silently by design (proven 2026-09-20: 26s Turkish silent-exit).
+    name: ai-triage (fail-only, deterministic)
+    # Deterministic fallback (2026-09-20): the 1.3 Spark action is parked
+    # because the Contributor-Free tier is app-only over the API-key path
+    # (FreeTierError) even with billing on file. This step needs no model,
+    # no API key, and cannot flake: it lists failed jobs via API and opens
+    # ONE English issue. To re-enable AI, restore the opencode action with:
+    #   model: opencode/muse-spark-1.3-contributor-free
+    # (backup in comment: opencode/muse-spark-1.2-contributor-free)
     needs: [offline-tests, e2e, live-smoke]
     if: failure()
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
     permissions:
       contents: read
       issues: write
     steps:
-      - uses: actions/checkout@v6
+      - name: Open or update [CI-TRIAGE] issue (English, no AI)
+        uses: actions/github-script@v7
         with:
-          fetch-depth: 1
-          persist-credentials: false
-
-      - name: Triage with 1.3 Spark (no code changes)
-        uses: anomalyco/opencode/github@latest
-        env:
-          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          # Yedek model (elde tutulur — otomatik fallback değildir):
-          # model: opencode/muse-spark-1.2-contributor-free
-          # Eğer 1.3 rate-limit/quota yerse yukarıdaki satırı primerle değiştir.
-          model: opencode/muse-spark-1.3-contributor-free
-          use_github_token: true
-          prompt: |
-            You are a fail-only CI triage agent. Do NOT modify code, do NOT open PRs, do NOT push commits.
-
-            Context: one of the blocking jobs (`offline-tests`: `npm ci` + syntax checks + `npm test` unit/DOM; `e2e`: real-browser fixture smoke — all AI-free) just failed in THIS completed run. (`live-smoke` is non-blocking and never triggers triage.)
-
-            Do exactly this, once:
-            1. Read the first 100 lines of the failed log with `gh run view <this-run-id> --log-failed` (resolve the current run id from the GitHub context, do not guess).
-            2. If the FAILURE log cannot be fetched (run still in progress / empty output), exit SILENTLY: do NOT open an issue, do NOT comment, do nothing.
-            3. If YOU (the triage model) hit an auth/credits/429/rate-limit error, do NOT stay silent: open ONE `[CI-TRIAGE]` issue in Turkish stating the triage infrastructure itself is broken (provider error text included) so a human fixes billing/quota. This is the only case where the issue is about triage, not the test failure.
-            3. Identify the single most likely failing layer: syntax/whitespace, unit/DOM (regression vs comprehensive), or infra (runner/Node/npm).
-            4. Open exactly ONE new GitHub Issue in Turkish with title prefix `[CI-TRIAGE]`, containing: failing job + step, short log excerpt (max 40 lines), likely cause (repo code vs fixture vs infra), and the single next command to reproduce locally (`npm test`). Do not blame live YouTube; live-smoke is a separate non-blocking job.
-            5. Exit. If an identical open `[CI-TRIAGE]` issue already exists for the same failure signature, comment there instead of opening a duplicate.
+          script: |
+            const sha = context.sha.slice(0, 7);
+            const title = `[CI-TRIAGE] test failed on ${sha}`;
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const { data } = await github.rest.actions.listJobsForWorkflowRun({
+              ...context.repo, run_id: context.runId, per_page: 50,
+            });
+            const failed = data.jobs.filter((j) => j.conclusion === 'failure').map((j) => `- ${j.name}`);
+            const body = [
+              'A blocking test job failed. This issue was opened deterministically by CI (no AI).',
+              '',
+              `- Commit: ${context.sha}`,
+              `- Run: ${runUrl}`,
+              '- Failed jobs:',
+              ...failed,
+              '- Reproduce locally: `npm test` (unit/DOM, offline) and `xvfb-run -a node tests/browser-smoke.cjs` (needs `BROWSER_PATH` to Chrome/Chromium).',
+              '- live-smoke is non-blocking and never triggers triage; do not blame live YouTube.',
+            ].join('\n');
+            const { data: open } = await github.rest.issues.listForRepo({ ...context.repo, state: 'open', per_page: 100 });
+            const dup = open.find((i) => i.title === title);
+            if (dup) {
+              await github.rest.issues.createComment({ ...context.repo, issue_number: dup.number, body: `Still failing: ${runUrl}` });
+            } else {
+              await github.rest.issues.create({ ...context.repo, title, body });
+            }
