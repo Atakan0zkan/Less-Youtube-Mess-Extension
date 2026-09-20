@@ -1,0 +1,41 @@
+name: Keepalive
+
+# GitHub, 60 gün commitsiz repolarda scheduled workflow'ları uyutur.
+# Ayın 1'i 06:05 UTC koşar; son commit 45+ gün eskiyse SADECE boş commit
+# atıp push'lar (cron'u uyanık tutar), değilse hiçbir şey yapmaz.
+
+on:
+  schedule:
+    - cron: '5 6 1 * *' # ayın 1'i 06:05 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  keepalive:
+    name: keepalive (empty commit only if stale)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          persist-credentials: true
+
+      - name: Empty commit if last commit is 45+ days old
+        run: |
+          LAST=$(git log -1 --format=%ct)
+          NOW=$(date +%s)
+          AGE_DAYS=$(( (NOW - LAST) / 86400 ))
+          echo "Last commit age: ${AGE_DAYS} days"
+          if [ "$AGE_DAYS" -ge 45 ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git commit --allow-empty -m "chore: keepalive (prevent cron sleep)"
+            git push
+          else
+            echo "Fresh enough, nothing to do."
+          fi

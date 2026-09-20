@@ -17,6 +17,16 @@ package.bat
 # Node (local only, zero runtime deps)
 node_modules/
 
+# Test artifacts (local runs only — never commit)
+.last-run/
+test-results/
+playwright-report/
+
+# Local Chrome temp profiles / screenshot workdirs — never commit
+# (binaries, caches, and browser state such as Login Data / Cookies)
+store_assets/chrome_temp_profile/
+*_temp_profile/
+
 # Local Chrome temp profiles / screenshot workdirs — never commit
 # (binaries, caches, and browser state such as Login Data / Cookies)
 store_assets/chrome_temp_profile/

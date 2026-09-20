@@ -1,0 +1,168 @@
+name: Daily Test
+
+# Formül: blocking fixture + non-blocking live + fail-only AI triage.
+# - offline-tests (BLOCKING): npm ci + offline komutlar. Ağ yok, tarayıcı yok.
+# - e2e (BLOCKING): gerçek tarayıcı + mock'lu API (fixture intercept).
+# - live-smoke (NON-BLOCKING, continue-on-error): gerçek YouTube (--live).
+#   Kırmızı olsa bile merge kilitlenmez, sadece sinyal.
+# - ai-triage (SADECE offline-tests fail olursa): 1.3 Spark, fail-only.
+# Test job'larında AI/model/API key YOK — dumb komutlar. Model seçimi
+# sadece ai-triage job'undadır.
+# Primer: opencode/muse-spark-1.3-contributor-free
+# Yedek model satırı ai-triage job'unda yorumdadır.
+
+on:
+  schedule:
+    - cron: '0 6 * * *' # daily 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-tests:
+    name: offline-tests (blocking)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      - name: Install deps (AI-free)
+        run: npm ci --no-audit --no-fund
+
+      - name: Syntax + whitespace (offline)
+        run: |
+          node --check content.js
+          node --check popup.js
+          node --check page-audio-bridge.js
+          node --check shared/constants.js
+          git diff --check
+
+      - name: Unit + DOM (offline, zero-dep)
+        run: npm test
+
+  e2e:
+    name: e2e (blocking, real browser + mocked API)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      - name: Install deps (AI-free)
+        run: npm ci --no-audit --no-fund
+
+      # Proven harness: tests/browser-smoke.cjs drives the real unpacked
+      # extension via CDP in a disposable profile; YouTube document requests
+      # are intercepted with controlled fixtures (mocked API, no external net).
+      # Headed Chrome needed (extensions don't init headless) -> xvfb.
+      - name: Install Chrome for Testing
+        id: chrome
+        uses: browser-actions/setup-chrome@latest
+
+      - name: Fixture E2E (AI-free, deterministic)
+        env:
+          BROWSER_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          BROWSER_NO_SANDBOX: '1'
+        run: xvfb-run -a node tests/browser-smoke.cjs
+
+  live-smoke:
+    name: live-smoke (real YouTube, non-blocking signal)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    continue-on-error: true
+    # Kota/rate-limit/kaldırılan video/bölge farkı yüzünden sebepsiz kırmızı
+    # verir; dış dünya ölçülür, bu yüzden merge'i engellemez.
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      - name: Install deps (AI-free)
+        run: npm ci --no-audit --no-fund
+
+      - name: Install Chrome for Testing
+        id: chrome
+        uses: browser-actions/setup-chrome@latest
+
+      - name: Live YouTube signal
+        id: live
+        continue-on-error: true
+        env:
+          BROWSER_PATH: ${{ steps.chrome.outputs.chrome-path }}
+          BROWSER_NO_SANDBOX: '1'
+        run: xvfb-run -a node tests/browser-smoke.cjs --live
+
+      - name: Open informational issue on live failure (no code blame)
+        if: steps.live.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = `Live YouTube sinyali başarısız — ${new Date().toISOString().slice(0,10)} (bilgilendirme, build'i kırmaz)`;
+            const body = [
+              'Bu Issue **live-smoke** job\'undan otomatik açıldı.',
+              '',
+              '- Fixture job\'lar yeşilse kod suçlanmaz; dış dünya (kota, kaldırılan video, bölge, ağ) ölçülür.',
+              `- Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              '- Yapılacak: log\'a bak, gerekirse haftalık ritimde izle. Kodu değiştirme.',
+            ].join('\n');
+            await github.rest.issues.create({ ...context.repo, title, body });
+
+  ai-triage:
+    name: ai-triage (fail-only, 1.3 Spark)
+    needs: [offline-tests]
+    if: failure()
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Triage with 1.3 Spark (no code changes)
+        uses: anomalyco/opencode/github@latest
+        env:
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # Yedek model (elde tutulur — otomatik fallback değildir):
+          # model: opencode/muse-spark-1.2-contributor-free
+          # Eğer 1.3 rate-limit/quota yerse yukarıdaki satırı primerle değiştir.
+          model: opencode/muse-spark-1.3-contributor-free
+          use_github_token: true
+          prompt: |
+            You are a fail-only CI triage agent. Do NOT modify code, do NOT open PRs, do NOT push commits.
+
+            Context: the blocking `offline-tests` job (ubuntu-latest, Node 22, `npm ci` + syntax checks + `npm test` unit/DOM, all AI-free) just failed in THIS run.
+
+            Do exactly this, once:
+            1. Read the first 100 lines of the failed log with `gh run view <this-run-id> --log-failed` (resolve the current run id from the GitHub context, do not guess).
+            2. If the log cannot be fetched (rate limit / 429 / auth error / empty output), exit SILENTLY: do NOT open an issue, do NOT comment, do nothing.
+            3. Identify the single most likely failing layer: syntax/whitespace, unit/DOM (regression vs comprehensive), or infra (runner/Node/npm).
+            4. Open exactly ONE new GitHub Issue in Turkish with title prefix `[CI-TRIAGE]`, containing: failing job + step, short log excerpt (max 40 lines), likely cause (repo code vs fixture vs infra), and the single next command to reproduce locally (`npm test`). Do not blame live YouTube; live-smoke is a separate non-blocking job.
+            5. Exit. If an identical open `[CI-TRIAGE]` issue already exists for the same failure signature, comment there instead of opening a duplicate.
