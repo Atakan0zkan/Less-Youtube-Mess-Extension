@@ -131,7 +131,10 @@ jobs:
 
   ai-triage:
     name: ai-triage (fail-only, 1.3 Spark)
-    needs: [offline-tests]
+    # All test jobs: triage must read FINISHED logs. Reading while the run is
+    # still in progress makes `gh run view --log-failed` fail and the agent
+    # exits silently by design (proven 2026-09-20: 26s Turkish silent-exit).
+    needs: [offline-tests, e2e, live-smoke]
     if: failure()
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -158,7 +161,7 @@ jobs:
           prompt: |
             You are a fail-only CI triage agent. Do NOT modify code, do NOT open PRs, do NOT push commits.
 
-            Context: the blocking `offline-tests` job (ubuntu-latest, Node 22, `npm ci` + syntax checks + `npm test` unit/DOM, all AI-free) just failed in THIS run.
+            Context: one of the blocking jobs (`offline-tests`: `npm ci` + syntax checks + `npm test` unit/DOM; `e2e`: real-browser fixture smoke — all AI-free) just failed in THIS completed run. (`live-smoke` is non-blocking and never triggers triage.)
 
             Do exactly this, once:
             1. Read the first 100 lines of the failed log with `gh run view <this-run-id> --log-failed` (resolve the current run id from the GitHub context, do not guess).
