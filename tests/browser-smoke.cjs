@@ -79,10 +79,48 @@ tp-yt-paper-dialog{width:320px;height:80px}
 tp-yt-iron-overlay-backdrop[opened]{display:block;width:40px;height:40px}
 [visibility="ENGAGEMENT_PANEL_VISIBILITY_HIDDEN"]{display:none}
 ytd-engagement-panel-section-list-renderer{display:block;width:320px;height:120px}
-</style></head><body><ytd-app><ytd-watch-flexy><div id="columns"><div id="primary">Video</div>
+ytd-masthead,ytd-topbar-menu-button-renderer,ytd-button-renderer,yt-button-view-model {display:block}
+ytd-topbar-logo-renderer,yt-icon-button,ytd-notification-topbar-button-renderer {display:block;width:40px;height:40px}
+ytd-watch-metadata,#actions,#segmented-like-button {display:block}
+ytd-thumbnail{display:block;width:120px;height:68px}
+ytd-video-preview{display:block;width:120px;height:68px}
+ytd-guide-section-renderer{display:block}
+ytd-browse,ytd-rich-grid-renderer,#contents,ytd-rich-item-renderer,yt-lockup-view-model {display:block}
+</style></head><body><ytd-app>
+<ytd-masthead><div id="buttons">
+<ytd-topbar-menu-button-renderer id="create-btn"><a href="/upload">Create</a></ytd-topbar-menu-button-renderer>
+</div><div id="end"></div></ytd-masthead>
+<ytd-topbar-logo-renderer id="logo">Logo</ytd-topbar-logo-renderer>
+<yt-icon-button id="voice-search-button">Mic</yt-icon-button>
+<ytd-notification-topbar-button-renderer id="bell">Bell</ytd-notification-topbar-button-renderer>
+<tp-yt-app-drawer id="guide">Nav</tp-yt-app-drawer>
+<ytd-guide-section-renderer id="guide-subs"><a href="/feed/channels">All subscriptions</a></ytd-guide-section-renderer>
+<ytd-guide-section-renderer id="guide-you"><a href="/feed/history">History</a></ytd-guide-section-renderer>
+<ytd-guide-section-renderer id="guide-explore"><a href="/trending">Trending</a></ytd-guide-section-renderer>
+<ytd-guide-section-renderer id="guide-more"><a href="/premium">Premium</a></ytd-guide-section-renderer>
+<a title="Shorts" id="shorts-link" href="/shorts/abc">Shorts</a>
+<ytd-reel-shelf-renderer id="shorts-shelf">Shorts shelf</ytd-reel-shelf-renderer>
+<div class="sbdd_a" id="search-sugg">Suggestions</div>
+<ytd-watch-flexy><div id="columns"><div id="primary">Video
+<div id="comments">Comments</div>
+<div class="html5-endscreen" id="endscreen">End</div>
+<div class="ytp-autonav-toggle-button-container" id="autoplay-toggle">Autoplay</div>
+<ytd-watch-metadata><div id="actions">
+<div id="segmented-like-button"><span class="yt-core-attributed-string" id="like-text">12K</span></div>
+<ytd-button-renderer id="hype-btn"><button aria-label="Hype">Hype</button></ytd-button-renderer>
+</div></ytd-watch-metadata>
+<ytd-mealbar-promo-renderer id="mealbar">Premium promo</ytd-mealbar-promo-renderer>
+<ytd-thumbnail id="blur-thumb"><img src="about:blank"></ytd-thumbnail>
+<ytd-video-preview id="thumb-preview"><video></video></ytd-video-preview>
+</div>
 <div id="secondary"><div id="related">Recommendations</div>
 <ytd-engagement-panel-section-list-renderer target-id="engagement-panel-searchable-transcript" visibility="ENGAGEMENT_PANEL_VISIBILITY_HIDDEN">Transcript</ytd-engagement-panel-section-list-renderer>
-</div></div></ytd-watch-flexy><tp-yt-paper-dialog id="premium" opened><yt-upsell-dialog-renderer>Premium</yt-upsell-dialog-renderer></tp-yt-paper-dialog>
+</div></div></ytd-watch-flexy>
+<ytd-browse page-subtype="subscriptions"><ytd-rich-grid-renderer><div id="contents">
+<ytd-rich-item-renderer id="list-item"><yt-lockup-view-model><div id="list-row"><a href="/watch?v=bad" id="list-link"><yt-thumbnail-view-model><img id="list-img" src="about:blank"></yt-thumbnail-view-model></a><yt-content-metadata-view-model>Meta</yt-content-metadata-view-model></div></yt-lockup-view-model></ytd-rich-item-renderer>
+<ytd-rich-item-renderer id="live-item"><div overlay-style="LIVE">LIVE</div><a href="/watch?v=bad2">Live video</a></ytd-rich-item-renderer>
+</div></ytd-rich-grid-renderer></ytd-browse>
+<tp-yt-paper-dialog id="premium" opened><yt-upsell-dialog-renderer>Premium</yt-upsell-dialog-renderer></tp-yt-paper-dialog>
 <tp-yt-iron-overlay-backdrop opened></tp-yt-iron-overlay-backdrop>
 </ytd-app></body></html>`;
 
@@ -122,12 +160,34 @@ async function main() {
         page.send('Fetch.fulfillRequest', { requestId: event.requestId, responseCode: 200, responseHeaders: [{ name: 'Content-Type', value: 'text/html; charset=utf-8' }], body: Buffer.from(fixture).toString('base64') }).catch(console.error);
     });
     await page.send('Page.navigate', { url: 'https://www.youtube.com/watch?v=abcdefghijk' });
-    const isolated = await until(() => [...contexts.values()].find(context => context.origin.startsWith('chrome-extension://')), 'unpacked content context');
+    let isolated = await until(() => [...contexts.values()].find(context => context.origin.startsWith('chrome-extension://')), 'unpacked content context');
     await until(() => page.evaluate("typeof cachedSettings !== 'undefined'", isolated.id), 'content initialization');
     const extensionId = new URL(isolated.origin).hostname;
     const settings = async values => {
         await page.evaluate(`chrome.storage.sync.set(${JSON.stringify(values)})`, isolated.id);
         await delay(350);
+    };
+    // SPA navigations destroy the isolated world: snapshot ids BEFORE navigating,
+    // then wait for a fresh live context (dead redirect-chain candidates are
+    // dropped as they fail evaluation).
+    const navigateAndRefresh = async (url, label) => {
+        const known = new Set(contexts.keys());
+        await page.send('Page.navigate', { url });
+        await until(async () => {
+            const entry = [...contexts.entries()].find(([id, context]) => !known.has(id) && context.origin.startsWith('chrome-extension://'));
+            if (!entry) return false;
+            try {
+                const ready = await page.evaluate("typeof cachedSettings !== 'undefined'", entry[0]);
+                if (ready) {
+                    isolated = entry[1];
+                    return true;
+                }
+                return false;
+            } catch {
+                contexts.delete(entry[0]);
+                return false;
+            }
+        }, label || `content context for ${url}`);
     };
     const display = selector => page.evaluate(`getComputedStyle(document.querySelector(${JSON.stringify(selector)})).display`);
 
@@ -164,6 +224,88 @@ async function main() {
     assert.notEqual(await display('#secondary'), 'none');
     assert.equal(await page.evaluate(`document.querySelectorAll('[data-lym-premium-hidden],[data-lym-premium-backdrop-hidden],[data-lym-premium-promo-hidden]').length`), 0);
     console.log('PASS: feature-off cleanup');
+
+    // ---- 25-toggle display matrix: every CSS-driven setting must hide its
+    // representative element, and reveal it again when turned off ----
+    const cssProp = (selector, prop) => page.evaluate(`getComputedStyle(document.querySelector(${JSON.stringify(selector)})).getPropertyValue(${JSON.stringify(prop)})`);
+    const hidden = async (setting, selector) => {
+        await settings({ [setting]: true });
+        await until(async () => await display(selector) === 'none', `${setting} hides ${selector}`);
+    };
+    const matrix = [
+        ['hide_left_nav', 'tp-yt-app-drawer#guide'],
+        ['hide_subscriptions_section', '#guide-subs'],
+        ['hide_you_section', '#guide-you'],
+        ['hide_explore', '#guide-explore'],
+        ['hide_more_from_youtube', '#guide-more'],
+        ['hide_comments', '#comments'],
+        ['hide_likes', '#like-text'],
+        ['hide_hype_button', '#hype-btn'],
+        ['hide_end_suggestions', '#endscreen'],
+        ['hide_autoplay', '#autoplay-toggle'],
+        ['hide_premium_popups', '#mealbar'],
+        ['hide_shorts', '#shorts-link'],
+        ['hide_shorts', '#shorts-shelf'],
+        ['hide_search_suggestions', '#search-sugg'],
+        ['hide_voice_search', '#voice-search-button'],
+        ['hide_notif_bell', '#bell'],
+        ['hide_youtube_logo', '#logo'],
+        ['hide_create_button', '#create-btn'],
+        ['disable_thumbnail_playback', '#thumb-preview'],
+        ['hide_live_premiere', '#live-item'],
+    ];
+    for (const [setting, selector] of matrix) await hidden(setting, selector);
+    console.log('PASS: display matrix hides (20 checks)');
+    // Blur asserts filter instead of display.
+    await settings({ blur_thumbnails: true });
+    await until(async () => (await cssProp('#blur-thumb', 'filter')) !== 'none', 'blur filter');
+    console.log('PASS: thumbnail blur filter');
+    // Turning everything off restores all matrix elements.
+    await settings({
+        hide_left_nav: false, hide_subscriptions_section: false, hide_you_section: false,
+        hide_explore: false, hide_more_from_youtube: false, hide_comments: false,
+        hide_likes: false, hide_hype_button: false, hide_end_suggestions: false,
+        hide_autoplay: false, hide_premium_popups: false, hide_shorts: false,
+        hide_search_suggestions: false, hide_voice_search: false, hide_notif_bell: false,
+        hide_youtube_logo: false, hide_create_button: false, blur_thumbnails: false,
+        disable_thumbnail_playback: false, hide_live_premiere: false,
+    });
+    for (const [, selector] of matrix) {
+        assert.notEqual(await display(selector), 'none', `${selector} restored`);
+    }
+    assert.equal(await cssProp('#blur-thumb', 'filter'), 'none');
+    assert.equal(await page.evaluate(`document.querySelectorAll('[data-lym-control-hidden],[data-lym-likes-applied]').length`), 0);
+    console.log('PASS: matrix off-state restores all elements');
+
+    // ---- List View runs on the subscriptions page: content.js strips the
+    // page-subtype marker elsewhere by design, so navigate there first ----
+    await navigateAndRefresh('https://www.youtube.com/feed/subscriptions', 'subscriptions page context');
+    await settings({ list_view: true });
+    await until(async () => (await cssProp('#list-img', 'width')) === '260px', 'list thumbnail 260px');
+    assert.equal(await cssProp('#list-row', 'display'), 'flex');
+    assert.equal(await cssProp('#list-row', 'flex-direction'), 'row');
+    console.log('PASS: list view layout');
+    // Compact asserts 180px alongside list view.
+    await settings({ compact_list_view: true });
+    await until(async () => (await cssProp('#list-img', 'width')) === '180px', 'compact thumbnail 180px');
+    console.log('PASS: compact list view layout');
+    await settings({ list_view: false, compact_list_view: false });
+    await navigateAndRefresh('https://www.youtube.com/watch?v=abcdefghijk', 'watch page context');
+    // Dubbing preference only sets the html attribute (menu stays visible by design).
+    await settings({ disable_auto_dubbing: true });
+    assert.equal(await page.evaluate(`document.documentElement.getAttribute('disable_auto_dubbing')`), 'true');
+    assert.notEqual(await display('#primary'), 'none');
+    console.log('PASS: auto-dubbing attribute without hiding content');
+    await settings({ disable_auto_dubbing: false });
+
+    // ---- Homepage redirect: default_subscriptions=true sends / to the feed ----
+    await settings({ default_subscriptions: true });
+    await navigateAndRefresh('https://www.youtube.com/', 'redirect landing context');
+    await until(async () => (await page.evaluate(`location.pathname`)) === '/feed/subscriptions', 'homepage redirect', 15000);
+    console.log('PASS: homepage redirects to subscriptions');
+    await settings({ default_subscriptions: false });
+    await navigateAndRefresh('https://www.youtube.com/watch?v=abcdefghijk', 'watch page context');
+    await until(() => page.evaluate(`location.pathname.includes('/watch')`), 'back on watch page');
 
     const { targetId } = await browserClient.send('Target.createTarget', { url: `chrome-extension://${extensionId}/popup.html` });
     const popupTarget = await until(async () => (await (await fetch(`http://127.0.0.1:${port}/json/list`)).json()).find(target => target.id === targetId), 'popup target');
@@ -239,3 +381,4 @@ main().catch(error => { console.error(error); process.exitCode = 1; }).finally(a
         catch (error) { console.warn(`Temporary profile retained: ${resolved}: ${error.message}`); }
     }
 });
+

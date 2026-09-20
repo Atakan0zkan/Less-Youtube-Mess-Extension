@@ -280,3 +280,191 @@ test('unit: extension-owned markers are namespaced for reversible cleanup', () =
     assert.ok(String(v).startsWith('data-lym-'), `${name}=${v}`);
   }
 });
+
+// ---------- subscription item + control fakes for supplement tests ----------
+function subItem({ href = null, overlay = false, badge = '', button = '', meta = '' } = {}) {
+  const attrs = new Map();
+  const link = href ? { href } : null;
+  const overlayEl = overlay ? {} : null;
+  const badgeEls = badge ? [{ textContent: badge }] : [];
+  const buttonEls = button ? [{ textContent: button }] : [];
+  const metaEl = meta ? { textContent: meta } : null;
+  return {
+    getAttribute: (k) => attrs.get(k) ?? null,
+    setAttribute: (k, v) => attrs.set(k, v),
+    removeAttribute: (k) => attrs.delete(k),
+    querySelector: (sel) => {
+      if (sel.includes('/watch')) return link;
+      if (sel.includes('overlay-style')) return overlayEl;
+      if (sel.includes('metadata')) return metaEl;
+      return null;
+    },
+    querySelectorAll: (sel) => {
+      if (sel.includes('button')) return buttonEls;
+      if (sel.includes('badge-shape') || sel.includes('attributed-string')) return badgeEls;
+      return [];
+    },
+  };
+}
+
+function controlFake({ text = '', labelled = '', upload = false } = {}) {
+  const attrs = new Map();
+  if (labelled) attrs.set('aria-label', labelled);
+  return {
+    nodeType: 1, textContent: text, children: [{},],
+    getAttribute: (k) => attrs.get(k) ?? null,
+    setAttribute: (k, v) => attrs.set(k, v),
+    removeAttribute: (k) => attrs.delete(k),
+    matches: (sel) => upload && sel.includes('/upload'),
+    querySelector: (sel) => (upload && sel.includes('/upload') ? {} : null),
+    style: {
+      _props: new Map(),
+      setProperty: function (k, v) { this._props.set(k, v); },
+      removeProperty: function (k) { this._props.delete(k); },
+      getPropertyValue: function (k) { return this._props.get(k) || ''; },
+      getPropertyPriority: () => '',
+    },
+  };
+}
+
+test('unit: live/premiere marking — overlay, badge, reminder, recycle, skip', () => {
+  const env = environment('content.js');
+  env.context.item = subItem({ href: '/watch?v=abcdefghijk', overlay: true });
+  env.run('markLiveAndPremieres([item])');
+  assert.equal(env.run(`item.getAttribute('data-live-premiere')`), 'true');
+  assert.equal(env.run(`item.getAttribute('data-live-checked')`), 'https://www.youtube.com/watch?v=abcdefghijk');
+
+  // NOTE: all-caps Turkish 'CANLI' does NOT match badgeText (/i folds I->i,
+  // not Turkish dotless ı). Known product gap, documented in riskBacklog;
+  // this test locks current behavior with mixed-case 'Canlı'.
+  env.context.item2 = subItem({ href: '/watch?v=abcdefghijk', badge: 'Canlı' });
+  env.run('markLiveAndPremieres([item2])');
+  assert.equal(env.run(`item2.getAttribute('data-live-premiere')`), 'true');
+
+  env.context.item3 = subItem({ href: '/watch?v=abcdefghijk', button: 'Remind me' });
+  env.run('markLiveAndPremieres([item3])');
+  assert.equal(env.run(`item3.getAttribute('data-live-premiere')`), 'true');
+
+  env.context.item4 = subItem({ href: '/watch?v=abcdefghijk' });
+  env.run('markLiveAndPremieres([item4])');
+  assert.equal(env.run(`item4.getAttribute('data-live-premiere')`), null);
+  assert.ok(env.run(`item4.getAttribute('data-live-checked')`));
+
+  // Recycled card: same item, new video, no live signal -> old mark removed.
+  env.context.item.setAttribute('data-live-premiere', 'true');
+  env.run(`item.querySelector = (sel) => sel.includes('/watch') ? { href: '/watch?v=12345678901' } : null`);
+  env.run(`item.querySelectorAll = () => []`);
+  env.run('markLiveAndPremieres([item])');
+  assert.equal(env.run(`item.getAttribute('data-live-premiere')`), null);
+
+  // Shorts / malformed hrefs are skipped entirely.
+  env.context.item5 = subItem({ href: '/shorts/abcdefghijk', overlay: true });
+  env.run('markLiveAndPremieres([item5])');
+  assert.equal(env.run(`item5.getAttribute('data-live-checked')`), null);
+});
+
+test('unit: like text supplement hides, skips empties, cleans on off', () => {
+  const env = environment('content.js');
+  const text = element();
+  text.textContent = '12K';
+  env.document.querySelectorAll = () => [text];
+  env.run('cachedSettings.hide_likes = true; likesDirty = true; forceLikesVisibility()');
+  assert.equal(text.getAttribute('data-lym-likes-applied'), 'hidden');
+  assert.equal(text.style.getPropertyValue('display'), 'none');
+
+  const empty = element();
+  env.context.emptyEl = empty;
+  env.run('hideLikeTextElement(emptyEl)');
+  assert.equal(env.run(`emptyEl.getAttribute('data-lym-likes-applied')`), null);
+
+  env.run('cachedSettings.hide_likes = false; forceLikesVisibility()');
+  assert.equal(text.getAttribute('data-lym-likes-applied'), null);
+  assert.equal(text.style.getPropertyValue('display'), '');
+});
+
+test('unit: create/hype supplements match targets, ignore others, clean on off', () => {
+  const env = environment('content.js');
+  const upload = controlFake({ upload: true });
+  const named = controlFake({ text: '+Create' });
+  const hype = controlFake({ text: 'Hype' });
+  const plain = controlFake({ text: 'Share' });
+  env.document.querySelectorAll = (sel) => (
+    String(sel).includes('control-hidden') ? [upload, named, hype].filter((el) => el.getAttribute('data-lym-control-hidden')) : [upload, named, hype, plain]
+  );
+  env.run('cachedSettings.hide_create_button = true; hideCreateButtonSupplement()');
+  assert.equal(upload.getAttribute('data-lym-control-hidden'), 'create');
+  assert.equal(named.getAttribute('data-lym-control-hidden'), 'create');
+  assert.equal(plain.getAttribute('data-lym-control-hidden'), null);
+  env.run('cachedSettings.hide_hype_button = true; hideHypeButton()');
+  assert.equal(hype.getAttribute('data-lym-control-hidden'), 'hype');
+  assert.equal(plain.getAttribute('data-lym-control-hidden'), null);
+  env.run('cachedSettings.hide_create_button = false; cachedSettings.hide_hype_button = false; hideCreateButtonSupplement(); hideHypeButton()');
+  assert.equal(upload.getAttribute('data-lym-control-hidden'), null);
+  assert.equal(hype.getAttribute('data-lym-control-hidden'), null);
+});
+
+test('unit: control text regexes cover locales without matching plain actions', () => {
+  const env = environment('content.js');
+  for (const label of ['+Create', 'Oluştur', 'Créer', 'Utwórz']) {
+    assert.ok(env.run(`CREATE_TEXT_RE.test(${JSON.stringify(label)})`), label);
+  }
+  for (const label of ['Hype', 'Thanks', 'Teşekkürler', 'Super Thanks']) {
+    assert.ok(env.run(`HYPE_TEXT_RE.test(${JSON.stringify(label)})`), label);
+  }
+  assert.equal(env.run(`CREATE_TEXT_RE.test('Share')`), false);
+  assert.equal(env.run(`HYPE_TEXT_RE.test('Share')`), false);
+  const el = controlFake({ labelled: 'Thanks', text: 'ignored' });
+  env.context.ctrl = el;
+  assert.ok(env.run(`getControlText(ctrl).includes('Thanks')`));
+});
+
+test('unit: autoplay persists localStorage and clicks an active toggle', () => {
+  const env = environment('content.js');
+  const writes = [];
+  env.context.localStorage = { setItem: (k, v) => writes.push([k, v]) };
+  let clicked = 0;
+  const toggle = { click: () => { clicked++; } };
+  env.document.querySelector = (sel) => (sel.includes('autonav') ? toggle : null);
+  env.run('cachedSettings.hide_autoplay = true; applyAutoplay()');
+  assert.ok(writes.some(([k, v]) => k === 'yt-autoplay' && v === '0'));
+  assert.equal(clicked, 1);
+  env.run('cachedSettings.hide_autoplay = false; applyAutoplay()');
+  assert.equal(clicked, 1);
+});
+
+test('unit: premium promo signal requires premium text or link', () => {
+  const env = environment('content.js');
+  env.context.p1 = { textContent: 'Try YouTube Premium free', querySelector: () => null };
+  env.context.p2 = { textContent: 'Share this video', querySelector: () => null };
+  env.context.p3 = { textContent: 'Offer', querySelector: (sel) => (sel.includes('/premium') ? {} : null) };
+  assert.equal(env.run('hasPremiumPromoSignal(p1)'), true);
+  assert.equal(env.run('hasPremiumPromoSignal(p2)'), false);
+  assert.equal(env.run('hasPremiumPromoSignal(p3)'), true);
+});
+
+test('unit: thumbnail playback supplement pauses, marks, and cleans on off', () => {
+  const env = environment('content.js');
+  let paused = 0;
+  const video = {
+    pause: () => { paused++; }, muted: false,
+    style: {
+      _props: new Map(),
+      setProperty: function (k, v) { this._props.set(k, v); },
+      removeProperty: function (k) { this._props.delete(k); },
+      getPropertyValue: function (k) { return this._props.get(k) || ''; },
+      getPropertyPriority: () => 'important',
+    },
+    setAttribute: (k, v) => video.attrs.set(k, v),
+    getAttribute: (k) => video.attrs.get(k) ?? null,
+    removeAttribute: (k) => video.attrs.delete(k),
+    attrs: new Map(),
+  };
+  env.document.querySelectorAll = () => [video];
+  env.document.documentElement.setAttribute('disable_thumbnail_playback', 'true');
+  env.run('cachedSettings.disable_thumbnail_playback = true; disableThumbnailPlayback()');
+  assert.equal(paused, 1);
+  assert.equal(video.attrs.get('data-lym-thumbnail-playback-disabled'), 'true');
+  env.run('cachedSettings.disable_thumbnail_playback = false; disableThumbnailPlayback()');
+  assert.equal(video.attrs.get('data-lym-thumbnail-playback-disabled'), undefined);
+  assert.equal(video.style.getPropertyValue('display'), '');
+});
