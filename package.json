@@ -2,7 +2,7 @@
   "name": "less-youtube-mess",
   "version": "1.8.3",
   "private": true,
-  "description": "Less Youtube Mess — Chrome MV3 extension (AI-less tests, Playwright fixture E2E)",
+  "description": "Less Youtube Mess — Chrome MV3 extension (AI-less, zero-dependency tests)",
   "engines": {
     "node": ">=22"
   },
@@ -10,11 +10,8 @@
     "test": "node --test tests/regression.test.cjs tests/comprehensive.test.cjs",
     "test:regression": "node --test tests/regression.test.cjs",
     "test:comprehensive": "node --test tests/comprehensive.test.cjs",
-    "test:e2e": "playwright test --config=playwright.config.mjs",
-    "check": "node --check content.js && node --check popup.js && node --check page-audio-bridge.js && node --check shared/constants.js && git diff --check",
-    "check:static": "node tests/comprehensive.test.cjs --test-name-pattern=\"static|contract|policy\""
-  },
-  "devDependencies": {
-    "@playwright/test": "^1.49.1"
+    "test:e2e": "node tests/browser-smoke.cjs",
+    "test:e2e:live": "node tests/browser-smoke.cjs --live",
+    "check": "node --check content.js && node --check popup.js && node --check page-audio-bridge.js && node --check shared/constants.js && git diff --check"
   }
 }

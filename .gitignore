@@ -14,7 +14,10 @@ AGENTS.md
 promo_generator.html
 package.bat
 
-# Node / CI artifacts (AI-free test deps, local only)
+# Node (local only, zero runtime deps)
 node_modules/
-playwright-report/
-test-results/
+
+# Local Chrome temp profiles / screenshot workdirs — never commit
+# (binaries, caches, and browser state such as Login Data / Cookies)
+store_assets/chrome_temp_profile/
+*_temp_profile/
