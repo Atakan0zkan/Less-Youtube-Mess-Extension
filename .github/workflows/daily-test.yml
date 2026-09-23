@@ -13,7 +13,7 @@ name: Daily Test
 
 on:
   schedule:
-    - cron: '0 6 * * *' # daily 06:00 UTC
+    - cron: '0 4 * * *' # daily 07:00 TRT (UTC+3, no DST -> 04:00 UTC)
   workflow_dispatch:
 
 permissions:
