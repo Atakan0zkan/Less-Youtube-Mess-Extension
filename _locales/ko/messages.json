@@ -14,11 +14,23 @@
   "powerToggleAria": {
     "message": "확장 프로그램 활성화/비활성화"
   },
+  "languageUseEnglishTitle": {
+    "message": "영어 사용"
+  },
+  "languageUseEnglishAria": {
+    "message": "확장 프로그램 메뉴를 영어로 표시"
+  },
+  "languageUseBrowserTitle": {
+    "message": "브라우저 언어 사용"
+  },
+  "languageUseBrowserAria": {
+    "message": "확장 프로그램 메뉴를 브라우저 언어로 되돌리기"
+  },
   "groupBasicUI": {
     "message": "기본 화면"
   },
   "groupLeftNav": {
-    "message": "왼쪽 메뉴"
+    "message": "왼쪽 탐색 메뉴"
   },
   "groupVideoPlayer": {
     "message": "동영상 플레이어"
@@ -45,7 +57,7 @@
     "message": "마이크 아이콘 숨기기"
   },
   "labelNotificationBell": {
-    "message": "알림"
+    "message": "알림 종 아이콘"
   },
   "descNotificationBell": {
     "message": "알림 종 모양 아이콘 숨기기"
@@ -66,10 +78,10 @@
     "message": "썸네일 흐리게"
   },
   "descThumbnailBlur": {
-    "message": "썸네일을 흐리게 처리하고 마우스를 올리면 표시합니다"
+    "message": "썸네일을 흐리게 처리하고 마우스를 올리면 선명하게 표시"
   },
   "labelThumbnailPlayback": {
-    "message": "썸네일 호버 재생"
+    "message": "마우스를 올릴 때 미리보기"
   },
   "descThumbnailPlayback": {
     "message": "썸네일에 마우스를 올렸을 때 미리보기가 재생되지 않게 합니다"
@@ -87,10 +99,10 @@
     "message": "메뉴의 구독 채널 목록 숨기기"
   },
   "labelYou": {
-    "message": "나"
+    "message": "내 페이지"
   },
   "descYou": {
-    "message": "'나' 섹션(시청 기록, 재생목록) 숨기기"
+    "message": "'내 페이지' 섹션(시청 기록, 재생목록) 숨기기"
   },
   "labelExplore": {
     "message": "탐색"
@@ -147,10 +159,10 @@
     "message": "YouTube Premium 프로모션 광고 숨기기"
   },
   "labelPremieres": {
-    "message": "실시간 및 최초 공개"
+    "message": "최초 공개"
   },
   "descPremieres": {
-    "message": "구독 피드에서 실시간 스트리밍 및 예정된 영상 숨기기"
+    "message": "진행 중이거나 예정된 실시간 스트리밍 숨기기"
   },
   "labelShorts": {
     "message": "Shorts"
@@ -171,7 +183,7 @@
     "message": "구독 영상을 목록 형태로 표시"
   },
   "labelCompactListView": {
-    "message": "간단한 목록 보기"
+    "message": "간결한 목록 보기"
   },
   "descCompactListView": {
     "message": "목록의 썸네일을 작게 표시 (목록 보기 활성화 필요)"

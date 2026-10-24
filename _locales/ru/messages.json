@@ -1,6 +1,6 @@
 {
   "extDescription": {
-    "message": "Настройте YouTube под себя: скрывайте Shorts, боковую панель, комментарии, рекомендации и лишнее!"
+    "message": "Настройте YouTube под себя: скрывайте Shorts, боковую панель, комментарии, рекомендации и многое другое!"
   },
   "toggleThemeTitle": {
     "message": "Переключить тему"
@@ -14,11 +14,23 @@
   "powerToggleAria": {
     "message": "Включить или выключить расширение"
   },
+  "languageUseEnglishTitle": {
+    "message": "Использовать английский"
+  },
+  "languageUseEnglishAria": {
+    "message": "Показать меню расширения на английском"
+  },
+  "languageUseBrowserTitle": {
+    "message": "Использовать язык браузера"
+  },
+  "languageUseBrowserAria": {
+    "message": "Вернуть меню расширения на язык браузера"
+  },
   "groupBasicUI": {
     "message": "Основной интерфейс"
   },
   "groupLeftNav": {
-    "message": "Левое меню"
+    "message": "Левая панель навигации"
   },
   "groupVideoPlayer": {
     "message": "Видеоплеер"
@@ -45,7 +57,7 @@
     "message": "Скрыть значок микрофона"
   },
   "labelNotificationBell": {
-    "message": "Уведомления"
+    "message": "Колокольчик уведомлений"
   },
   "descNotificationBell": {
     "message": "Скрыть колокольчик уведомлений"
@@ -63,19 +75,19 @@
     "message": "Скрыть кнопку «Создать» для загрузки видео"
   },
   "labelThumbnailBlur": {
-    "message": "Размытие превью"
+    "message": "Размытие миниатюр"
   },
   "descThumbnailBlur": {
-    "message": "Размывать превью видео; наведите курсор, чтобы увидеть их"
+    "message": "Размыть миниатюры видео; наведите курсор, чтобы увидеть их чётко"
   },
   "labelThumbnailPlayback": {
-    "message": "Воспроизведение при наведении на миниатюру"
+    "message": "Предпросмотр при наведении"
   },
   "descThumbnailPlayback": {
-    "message": "Останавливает запуск предпросмотра при наведении на миниатюры"
+    "message": "Отключить воспроизведение предпросмотра при наведении на миниатюры"
   },
   "labelHideLeftNav": {
-    "message": "Скрыть левое меню"
+    "message": "Скрыть всю левую панель навигации"
   },
   "descHideLeftNav": {
     "message": "Полностью скрыть левую панель навигации"
@@ -120,13 +132,13 @@
     "message": "Кнопка Hype / Спасибо"
   },
   "descHypeButton": {
-    "message": "Скрывает кнопку поддержки Hype или Спасибо под видео"
+    "message": "Скрыть кнопку поддержки Hype или Спасибо под видео"
   },
   "labelEndScreen": {
     "message": "Конечные подсказки"
   },
   "descEndScreen": {
-    "message": "Скрыть карточки рекомендаций в конце видео"
+    "message": "Скрыть карточки, появляющиеся поверх видео в конце воспроизведения"
   },
   "labelAutoplay": {
     "message": "Автовоспроизведение"
@@ -141,16 +153,16 @@
     "message": "По возможности включает оригинальную аудиодорожку"
   },
   "labelPremiumPopups": {
-    "message": "Реклама Premium"
+    "message": "Всплывающие окна Premium"
   },
   "descPremiumPopups": {
     "message": "Скрыть всплывающие предложения YouTube Premium"
   },
   "labelPremieres": {
-    "message": "Трансляции и премьеры"
+    "message": "Премьеры"
   },
   "descPremieres": {
-    "message": "Скрыть прямые эфиры и премьеры в ленте подписок"
+    "message": "Скрыть текущие и запланированные прямые эфиры"
   },
   "labelShorts": {
     "message": "Shorts"
@@ -165,7 +177,7 @@
     "message": "Открывать ленту подписок вместо главной страницы YouTube"
   },
   "labelListView": {
-    "message": "Список"
+    "message": "Режим списка"
   },
   "descListView": {
     "message": "Показывать видео из подписок удобным списком"
@@ -174,6 +186,6 @@
     "message": "Компактный список"
   },
   "descCompactListView": {
-    "message": "Использовать меньшие превью (требуется режим списка)"
+    "message": "Миниатюры меньшего размера (требуется режим списка)"
   }
 }

@@ -1,16 +1,18 @@
 {
   "name": "less-youtube-mess",
-  "version": "1.8.3",
+  "version": "1.8.4",
   "private": true,
   "description": "Less Youtube Mess — Chrome MV3 extension (AI-less, zero-dependency tests)",
   "engines": {
     "node": ">=22"
   },
   "scripts": {
-    "test": "node --test tests/regression.test.cjs tests/comprehensive.test.cjs",
+    "test": "node --test tests/regression.test.cjs tests/comprehensive.test.cjs tests/localization.test.cjs",
     "test:regression": "node --test tests/regression.test.cjs",
     "test:comprehensive": "node --test tests/comprehensive.test.cjs",
+    "test:localization": "node --test tests/localization.test.cjs",
     "test:e2e": "node tests/browser-smoke.cjs",
+    "test:e2e:localization": "node tests/browser-smoke.cjs --localization",
     "test:e2e:live": "node tests/browser-smoke.cjs --live",
     "check": "node --check content.js && node --check popup.js && node --check page-audio-bridge.js && node --check shared/constants.js && git diff --check"
   }

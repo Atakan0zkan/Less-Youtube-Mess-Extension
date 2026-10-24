@@ -14,6 +14,18 @@
   "powerToggleAria": {
     "message": "Extensie aan- of uitzetten"
   },
+  "languageUseEnglishTitle": {
+    "message": "Engels gebruiken"
+  },
+  "languageUseEnglishAria": {
+    "message": "Het extensiemenu in het Engels weergeven"
+  },
+  "languageUseBrowserTitle": {
+    "message": "Browsertaal gebruiken"
+  },
+  "languageUseBrowserAria": {
+    "message": "Het extensiemenu weer in de browsertaal weergeven"
+  },
   "groupBasicUI": {
     "message": "Basisweergave"
   },
@@ -45,7 +57,7 @@
     "message": "Verberg het microfoonpictogram"
   },
   "labelNotificationBell": {
-    "message": "Meldingen"
+    "message": "Meldingsbel"
   },
   "descNotificationBell": {
     "message": "Verberg de meldingsbel"
@@ -66,16 +78,16 @@
     "message": "Miniaturen vervagen"
   },
   "descThumbnailBlur": {
-    "message": "Vervaag videominiaturen; beweeg eroverheen om ze te zien"
+    "message": "Vervaag videominiaturen; beweeg de muis erover om ze scherp te zien"
   },
   "labelThumbnailPlayback": {
-    "message": "Afspelen bij hover op thumbnails"
+    "message": "Afspelen bij aanwijzen"
   },
   "descThumbnailPlayback": {
-    "message": "Voorkomt dat videovoorbeelden starten wanneer je over thumbnails beweegt"
+    "message": "Voorkom dat videovoorbeelden afspelen wanneer je de muis over miniaturen beweegt"
   },
   "labelHideLeftNav": {
-    "message": "Linkernavigatie verbergen"
+    "message": "Volledige linkernavigatie verbergen"
   },
   "descHideLeftNav": {
     "message": "Verberg het volledige linkermenu"
@@ -120,13 +132,13 @@
     "message": "Hype-/Bedankt-knop"
   },
   "descHypeButton": {
-    "message": "Verbergt de Hype- of Bedankt-steunknop onder video's"
+    "message": "Verberg de steunknop Hype of Bedankt onder video's"
   },
   "labelEndScreen": {
     "message": "Eindschermsuggesties"
   },
   "descEndScreen": {
-    "message": "Verberg aanbevelingskaarten aan het einde van video's"
+    "message": "Verberg kaarten die aan het einde over de video verschijnen"
   },
   "labelAutoplay": {
     "message": "Automatisch afspelen"
@@ -141,16 +153,16 @@
     "message": "Gebruikt waar mogelijk de originele audio"
   },
   "labelPremiumPopups": {
-    "message": "Premium-promoties"
+    "message": "Premium-pop-ups"
   },
   "descPremiumPopups": {
     "message": "Verberg pop-ups voor YouTube Premium"
   },
   "labelPremieres": {
-    "message": "Live en premières"
+    "message": "Premières"
   },
   "descPremieres": {
-    "message": "Verberg livestreams en premières in je Abonnementen"
+    "message": "Verberg geplande en lopende livestreams"
   },
   "labelShorts": {
     "message": "Shorts"
@@ -171,7 +183,7 @@
     "message": "Toon je abonnementsvideo's als een overzichtelijke lijst"
   },
   "labelCompactListView": {
-    "message": "Compacte lijst"
+    "message": "Compacte lijstweergave"
   },
   "descCompactListView": {
     "message": "Gebruik kleinere miniaturen (vereist Lijstweergave)"

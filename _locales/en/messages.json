@@ -14,6 +14,18 @@
   "powerToggleAria": {
     "message": "Toggle extension on/off"
   },
+  "languageUseEnglishTitle": {
+    "message": "Use English"
+  },
+  "languageUseEnglishAria": {
+    "message": "Switch popup menu to English"
+  },
+  "languageUseBrowserTitle": {
+    "message": "Use browser language"
+  },
+  "languageUseBrowserAria": {
+    "message": "Switch popup menu back to browser language"
+  },
   "groupBasicUI": {
     "message": "Basic UI"
   },

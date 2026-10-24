@@ -14,6 +14,18 @@
   "powerToggleAria": {
     "message": "拡張機能を有効または無効にする"
   },
+  "languageUseEnglishTitle": {
+    "message": "英語を使用"
+  },
+  "languageUseEnglishAria": {
+    "message": "拡張機能のメニューを英語で表示"
+  },
+  "languageUseBrowserTitle": {
+    "message": "ブラウザの言語を使用"
+  },
+  "languageUseBrowserAria": {
+    "message": "拡張機能のメニューをブラウザの言語に戻す"
+  },
   "groupBasicUI": {
     "message": "基本表示"
   },
@@ -45,7 +57,7 @@
     "message": "マイクアイコンを非表示"
   },
   "labelNotificationBell": {
-    "message": "通知"
+    "message": "通知ベル"
   },
   "descNotificationBell": {
     "message": "通知ベルを非表示"
@@ -66,13 +78,13 @@
     "message": "サムネイルをぼかす"
   },
   "descThumbnailBlur": {
-    "message": "サムネイルをぼかします。マウスホバーで表示されます"
+    "message": "サムネイルをぼかし、マウスを重ねると鮮明に表示"
   },
   "labelThumbnailPlayback": {
-    "message": "サムネイルのホバー再生"
+    "message": "マウスを重ねたときのプレビュー"
   },
   "descThumbnailPlayback": {
-    "message": "サムネイルにカーソルを合わせたときの動画プレビュー再生を止めます"
+    "message": "サムネイルにマウスを重ねたときの動画プレビュー再生を停止"
   },
   "labelHideLeftNav": {
     "message": "左側メニューをすべて非表示"
@@ -120,13 +132,13 @@
     "message": "Hype / Thanks ボタン"
   },
   "descHypeButton": {
-    "message": "動画の下にある Hype または Thanks の応援ボタンを非表示にします"
+    "message": "動画の下にあるHypeやThanksの応援ボタンを非表示"
   },
   "labelEndScreen": {
     "message": "終了画面のおすすめ"
   },
   "descEndScreen": {
-    "message": "動画再生終了時のおすすめカードを非表示"
+    "message": "動画の最後に重ねて表示されるカードを非表示"
   },
   "labelAutoplay": {
     "message": "自動再生"
@@ -147,10 +159,10 @@
     "message": "YouTube Premiumのプロモーションを非表示"
   },
   "labelPremieres": {
-    "message": "ライブとプレミア公開"
+    "message": "プレミア公開"
   },
   "descPremieres": {
-    "message": "登録チャンネルのフィードからライブ配信やプレミア公開を非表示"
+    "message": "配信予定または配信中のライブ動画を非表示"
   },
   "labelShorts": {
     "message": "ショート動画"
@@ -162,13 +174,13 @@
     "message": "デフォルトを登録チャンネルにする"
   },
   "descDefaultSubs": {
-    "message": "YouTubeのホームを自動的に登録チャンネルにリダイレクト"
+    "message": "ホームから登録チャンネルのフィードへ自動的に移動"
   },
   "labelListView": {
     "message": "リスト表示"
   },
   "descListView": {
-    "message": "登録チャンネルをリスト形式で表示"
+    "message": "登録チャンネルの動画をリスト形式で表示"
   },
   "labelCompactListView": {
     "message": "コンパクトリスト"

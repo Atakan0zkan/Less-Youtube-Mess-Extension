@@ -14,11 +14,23 @@
   "powerToggleAria": {
     "message": "Увімкнути або вимкнути розширення"
   },
+  "languageUseEnglishTitle": {
+    "message": "Використовувати англійську"
+  },
+  "languageUseEnglishAria": {
+    "message": "Показати меню розширення англійською"
+  },
+  "languageUseBrowserTitle": {
+    "message": "Використовувати мову браузера"
+  },
+  "languageUseBrowserAria": {
+    "message": "Повернути меню розширення до мови браузера"
+  },
   "groupBasicUI": {
     "message": "Основний інтерфейс"
   },
   "groupLeftNav": {
-    "message": "Ліва навігація"
+    "message": "Ліва панель навігації"
   },
   "groupVideoPlayer": {
     "message": "Відеопрогравач"
@@ -45,7 +57,7 @@
     "message": "Приховати піктограму мікрофона"
   },
   "labelNotificationBell": {
-    "message": "Сповіщення"
+    "message": "Дзвіночок сповіщень"
   },
   "descNotificationBell": {
     "message": "Приховати дзвіночок сповіщень"
@@ -66,16 +78,16 @@
     "message": "Розмиття мініатюр"
   },
   "descThumbnailBlur": {
-    "message": "Розмивати мініатюри відео; наведіть курсор, щоб побачити їх"
+    "message": "Розмити мініатюри відео; наведіть курсор, щоб побачити їх чітко"
   },
   "labelThumbnailPlayback": {
     "message": "Відтворення при наведенні на мініатюру"
   },
   "descThumbnailPlayback": {
-    "message": "Зупиняє запуск попереднього перегляду при наведенні на мініатюри"
+    "message": "Вимкнути відтворення попереднього перегляду при наведенні на мініатюри"
   },
   "labelHideLeftNav": {
-    "message": "Приховати ліву навігацію"
+    "message": "Приховати всю ліву панель навігації"
   },
   "descHideLeftNav": {
     "message": "Повністю приховати ліве навігаційне меню"
@@ -120,13 +132,13 @@
     "message": "Кнопка Hype / Дякую"
   },
   "descHypeButton": {
-    "message": "Приховує кнопку підтримки Hype або Дякую під відео"
+    "message": "Приховати кнопку підтримки Hype або Дякую під відео"
   },
   "labelEndScreen": {
-    "message": "Підказки наприкінці"
+    "message": "Рекомендації наприкінці відео"
   },
   "descEndScreen": {
-    "message": "Приховати картки рекомендацій у кінці відео"
+    "message": "Приховати картки, що накладаються на зображення наприкінці відео"
   },
   "labelAutoplay": {
     "message": "Автовідтворення"
@@ -141,16 +153,16 @@
     "message": "За можливості вмикає оригінальну аудіодоріжку"
   },
   "labelPremiumPopups": {
-    "message": "Промо Premium"
+    "message": "Спливаючі вікна Premium"
   },
   "descPremiumPopups": {
     "message": "Приховати спливаючі пропозиції YouTube Premium"
   },
   "labelPremieres": {
-    "message": "Прямі ефіри та прем'єри"
+    "message": "Прем’єри"
   },
   "descPremieres": {
-    "message": "Приховати прямі ефіри та прем'єри у стрічці Підписок"
+    "message": "Приховати поточні й заплановані прямі ефіри"
   },
   "labelShorts": {
     "message": "Shorts"
@@ -165,7 +177,7 @@
     "message": "Відкривати стрічку Підписок замість головної сторінки YouTube"
   },
   "labelListView": {
-    "message": "Список"
+    "message": "Режим списку"
   },
   "descListView": {
     "message": "Показувати відео з Підписок як зручний список"

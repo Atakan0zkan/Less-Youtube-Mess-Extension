@@ -1,6 +1,6 @@
 {
   "extDescription": {
-    "message": "Dostosuj YouTube: ukryj Shorts, panel boczny, komentarze, rekomendacje i inne rozpraszacze!"
+    "message": "Dostosuj YouTube: ukryj Shorts, panel boczny, komentarze, rekomendacje i nie tylko!"
   },
   "toggleThemeTitle": {
     "message": "Zmień motyw"
@@ -14,11 +14,23 @@
   "powerToggleAria": {
     "message": "Włącz lub wyłącz rozszerzenie"
   },
+  "languageUseEnglishTitle": {
+    "message": "Użyj angielskiego"
+  },
+  "languageUseEnglishAria": {
+    "message": "Wyświetl menu rozszerzenia po angielsku"
+  },
+  "languageUseBrowserTitle": {
+    "message": "Użyj języka przeglądarki"
+  },
+  "languageUseBrowserAria": {
+    "message": "Przywróć język przeglądarki w menu rozszerzenia"
+  },
   "groupBasicUI": {
     "message": "Podstawowy wygląd"
   },
   "groupLeftNav": {
-    "message": "Lewa nawigacja"
+    "message": "Lewy panel nawigacyjny"
   },
   "groupVideoPlayer": {
     "message": "Odtwarzacz wideo"
@@ -45,13 +57,13 @@
     "message": "Ukryj ikonę mikrofonu"
   },
   "labelNotificationBell": {
-    "message": "Powiadomienia"
+    "message": "Dzwonek powiadomień"
   },
   "descNotificationBell": {
     "message": "Ukryj dzwonek powiadomień"
   },
   "labelVideoSidebar": {
-    "message": "Polecane filmy z boku"
+    "message": "Panel polecanych filmów"
   },
   "descVideoSidebar": {
     "message": "Ukryj panel polecanych filmów obok odtwarzacza"
@@ -66,16 +78,16 @@
     "message": "Rozmycie miniaturek"
   },
   "descThumbnailBlur": {
-    "message": "Rozmywaj miniaturki filmów; najedź kursorem, aby je zobaczyć"
+    "message": "Rozmyj miniatury filmów; najedź na nie kursorem, aby zobaczyć je wyraźnie"
   },
   "labelThumbnailPlayback": {
     "message": "Odtwarzanie po najechaniu na miniaturę"
   },
   "descThumbnailPlayback": {
-    "message": "Zatrzymuje podglądy wideo uruchamiane po najechaniu na miniatury"
+    "message": "Zablokuj odtwarzanie podglądów po najechaniu kursorem na miniatury"
   },
   "labelHideLeftNav": {
-    "message": "Ukryj lewą nawigację"
+    "message": "Ukryj cały lewy panel nawigacyjny"
   },
   "descHideLeftNav": {
     "message": "Ukryj cały lewy panel nawigacyjny"
@@ -120,13 +132,13 @@
     "message": "Przycisk Hype / Dzięki"
   },
   "descHypeButton": {
-    "message": "Ukrywa przycisk wsparcia Hype lub Dzięki pod filmami"
+    "message": "Ukryj przycisk wsparcia Hype lub Dzięki pod filmami"
   },
   "labelEndScreen": {
     "message": "Sugestie na końcu filmu"
   },
   "descEndScreen": {
-    "message": "Ukryj karty rekomendacji wyświetlane po zakończeniu filmu"
+    "message": "Ukryj karty nakładane na obraz pod koniec filmu"
   },
   "labelAutoplay": {
     "message": "Autoodtwarzanie"
@@ -141,16 +153,16 @@
     "message": "Używa oryginalnej ścieżki audio, gdy to możliwe"
   },
   "labelPremiumPopups": {
-    "message": "Promocje Premium"
+    "message": "Wyskakujące okna Premium"
   },
   "descPremiumPopups": {
     "message": "Ukryj wyskakujące promocje YouTube Premium"
   },
   "labelPremieres": {
-    "message": "Transmisje i premiery"
+    "message": "Premiery"
   },
   "descPremieres": {
-    "message": "Ukryj transmisje na żywo i premiery w Subskrypcjach"
+    "message": "Ukryj trwające i zaplanowane transmisje na żywo"
   },
   "labelShorts": {
     "message": "Shorts"
@@ -162,7 +174,7 @@
     "message": "Od razu do Subskrypcji"
   },
   "descDefaultSubs": {
-    "message": "Otwieraj kanał Subskrypcje zamiast strony głównej YouTube"
+    "message": "Otwieraj stronę Subskrypcje zamiast strony głównej YouTube"
   },
   "labelListView": {
     "message": "Widok listy"
@@ -171,7 +183,7 @@
     "message": "Pokazuj filmy z Subskrypcji jako czytelną listę"
   },
   "labelCompactListView": {
-    "message": "Kompaktowa lista"
+    "message": "Kompaktowy widok listy"
   },
   "descCompactListView": {
     "message": "Używaj mniejszych miniaturek (wymaga Widoku listy)"

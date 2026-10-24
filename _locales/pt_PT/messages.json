@@ -14,11 +14,23 @@
   "powerToggleAria": {
     "message": "Ativar ou desativar a extensão"
   },
+  "languageUseEnglishTitle": {
+    "message": "Usar inglês"
+  },
+  "languageUseEnglishAria": {
+    "message": "Mostrar o menu da extensão em inglês"
+  },
+  "languageUseBrowserTitle": {
+    "message": "Usar o idioma do navegador"
+  },
+  "languageUseBrowserAria": {
+    "message": "Voltar a mostrar o menu da extensão no idioma do navegador"
+  },
   "groupBasicUI": {
     "message": "Aspeto geral"
   },
   "groupLeftNav": {
-    "message": "Navegação esquerda"
+    "message": "Barra de navegação esquerda"
   },
   "groupVideoPlayer": {
     "message": "Leitor de vídeo"
@@ -45,7 +57,7 @@
     "message": "Ocultar o ícone do microfone"
   },
   "labelNotificationBell": {
-    "message": "Notificações"
+    "message": "Sino de notificações"
   },
   "descNotificationBell": {
     "message": "Ocultar o sino de notificações"
@@ -69,13 +81,13 @@
     "message": "Desfocar miniaturas dos vídeos; passe o rato para revelar"
   },
   "labelThumbnailPlayback": {
-    "message": "Reprodução ao passar nas miniaturas"
+    "message": "Reprodução ao passar o rato"
   },
   "descThumbnailPlayback": {
-    "message": "Impede que as pré-visualizações sejam reproduzidas ao passar o cursor nas miniaturas"
+    "message": "Impedir a reprodução de pré-visualizações ao passar o rato sobre as miniaturas"
   },
   "labelHideLeftNav": {
-    "message": "Ocultar navegação esquerda"
+    "message": "Ocultar toda a barra de navegação esquerda"
   },
   "descHideLeftNav": {
     "message": "Ocultar todo o menu de navegação esquerdo"
@@ -87,10 +99,10 @@
     "message": "Ocultar a lista de canais subscritos"
   },
   "labelYou": {
-    "message": "Tu"
+    "message": "Você"
   },
   "descYou": {
-    "message": "Ocultar a secção 'Tu' (Histórico, playlists e mais)"
+    "message": "Ocultar a secção «Você» (Histórico, listas de reprodução)"
   },
   "labelExplore": {
     "message": "Explorar"
@@ -120,13 +132,13 @@
     "message": "Botão Hype / Obrigado"
   },
   "descHypeButton": {
-    "message": "Oculta o botão de apoio Hype ou Obrigado por baixo dos vídeos"
+    "message": "Ocultar o botão de apoio Hype ou Obrigado por baixo dos vídeos"
   },
   "labelEndScreen": {
     "message": "Sugestões no fim do vídeo"
   },
   "descEndScreen": {
-    "message": "Ocultar cartões de recomendação no final dos vídeos"
+    "message": "Ocultar cartões sobrepostos no final dos vídeos"
   },
   "labelAutoplay": {
     "message": "Reprodução automática"
@@ -141,16 +153,16 @@
     "message": "Usa o áudio original quando possível"
   },
   "labelPremiumPopups": {
-    "message": "Promoções Premium"
+    "message": "Pop-ups Premium"
   },
   "descPremiumPopups": {
     "message": "Ocultar pop-ups de promoção do YouTube Premium"
   },
   "labelPremieres": {
-    "message": "Diretos e estreias"
+    "message": "Estreias"
   },
   "descPremieres": {
-    "message": "Ocultar transmissões em direto e estreias no feed de Subscrições"
+    "message": "Ocultar transmissões em direto em curso ou agendadas"
   },
   "labelShorts": {
     "message": "Shorts"
@@ -171,7 +183,7 @@
     "message": "Mostrar vídeos das Subscrições numa lista clara e fácil de ler"
   },
   "labelCompactListView": {
-    "message": "Lista compacta"
+    "message": "Vista em lista compacta"
   },
   "descCompactListView": {
     "message": "Usar miniaturas mais pequenas (requer Vista em lista)"

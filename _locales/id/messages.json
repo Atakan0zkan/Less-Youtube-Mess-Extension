@@ -3,22 +3,34 @@
     "message": "Atur YouTube sesukamu: sembunyikan Shorts, sidebar, komentar, rekomendasi, dan lainnya!"
   },
   "toggleThemeTitle": {
-    "message": "Ganti Tema"
+    "message": "Ganti tema"
   },
   "toggleThemeAria": {
     "message": "Alihkan tema terang/gelap"
   },
   "powerToggleTitle": {
-    "message": "Aktifkan/Nonaktifkan Ekstensi"
+    "message": "Aktifkan/nonaktifkan ekstensi"
   },
   "powerToggleAria": {
     "message": "Aktifkan atau nonaktifkan ekstensi"
   },
+  "languageUseEnglishTitle": {
+    "message": "Gunakan bahasa Inggris"
+  },
+  "languageUseEnglishAria": {
+    "message": "Tampilkan menu ekstensi dalam bahasa Inggris"
+  },
+  "languageUseBrowserTitle": {
+    "message": "Gunakan bahasa browser"
+  },
+  "languageUseBrowserAria": {
+    "message": "Kembalikan bahasa menu ekstensi ke bahasa browser"
+  },
   "groupBasicUI": {
-    "message": "Tampilan Utama"
+    "message": "Antarmuka dasar"
   },
   "groupLeftNav": {
-    "message": "Navigasi Kiri"
+    "message": "Navigasi sebelah kiri"
   },
   "groupVideoPlayer": {
     "message": "Pemutar Video"
@@ -45,13 +57,13 @@
     "message": "Sembunyikan ikon mikrofon"
   },
   "labelNotificationBell": {
-    "message": "Notifikasi"
+    "message": "Lonceng notifikasi"
   },
   "descNotificationBell": {
     "message": "Sembunyikan ikon lonceng notifikasi"
   },
   "labelVideoSidebar": {
-    "message": "Video Rekomendasi"
+    "message": "Panel video di samping"
   },
   "descVideoSidebar": {
     "message": "Sembunyikan panel video rekomendasi di samping pemutar"
@@ -63,19 +75,19 @@
     "message": "Sembunyikan tombol '+Buat' untuk mengunggah video"
   },
   "labelThumbnailBlur": {
-    "message": "Blur Thumbnail"
+    "message": "Buramkan thumbnail"
   },
   "descThumbnailBlur": {
     "message": "Buramkan thumbnail video; arahkan kursor untuk melihatnya"
   },
   "labelThumbnailPlayback": {
-    "message": "Pemutaran Saat Arahkan ke Thumbnail"
+    "message": "Pratinjau saat kursor diarahkan"
   },
   "descThumbnailPlayback": {
-    "message": "Hentikan pratinjau video agar tidak diputar saat thumbnail diarahkan"
+    "message": "Cegah pratinjau video diputar saat kursor diarahkan ke thumbnail"
   },
   "labelHideLeftNav": {
-    "message": "Sembunyikan Navigasi Kiri"
+    "message": "Sembunyikan seluruh navigasi kiri"
   },
   "descHideLeftNav": {
     "message": "Sembunyikan seluruh menu navigasi di sebelah kiri"
@@ -102,7 +114,7 @@
     "message": "Lainnya dari YouTube"
   },
   "descMoreFromYT": {
-    "message": "Sembunyikan tautan Premium, Musik, dan Kids"
+    "message": "Sembunyikan tautan Premium, Music, dan Kids"
   },
   "labelComments": {
     "message": "Komentar"
@@ -126,7 +138,7 @@
     "message": "Saran Akhir Video"
   },
   "descEndScreen": {
-    "message": "Sembunyikan kartu rekomendasi di akhir video"
+    "message": "Sembunyikan kartu yang ditampilkan di atas video pada akhir pemutaran"
   },
   "labelAutoplay": {
     "message": "Putar Otomatis"
@@ -135,22 +147,22 @@
     "message": "Matikan dan sembunyikan putar otomatis video berikutnya"
   },
   "labelAutoDubbing": {
-    "message": "Dubbing Otomatis"
+    "message": "Sulih suara otomatis"
   },
   "descAutoDubbing": {
-    "message": "Gunakan audio asli jika tersedia"
+    "message": "Gunakan audio asli jika memungkinkan"
   },
   "labelPremiumPopups": {
-    "message": "Promo Premium"
+    "message": "Pop-up Premium"
   },
   "descPremiumPopups": {
     "message": "Sembunyikan pop-up promosi YouTube Premium"
   },
   "labelPremieres": {
-    "message": "Live dan Premiere"
+    "message": "Penayangan perdana"
   },
   "descPremieres": {
-    "message": "Sembunyikan siaran langsung dan premiere di feed Langganan"
+    "message": "Sembunyikan siaran langsung yang sedang berlangsung atau dijadwalkan"
   },
   "labelShorts": {
     "message": "Shorts"
@@ -165,15 +177,15 @@
     "message": "Buka feed Langganan, bukan halaman beranda YouTube"
   },
   "labelListView": {
-    "message": "Tampilan Daftar"
+    "message": "Tampilan daftar"
   },
   "descListView": {
     "message": "Tampilkan video Langganan dalam daftar yang mudah dibaca"
   },
   "labelCompactListView": {
-    "message": "Daftar Ringkas"
+    "message": "Tampilan daftar ringkas"
   },
   "descCompactListView": {
-    "message": "Gunakan thumbnail yang lebih kecil (perlu Tampilan Daftar)"
+    "message": "Thumbnail lebih kecil (memerlukan Tampilan daftar)"
   }
 }

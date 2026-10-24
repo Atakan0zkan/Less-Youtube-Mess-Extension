@@ -1,9 +1,9 @@
 {
   "extDescription": {
-    "message": "Personalize o YouTube: Oculte Shorts, barra lateral, comentários e muito mais!"
+    "message": "Personalize o YouTube: oculte Shorts, a barra lateral, os comentários, as recomendações e muito mais!"
   },
   "toggleThemeTitle": {
-    "message": "Mudar Tema"
+    "message": "Mudar tema"
   },
   "toggleThemeAria": {
     "message": "Alternar tema claro/escuro"
@@ -14,14 +14,26 @@
   "powerToggleAria": {
     "message": "Ativar ou desativar a extensão"
   },
+  "languageUseEnglishTitle": {
+    "message": "Usar inglês"
+  },
+  "languageUseEnglishAria": {
+    "message": "Mostrar o menu da extensão em inglês"
+  },
+  "languageUseBrowserTitle": {
+    "message": "Usar o idioma do navegador"
+  },
+  "languageUseBrowserAria": {
+    "message": "Voltar a mostrar o menu da extensão no idioma do navegador"
+  },
   "groupBasicUI": {
-    "message": "Aparência Geral"
+    "message": "Aparência geral"
   },
   "groupLeftNav": {
-    "message": "Menu Lateral"
+    "message": "Barra de navegação esquerda"
   },
   "groupVideoPlayer": {
-    "message": "Player de Vídeo"
+    "message": "Player de vídeo"
   },
   "groupMisc": {
     "message": "Outros"
@@ -33,25 +45,25 @@
     "message": "Ocultar o logo do YouTube no canto superior esquerdo"
   },
   "labelSearchSuggestions": {
-    "message": "Sugestões de Pesquisa"
+    "message": "Sugestões de pesquisa"
   },
   "descSearchSuggestions": {
     "message": "Ocultar o preenchimento automático na barra de pesquisa"
   },
   "labelVoiceSearch": {
-    "message": "Pesquisa por Voz"
+    "message": "Pesquisa por voz"
   },
   "descVoiceSearch": {
     "message": "Ocultar o ícone do microfone"
   },
   "labelNotificationBell": {
-    "message": "Notificações"
+    "message": "Sino de notificações"
   },
   "descNotificationBell": {
     "message": "Ocultar o ícone de notificações"
   },
   "labelVideoSidebar": {
-    "message": "Vídeos Sugeridos"
+    "message": "Painel lateral de vídeos"
   },
   "descVideoSidebar": {
     "message": "Ocultar a lista de vídeos recomendados ao lado"
@@ -63,19 +75,19 @@
     "message": "Ocultar o botão '+Criar' de upload de vídeo"
   },
   "labelThumbnailBlur": {
-    "message": "Desfocar Miniaturas"
+    "message": "Desfocar miniaturas"
   },
   "descThumbnailBlur": {
-    "message": "Desfoca as miniaturas dos vídeos, passe o mouse para revelar"
+    "message": "Desfocar as miniaturas e revelá-las ao passar o mouse"
   },
   "labelThumbnailPlayback": {
-    "message": "Reprodução ao passar nas miniaturas"
+    "message": "Reprodução ao passar o mouse"
   },
   "descThumbnailPlayback": {
-    "message": "Impede que prévias de vídeo sejam reproduzidas ao passar o cursor nas miniaturas"
+    "message": "Impedir a reprodução de prévias ao passar o mouse sobre as miniaturas"
   },
   "labelHideLeftNav": {
-    "message": "Ocultar Menu Lateral"
+    "message": "Ocultar toda a barra de navegação esquerda"
   },
   "descHideLeftNav": {
     "message": "Ocultar completamente o menu de navegação esquerdo"
@@ -84,7 +96,7 @@
     "message": "Inscrições"
   },
   "descSubscriptions": {
-    "message": "Ocultar a lista de canais inscritos"
+    "message": "Ocultar a lista de canais em que você se inscreveu"
   },
   "labelYou": {
     "message": "Você"
@@ -102,7 +114,7 @@
     "message": "Mais do YouTube"
   },
   "descMoreFromYT": {
-    "message": "Ocultar links do Premium, Música e Kids"
+    "message": "Ocultar links para Premium, Music e Kids"
   },
   "labelComments": {
     "message": "Comentários"
@@ -111,7 +123,7 @@
     "message": "Ocultar a seção de comentários abaixo do vídeo"
   },
   "labelLikes": {
-    "message": "Contador de Curtidas"
+    "message": "Curtidas"
   },
   "descLikes": {
     "message": "Ocultar a quantidade de curtidas nos vídeos"
@@ -120,16 +132,16 @@
     "message": "Botão Hype / Valeu"
   },
   "descHypeButton": {
-    "message": "Oculta o botão de apoio Hype ou Valeu abaixo dos vídeos"
+    "message": "Ocultar o botão de apoio Hype ou Valeu abaixo dos vídeos"
   },
   "labelEndScreen": {
-    "message": "Sugestões de Fim de Vídeo"
+    "message": "Sugestões da tela final"
   },
   "descEndScreen": {
-    "message": "Ocultar os cards de recomendação no final dos vídeos"
+    "message": "Ocultar os cards sobrepostos no final dos vídeos"
   },
   "labelAutoplay": {
-    "message": "Reprodução Automática"
+    "message": "Reprodução automática"
   },
   "descAutoplay": {
     "message": "Desativar e ocultar a reprodução automática"
@@ -141,16 +153,16 @@
     "message": "Usa o áudio original quando possível"
   },
   "labelPremiumPopups": {
-    "message": "Anúncios Premium"
+    "message": "Pop-ups Premium"
   },
   "descPremiumPopups": {
     "message": "Ocultar os pop-ups promovendo o YouTube Premium"
   },
   "labelPremieres": {
-    "message": "Ao Vivo e Estreias"
+    "message": "Estreias"
   },
   "descPremieres": {
-    "message": "Ocultar transmissões ao vivo e estreias no feed de Inscrições"
+    "message": "Ocultar transmissões ao vivo em andamento ou agendadas"
   },
   "labelShorts": {
     "message": "Shorts"
@@ -159,21 +171,21 @@
     "message": "Ocultar todos os conteúdos de Shorts"
   },
   "labelDefaultSubs": {
-    "message": "Inscrições na Página Inicial"
+    "message": "Inscrições ao abrir o YouTube"
   },
   "descDefaultSubs": {
     "message": "Redirecionar automaticamente a página inicial para Inscrições"
   },
   "labelListView": {
-    "message": "Exibição em Lista"
+    "message": "Visualização em lista"
   },
   "descListView": {
     "message": "Mostrar as inscrições em formato de lista"
   },
   "labelCompactListView": {
-    "message": "Lista Compacta"
+    "message": "Visualização em lista compacta"
   },
   "descCompactListView": {
-    "message": "Usar miniaturas menores (requer Exibição em Lista)"
+    "message": "Miniaturas menores (requer Visualização em lista)"
   }
 }

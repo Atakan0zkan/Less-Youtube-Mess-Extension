@@ -14,6 +14,18 @@
   "powerToggleAria": {
     "message": "تفعيل الإضافة أو تعطيلها"
   },
+  "languageUseEnglishTitle": {
+    "message": "استخدام الإنجليزية"
+  },
+  "languageUseEnglishAria": {
+    "message": "عرض قائمة الإضافة باللغة الإنجليزية"
+  },
+  "languageUseBrowserTitle": {
+    "message": "استخدام لغة المتصفح"
+  },
+  "languageUseBrowserAria": {
+    "message": "إعادة عرض قائمة الإضافة بلغة المتصفح"
+  },
   "groupBasicUI": {
     "message": "الواجهة الأساسية"
   },
@@ -45,7 +57,7 @@
     "message": "إخفاء أيقونة الميكروفون"
   },
   "labelNotificationBell": {
-    "message": "الإشعارات"
+    "message": "جرس الإشعارات"
   },
   "descNotificationBell": {
     "message": "إخفاء جرس الإشعارات"
@@ -66,7 +78,7 @@
     "message": "تمويه الصور المصغّرة"
   },
   "descThumbnailBlur": {
-    "message": "تمويه صور الفيديوهات المصغّرة، ومرّر المؤشر فوقها لعرضها"
+    "message": "تمويه الصور المصغّرة للفيديوهات وإظهارها عند تمرير المؤشر فوقها"
   },
   "labelThumbnailPlayback": {
     "message": "تشغيل المعاينة عند تمرير المؤشر"
@@ -75,7 +87,7 @@
     "message": "إيقاف معاينات الفيديو عند تمرير المؤشر فوق الصور المصغرة"
   },
   "labelHideLeftNav": {
-    "message": "إخفاء القائمة اليسرى"
+    "message": "إخفاء شريط التنقل الأيسر بالكامل"
   },
   "descHideLeftNav": {
     "message": "إخفاء قائمة التنقل اليسرى بالكامل"
@@ -117,10 +129,10 @@
     "message": "إخفاء أعداد الإعجابات على الفيديوهات"
   },
   "labelHypeButton": {
-    "message": "زر Hype / الشكر"
+    "message": "زر Hype / شكرًا"
   },
   "descHypeButton": {
-    "message": "إخفاء زر الدعم Hype أو الشكر أسفل الفيديوهات"
+    "message": "إخفاء زر الدعم Hype أو شكرًا أسفل الفيديوهات"
   },
   "labelEndScreen": {
     "message": "اقتراحات نهاية الفيديو"
@@ -132,25 +144,25 @@
     "message": "التشغيل التلقائي"
   },
   "descAutoplay": {
-    "message": "تعطيل التشغيل التلقائي للفيديو التالي وإخفاؤه"
+    "message": "إخفاء خيار التشغيل التلقائي للفيديوهات وتعطيله"
   },
   "labelAutoDubbing": {
     "message": "الدبلجة التلقائية"
   },
   "descAutoDubbing": {
-    "message": "يحاول تشغيل الصوت الأصلي تلقائيًا عند توفره"
+    "message": "استخدام الصوت الأصلي متى أمكن"
   },
   "labelPremiumPopups": {
-    "message": "عروض Premium"
+    "message": "نوافذ Premium المنبثقة"
   },
   "descPremiumPopups": {
     "message": "إخفاء نوافذ الترويج لاشتراك YouTube Premium"
   },
   "labelPremieres": {
-    "message": "البث المباشر والعروض الأولى"
+    "message": "العروض الأولى"
   },
   "descPremieres": {
-    "message": "إخفاء البث المباشر والعروض الأولى من صفحة الاشتراكات"
+    "message": "إخفاء البث المباشر الحالي والقادم"
   },
   "labelShorts": {
     "message": "Shorts"
@@ -168,7 +180,7 @@
     "message": "عرض القائمة"
   },
   "descListView": {
-    "message": "عرض فيديوهات الاشتراكات في قائمة واضحة وسهلة القراءة"
+    "message": "عرض فيديوهات الاشتراكات في قائمة"
   },
   "labelCompactListView": {
     "message": "قائمة مضغوطة"

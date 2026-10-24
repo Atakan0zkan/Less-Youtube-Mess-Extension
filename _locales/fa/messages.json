@@ -1,6 +1,6 @@
 {
   "extDescription": {
-    "message": "YouTube را مطابق سلیقه‌تان تنظیم کنید: Shorts، نوار کناری، دیدگاه‌ها، پیشنهادها و موارد اضافه را پنهان کنید!"
+    "message": "YouTube را مطابق سلیقه‌تان تنظیم کنید: Shorts، نوار کناری، دیدگاه‌ها، پیشنهادها و موارد دیگر را پنهان کنید!"
   },
   "toggleThemeTitle": {
     "message": "تغییر پوسته"
@@ -14,11 +14,23 @@
   "powerToggleAria": {
     "message": "روشن یا خاموش کردن افزونه"
   },
+  "languageUseEnglishTitle": {
+    "message": "استفاده از انگلیسی"
+  },
+  "languageUseEnglishAria": {
+    "message": "نمایش منوی افزونه به زبان انگلیسی"
+  },
+  "languageUseBrowserTitle": {
+    "message": "استفاده از زبان مرورگر"
+  },
+  "languageUseBrowserAria": {
+    "message": "بازگرداندن زبان منوی افزونه به زبان مرورگر"
+  },
   "groupBasicUI": {
     "message": "ظاهر اصلی"
   },
   "groupLeftNav": {
-    "message": "ناوبری سمت چپ"
+    "message": "نوار ناوبری سمت چپ"
   },
   "groupVideoPlayer": {
     "message": "پخش‌کننده ویدیو"
@@ -30,7 +42,7 @@
     "message": "نشان YouTube"
   },
   "descYouTubeLogo": {
-    "message": "پنهان کردن نشان YouTube در گوشه بالا"
+    "message": "پنهان کردن نشان YouTube در گوشهٔ بالا سمت چپ"
   },
   "labelSearchSuggestions": {
     "message": "پیشنهادهای جستجو"
@@ -45,7 +57,7 @@
     "message": "پنهان کردن نماد میکروفون"
   },
   "labelNotificationBell": {
-    "message": "اعلان‌ها"
+    "message": "زنگ اعلان‌ها"
   },
   "descNotificationBell": {
     "message": "پنهان کردن زنگ اعلان‌ها"
@@ -63,19 +75,19 @@
     "message": "پنهان کردن دکمه '+ایجاد' برای بارگذاری ویدیو"
   },
   "labelThumbnailBlur": {
-    "message": "محو کردن تصویر بندانگشتی"
+    "message": "محو کردن تصاویر بندانگشتی"
   },
   "descThumbnailBlur": {
-    "message": "تصاویر بندانگشتی ویدیوها را محو می‌کند؛ برای دیدن، نشانگر را روی آن ببرید"
+    "message": "محو کردن تصاویر بندانگشتی و نمایش آن‌ها هنگام بردن نشانگر رویشان"
   },
   "labelThumbnailPlayback": {
-    "message": "پخش با بردن نشانگر روی بندانگشتی"
+    "message": "پیش‌نمایش با بردن نشانگر"
   },
   "descThumbnailPlayback": {
     "message": "پخش پیش‌نمایش ویدئوها با بردن نشانگر روی بندانگشتی‌ها را متوقف می‌کند"
   },
   "labelHideLeftNav": {
-    "message": "پنهان کردن ناوبری چپ"
+    "message": "پنهان کردن کل نوار ناوبری سمت چپ"
   },
   "descHideLeftNav": {
     "message": "پنهان کردن کامل منوی ناوبری سمت چپ"
@@ -120,13 +132,13 @@
     "message": "دکمه Hype / تشکر"
   },
   "descHypeButton": {
-    "message": "دکمه پشتیبانی Hype یا تشکر را زیر ویدئوها پنهان می‌کند"
+    "message": "پنهان کردن دکمهٔ حمایت Hype یا تشکر زیر ویدیوها"
   },
   "labelEndScreen": {
     "message": "پیشنهادهای پایان ویدیو"
   },
   "descEndScreen": {
-    "message": "پنهان کردن کارت‌های پیشنهادی در پایان ویدیو"
+    "message": "پنهان کردن کارت‌هایی که در پایان روی ویدیو ظاهر می‌شوند"
   },
   "labelAutoplay": {
     "message": "پخش خودکار"
@@ -141,16 +153,16 @@
     "message": "در صورت امکان صدای اصلی را پخش می‌کند"
   },
   "labelPremiumPopups": {
-    "message": "تبلیغ‌های Premium"
+    "message": "پنجره‌های بازشوی Premium"
   },
   "descPremiumPopups": {
     "message": "پنهان کردن پنجره‌های تبلیغاتی YouTube Premium"
   },
   "labelPremieres": {
-    "message": "زنده و نمایش‌های برتر"
+    "message": "نمایش‌های افتتاحیه"
   },
   "descPremieres": {
-    "message": "پنهان کردن پخش‌های زنده و نمایش‌های برتر در صفحه اشتراک‌ها"
+    "message": "پنهان کردن پخش‌های زندهٔ در حال اجرا و برنامه‌ریزی‌شده"
   },
   "labelShorts": {
     "message": "Shorts"

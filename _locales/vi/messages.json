@@ -1,6 +1,6 @@
 {
   "extDescription": {
-    "message": "Tùy chỉnh YouTube: ẩn Shorts, thanh bên, bình luận, đề xuất và nhiều nội dung gây xao nhãng khác!"
+    "message": "Tùy chỉnh YouTube: ẩn Shorts, thanh bên, bình luận, đề xuất và nhiều nội dung khác!"
   },
   "toggleThemeTitle": {
     "message": "Đổi giao diện"
@@ -13,6 +13,18 @@
   },
   "powerToggleAria": {
     "message": "Bật hoặc tắt tiện ích"
+  },
+  "languageUseEnglishTitle": {
+    "message": "Dùng tiếng Anh"
+  },
+  "languageUseEnglishAria": {
+    "message": "Hiển thị menu tiện ích bằng tiếng Anh"
+  },
+  "languageUseBrowserTitle": {
+    "message": "Dùng ngôn ngữ trình duyệt"
+  },
+  "languageUseBrowserAria": {
+    "message": "Đưa menu tiện ích về ngôn ngữ của trình duyệt"
   },
   "groupBasicUI": {
     "message": "Giao diện cơ bản"
@@ -45,7 +57,7 @@
     "message": "Ẩn biểu tượng micro"
   },
   "labelNotificationBell": {
-    "message": "Thông báo"
+    "message": "Chuông thông báo"
   },
   "descNotificationBell": {
     "message": "Ẩn chuông thông báo"
@@ -66,7 +78,7 @@
     "message": "Làm mờ hình thu nhỏ"
   },
   "descThumbnailBlur": {
-    "message": "Làm mờ hình thu nhỏ video; di chuột lên để xem"
+    "message": "Làm mờ hình thu nhỏ video; di chuột lên để xem rõ"
   },
   "labelThumbnailPlayback": {
     "message": "Phát khi rê chuột trên hình thu nhỏ"
@@ -75,7 +87,7 @@
     "message": "Ngăn bản xem trước video phát khi rê chuột lên hình thu nhỏ"
   },
   "labelHideLeftNav": {
-    "message": "Ẩn điều hướng trái"
+    "message": "Ẩn toàn bộ thanh điều hướng bên trái"
   },
   "descHideLeftNav": {
     "message": "Ẩn toàn bộ menu điều hướng bên trái"
@@ -126,7 +138,7 @@
     "message": "Gợi ý cuối video"
   },
   "descEndScreen": {
-    "message": "Ẩn thẻ đề xuất xuất hiện khi video kết thúc"
+    "message": "Ẩn các thẻ hiển thị đè lên video ở phần cuối"
   },
   "labelAutoplay": {
     "message": "Tự động phát"
@@ -141,16 +153,16 @@
     "message": "Dùng âm thanh gốc khi có thể"
   },
   "labelPremiumPopups": {
-    "message": "Quảng bá Premium"
+    "message": "Cửa sổ bật lên Premium"
   },
   "descPremiumPopups": {
     "message": "Ẩn cửa sổ quảng bá YouTube Premium"
   },
   "labelPremieres": {
-    "message": "Trực tiếp và Công chiếu"
+    "message": "Công chiếu"
   },
   "descPremieres": {
-    "message": "Ẩn livestream và video công chiếu trong mục Kênh đăng ký"
+    "message": "Ẩn các buổi phát trực tiếp sắp diễn ra hoặc đang phát"
   },
   "labelShorts": {
     "message": "Shorts"
@@ -171,9 +183,9 @@
     "message": "Hiển thị video từ Kênh đăng ký dưới dạng danh sách dễ đọc"
   },
   "labelCompactListView": {
-    "message": "Danh sách gọn"
+    "message": "Dạng danh sách gọn"
   },
   "descCompactListView": {
-    "message": "Dùng hình thu nhỏ nhỏ hơn (cần bật Dạng danh sách)"
+    "message": "Giảm kích thước hình thu nhỏ (cần bật Dạng danh sách)"
   }
 }

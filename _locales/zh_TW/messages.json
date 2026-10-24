@@ -1,6 +1,6 @@
 {
   "extDescription": {
-    "message": "自訂 YouTube：隱藏 Shorts、側邊欄、留言、推薦等干擾內容！"
+    "message": "自訂 YouTube：隱藏 Shorts、側邊欄、留言、推薦等內容！"
   },
   "toggleThemeTitle": {
     "message": "切換主題"
@@ -13,6 +13,18 @@
   },
   "powerToggleAria": {
     "message": "開啟或關閉擴充功能"
+  },
+  "languageUseEnglishTitle": {
+    "message": "使用英文"
+  },
+  "languageUseEnglishAria": {
+    "message": "將擴充功能選單切換為英文"
+  },
+  "languageUseBrowserTitle": {
+    "message": "使用瀏覽器語言"
+  },
+  "languageUseBrowserAria": {
+    "message": "將擴充功能選單切換回瀏覽器語言"
   },
   "groupBasicUI": {
     "message": "基本介面"
@@ -45,7 +57,7 @@
     "message": "隱藏麥克風圖示"
   },
   "labelNotificationBell": {
-    "message": "通知"
+    "message": "通知鈴鐺"
   },
   "descNotificationBell": {
     "message": "隱藏通知鈴鐺"
@@ -66,16 +78,16 @@
     "message": "模糊縮圖"
   },
   "descThumbnailBlur": {
-    "message": "模糊影片縮圖，滑鼠移上去時顯示"
+    "message": "模糊影片縮圖，滑鼠移上時清晰顯示"
   },
   "labelThumbnailPlayback": {
-    "message": "游標停留縮圖時播放"
+    "message": "滑鼠移上縮圖時播放"
   },
   "descThumbnailPlayback": {
-    "message": "阻止游標停留在縮圖上時播放影片預覽"
+    "message": "避免滑鼠移到縮圖上時播放影片預覽"
   },
   "labelHideLeftNav": {
-    "message": "隱藏左側導覽"
+    "message": "隱藏整個左側導覽列"
   },
   "descHideLeftNav": {
     "message": "完整隱藏左側導覽選單"
@@ -87,10 +99,10 @@
     "message": "隱藏已訂閱頻道清單"
   },
   "labelYou": {
-    "message": "你的內容"
+    "message": "個人中心"
   },
   "descYou": {
-    "message": "隱藏「你的內容」區塊（觀看記錄、播放清單等）"
+    "message": "隱藏「個人中心」區塊（觀看記錄、播放清單）"
   },
   "labelExplore": {
     "message": "探索"
@@ -111,22 +123,22 @@
     "message": "隱藏影片下方的留言區"
   },
   "labelLikes": {
-    "message": "喜歡次數"
+    "message": "按讚數"
   },
   "descLikes": {
-    "message": "隱藏影片的喜歡次數"
+    "message": "隱藏影片的按讚數"
   },
   "labelHypeButton": {
     "message": "Hype / 感謝按鈕"
   },
   "descHypeButton": {
-    "message": "隱藏影片下方的 Hype 或感謝支持按鈕"
+    "message": "隱藏影片下方用來支持創作者的 Hype 或感謝按鈕"
   },
   "labelEndScreen": {
     "message": "片尾推薦"
   },
   "descEndScreen": {
-    "message": "隱藏影片結尾出現的推薦卡片"
+    "message": "隱藏影片結尾疊加顯示的卡片"
   },
   "labelAutoplay": {
     "message": "自動播放"
@@ -141,16 +153,16 @@
     "message": "盡可能使用原始音軌"
   },
   "labelPremiumPopups": {
-    "message": "Premium 推廣"
+    "message": "Premium 彈出視窗"
   },
   "descPremiumPopups": {
     "message": "隱藏 YouTube Premium 的推廣彈窗"
   },
   "labelPremieres": {
-    "message": "直播與首播"
+    "message": "首播"
   },
   "descPremieres": {
-    "message": "隱藏訂閱內容中的直播與首播"
+    "message": "隱藏即將開始及正在進行的直播"
   },
   "labelShorts": {
     "message": "Shorts"
@@ -165,15 +177,15 @@
     "message": "開啟 YouTube 時略過首頁，直接進入訂閱內容"
   },
   "labelListView": {
-    "message": "列表檢視"
+    "message": "清單檢視"
   },
   "descListView": {
-    "message": "用更清楚的列表顯示訂閱影片"
+    "message": "以清單形式顯示訂閱影片"
   },
   "labelCompactListView": {
-    "message": "精簡列表"
+    "message": "精簡清單檢視"
   },
   "descCompactListView": {
-    "message": "使用較小的縮圖（需要開啟列表檢視）"
+    "message": "使用較小的縮圖（需要開啟清單檢視）"
   }
 }

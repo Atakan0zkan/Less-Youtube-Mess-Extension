@@ -1,12 +1,12 @@
 {
   "extDescription": {
-    "message": "YouTube को कस्टमाइज़ करें: Shorts, साइडबार, टिप्पणियाँ और बहुत कुछ छिपाएं!"
+    "message": "YouTube को अपने हिसाब से सेट करें: Shorts, साइडबार, टिप्पणियां, सुझाए गए वीडियो और बहुत कुछ छिपाएं!"
   },
   "toggleThemeTitle": {
     "message": "थीम बदलें"
   },
   "toggleThemeAria": {
-    "message": "लाइट/डार्क थीम चालू/बंद करें"
+    "message": "लाइट और डार्क थीम के बीच बदलें"
   },
   "powerToggleTitle": {
     "message": "एक्सटेंशन चालू/बंद करें"
@@ -14,11 +14,23 @@
   "powerToggleAria": {
     "message": "एक्सटेंशन को सक्षम/अक्षम करें"
   },
+  "languageUseEnglishTitle": {
+    "message": "अंग्रेज़ी इस्तेमाल करें"
+  },
+  "languageUseEnglishAria": {
+    "message": "एक्सटेंशन का मेनू अंग्रेज़ी में दिखाएं"
+  },
+  "languageUseBrowserTitle": {
+    "message": "ब्राउज़र की भाषा इस्तेमाल करें"
+  },
+  "languageUseBrowserAria": {
+    "message": "एक्सटेंशन का मेनू फिर से ब्राउज़र की भाषा में दिखाएं"
+  },
   "groupBasicUI": {
-    "message": "सामान्य रूप"
+    "message": "सामान्य इंटरफ़ेस"
   },
   "groupLeftNav": {
-    "message": "बायां मेनू"
+    "message": "बायां नेविगेशन बार"
   },
   "groupVideoPlayer": {
     "message": "वीडियो प्लेयर"
@@ -45,7 +57,7 @@
     "message": "माइक्रोफ़ोन आइकन छिपाएं"
   },
   "labelNotificationBell": {
-    "message": "सूचनाएं"
+    "message": "सूचनाओं की घंटी"
   },
   "descNotificationBell": {
     "message": "सूचना घंटी आइकन छिपाएं"
@@ -54,7 +66,7 @@
     "message": "सुझाए गए वीडियो"
   },
   "descVideoSidebar": {
-    "message": "वीडियो के बगल में सुझाए गए वीडियो सूची छिपाएं"
+    "message": "सुझाए गए वीडियो का पैनल छिपाएं"
   },
   "labelCreateButton": {
     "message": "बनाएं बटन"
@@ -66,16 +78,16 @@
     "message": "थंबनेल ब्लर करें"
   },
   "descThumbnailBlur": {
-    "message": "वीडियो थंबनेल को ब्लर करें, देखने के लिए माउस घुमाएं"
+    "message": "वीडियो के थंबनेल धुंधले करें; साफ़ देखने के लिए उन पर माउस ले जाएं"
   },
   "labelThumbnailPlayback": {
-    "message": "थंबनेल पर होवर प्लेबैक"
+    "message": "माउस रखने पर प्रीव्यू"
   },
   "descThumbnailPlayback": {
-    "message": "थंबनेल पर होवर करने पर वीडियो प्रीव्यू चलना रोकें"
+    "message": "थंबनेल पर माउस रखने से वीडियो प्रीव्यू चलना रोकें"
   },
   "labelHideLeftNav": {
-    "message": "बायां मेनू छिपाएं"
+    "message": "पूरा बायां नेविगेशन बार छिपाएं"
   },
   "descHideLeftNav": {
     "message": "बाएं नेविगेशन मेनू को पूरी तरह छिपाएं"
@@ -102,7 +114,7 @@
     "message": "YouTube से और अधिक"
   },
   "descMoreFromYT": {
-    "message": "Premium, संगीत और Kids लिंक छिपाएं"
+    "message": "Premium, Music और Kids के लिंक छिपाएं"
   },
   "labelComments": {
     "message": "टिप्पणियां"
@@ -120,13 +132,13 @@
     "message": "Hype / धन्यवाद बटन"
   },
   "descHypeButton": {
-    "message": "वीडियो के नीचे Hype या धन्यवाद सपोर्ट बटन छिपाएं"
+    "message": "वीडियो के नीचे क्रिएटर को सहयोग देने वाले Hype या धन्यवाद बटन छिपाएं"
   },
   "labelEndScreen": {
-    "message": "अंत स्क्रीन सुझाव"
+    "message": "वीडियो के अंत में सुझाव"
   },
   "descEndScreen": {
-    "message": "वीडियो के अंत में सुझाव कार्ड छिपाएं"
+    "message": "वीडियो के अंत में उसके ऊपर दिखने वाले कार्ड छिपाएं"
   },
   "labelAutoplay": {
     "message": "ऑटोप्ले"
@@ -141,16 +153,16 @@
     "message": "जहां संभव हो मूल ऑडियो चलाएं"
   },
   "labelPremiumPopups": {
-    "message": "प्रीमियम विज्ञापन"
+    "message": "Premium पॉप-अप"
   },
   "descPremiumPopups": {
     "message": "YouTube Premium के प्रचार पॉपअप छिपाएं"
   },
   "labelPremieres": {
-    "message": "लाइव और प्रीमियर"
+    "message": "प्रीमियर"
   },
   "descPremieres": {
-    "message": "सदस्यता फ़ीड में लाइव स्ट्रीम और आगामी वीडियो छिपाएं"
+    "message": "आने वाली और चल रही लाइव स्ट्रीम छिपाएं"
   },
   "labelShorts": {
     "message": "Shorts"
@@ -168,12 +180,12 @@
     "message": "सूची दृश्य"
   },
   "descListView": {
-    "message": "सदस्यताओं को सूची के रूप में दिखाएं"
+    "message": "सदस्यताओं के वीडियो सूची में दिखाएं"
   },
   "labelCompactListView": {
     "message": "कॉम्पैक्ट सूची"
   },
   "descCompactListView": {
-    "message": "सूची दृश्य में छोटे थंबनेल दिखाएं"
+    "message": "छोटे थंबनेल (सूची दृश्य चालू होना चाहिए)"
   }
 }

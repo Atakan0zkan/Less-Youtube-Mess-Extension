@@ -1,6 +1,6 @@
 {
   "extDescription": {
-    "message": "নিজের মতো YouTube সাজান: Shorts, সাইডবার, মন্তব্য, সুপারিশসহ অপ্রয়োজনীয় জিনিস লুকান!"
+    "message": "YouTube নিজের মতো সাজান: Shorts, সাইডবার, মন্তব্য, প্রস্তাবিত ভিডিওসহ আরও অনেক কিছু লুকান!"
   },
   "toggleThemeTitle": {
     "message": "থিম বদলান"
@@ -14,11 +14,23 @@
   "powerToggleAria": {
     "message": "এক্সটেনশন চালু বা বন্ধ করুন"
   },
+  "languageUseEnglishTitle": {
+    "message": "ইংরেজি ব্যবহার করুন"
+  },
+  "languageUseEnglishAria": {
+    "message": "এক্সটেনশনের মেনু ইংরেজিতে দেখান"
+  },
+  "languageUseBrowserTitle": {
+    "message": "ব্রাউজারের ভাষা ব্যবহার করুন"
+  },
+  "languageUseBrowserAria": {
+    "message": "এক্সটেনশনের মেনু আবার ব্রাউজারের ভাষায় দেখান"
+  },
   "groupBasicUI": {
-    "message": "প্রাথমিক ইন্টারফেস"
+    "message": "সাধারণ ইন্টারফেস"
   },
   "groupLeftNav": {
-    "message": "বাম নেভিগেশন"
+    "message": "বাম পাশের নেভিগেশন বার"
   },
   "groupVideoPlayer": {
     "message": "ভিডিও প্লেয়ার"
@@ -45,16 +57,16 @@
     "message": "মাইক্রোফোন আইকন লুকান"
   },
   "labelNotificationBell": {
-    "message": "নোটিফিকেশন"
+    "message": "নোটিফিকেশন বেল"
   },
   "descNotificationBell": {
     "message": "নোটিফিকেশন বেল লুকান"
   },
   "labelVideoSidebar": {
-    "message": "পাশের সুপারিশ করা ভিডিও"
+    "message": "পাশের প্রস্তাবিত ভিডিও"
   },
   "descVideoSidebar": {
-    "message": "ভিডিও প্লেয়ারের পাশে থাকা সুপারিশ প্যানেল লুকান"
+    "message": "ভিডিও প্লেয়ারের পাশের প্রস্তাবিত ভিডিওর প্যানেল লুকান"
   },
   "labelCreateButton": {
     "message": "তৈরি করুন বোতাম"
@@ -69,13 +81,13 @@
     "message": "ভিডিও থাম্বনেইল ঝাপসা রাখুন; দেখতে মাউস নিয়ে যান"
   },
   "labelThumbnailPlayback": {
-    "message": "থাম্বনেইলে হোভার করলে প্লেব্যাক"
+    "message": "থাম্বনেইলে মাউস রাখলে প্রিভিউ"
   },
   "descThumbnailPlayback": {
-    "message": "থাম্বনেইলের ওপর মাউস রাখলে ভিডিও প্রিভিউ চালু হওয়া বন্ধ করুন"
+    "message": "থাম্বনেইলের ওপর মাউস রাখলে ভিডিও প্রিভিউ চালানো বন্ধ করুন"
   },
   "labelHideLeftNav": {
-    "message": "বাম নেভিগেশন লুকান"
+    "message": "পুরো বাম নেভিগেশন বার লুকান"
   },
   "descHideLeftNav": {
     "message": "পুরো বাম পাশের নেভিগেশন মেনু লুকান"
@@ -120,7 +132,7 @@
     "message": "Hype / Thanks বোতাম"
   },
   "descHypeButton": {
-    "message": "ভিডিওর নিচে থাকা Hype বা Thanks সমর্থন বোতাম লুকান"
+    "message": "ভিডিওর নিচে নির্মাতাকে সমর্থন করার Hype বা Thanks বোতাম লুকান"
   },
   "labelEndScreen": {
     "message": "শেষের সুপারিশ"
@@ -138,19 +150,19 @@
     "message": "স্বয়ংক্রিয় ডাবিং"
   },
   "descAutoDubbing": {
-    "message": "সম্ভব হলে আসল অডিও চালানোর চেষ্টা করে"
+    "message": "সম্ভব হলে মূল অডিও ব্যবহার করুন"
   },
   "labelPremiumPopups": {
-    "message": "Premium প্রচার"
+    "message": "Premium পপ-আপ"
   },
   "descPremiumPopups": {
     "message": "YouTube Premium প্রচারের পপ-আপ লুকান"
   },
   "labelPremieres": {
-    "message": "লাইভ ও প্রিমিয়ার"
+    "message": "প্রিমিয়ার"
   },
   "descPremieres": {
-    "message": "সাবস্ক্রিপশন ফিডের লাইভ স্ট্রিম ও প্রিমিয়ার লুকান"
+    "message": "আসন্ন ও চলমান লাইভ স্ট্রিম লুকান"
   },
   "labelShorts": {
     "message": "Shorts"
@@ -168,10 +180,10 @@
     "message": "লিস্ট ভিউ"
   },
   "descListView": {
-    "message": "সাবস্ক্রিপশন ভিডিওগুলো পড়ার সহজ তালিকা হিসেবে দেখান"
+    "message": "সাবস্ক্রিপশনের ভিডিওগুলো তালিকা আকারে দেখান"
   },
   "labelCompactListView": {
-    "message": "কমপ্যাক্ট লিস্ট"
+    "message": "কমপ্যাক্ট লিস্ট ভিউ"
   },
   "descCompactListView": {
     "message": "ছোট থাম্বনেইল ব্যবহার করুন (লিস্ট ভিউ চালু থাকতে হবে)"

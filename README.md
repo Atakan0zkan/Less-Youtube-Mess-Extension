@@ -82,7 +82,7 @@ The main pattern is:
 - Video descriptions in list view are fetched lazily with `IntersectionObserver`, session caching, a high queue cap, concurrency limiting, origin validation, `credentials: "omit"`, and `DOMParser`. New description fetches pause while the tab is hidden.
 - Description fetches are restricted to canonical `https://www.youtube.com/watch?v=VIDEO_ID` URLs with valid 11-character YouTube IDs. Redirects are rejected, referrers omitted, and decoded input is capped at 15,000 bytes. If metadata is outside this budget, descriptions are omitted rather than downloading the entire page.
 - `page-audio-bridge.js` is a minimal web-accessible resource that runs in YouTube's page context only to request original audio through YouTube's internal player methods. The audio-track/dubbing menu remains visible for manual selection.
-- Popup UI localization currently covers 24 Chrome locale folders, each with the same 59 message keys.
+- Popup UI localization covers 24 Chrome locale folders, each with the same 63 message keys, including localized language-button tooltips and screen-reader labels. Arabic and Persian use right-to-left layout; the English override restores left-to-right layout.
 - The popup `ENG` override is stored in `chrome.storage.local` as a UI preference. It only loads `_locales/en/messages.json` inside the popup and does not affect YouTube content scripts or sync settings.
 - `selfDiagnose()` is intentionally conservative: the delayed subscriptions outer-structure warning should fire only when watch links exist but no known subscription item or lockup containers are found.
 

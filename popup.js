@@ -148,18 +148,21 @@ function getLocalizedMessage(key, englishMessages) {
   return chrome.i18n.getMessage(key);
 }
 
-function updateLanguageToggleButton() {
+function updateLanguageToggleButton(englishMessages = null) {
   const languageBtn = document.getElementById('language-toggle');
   if (!languageBtn) return;
 
   const useEnglish = activeLanguageOverride === ENGLISH_LANGUAGE_OVERRIDE;
   languageBtn.setAttribute('aria-pressed', String(useEnglish));
-  languageBtn.title = useEnglish ? 'Use browser language' : 'Use English';
+  languageBtn.title = getLocalizedMessage(
+    useEnglish ? 'languageUseBrowserTitle' : 'languageUseEnglishTitle',
+    englishMessages
+  );
   languageBtn.setAttribute(
     'aria-label',
     useEnglish
-      ? 'Switch popup menu back to browser language'
-      : 'Switch popup menu to English'
+      ? getLocalizedMessage('languageUseBrowserAria', englishMessages)
+      : getLocalizedMessage('languageUseEnglishAria', englishMessages)
   );
 }
 
@@ -167,7 +170,6 @@ function setupLanguageToggleButton() {
   const languageBtn = document.getElementById('language-toggle');
   if (!languageBtn) return;
 
-  updateLanguageToggleButton();
   languageBtn.addEventListener('click', async () => {
     const nextOverride = activeLanguageOverride === ENGLISH_LANGUAGE_OVERRIDE
       ? ''
@@ -203,7 +205,9 @@ async function applyI18n(languageOverride = '') {
     ? chrome.i18n.getUILanguage()
     : 'en';
   document.documentElement.lang = activeLanguageOverride || browserLanguage || 'en';
-  updateLanguageToggleButton();
+  const languageCode = document.documentElement.lang.split(/[-_]/)[0].toLowerCase();
+  document.documentElement.dir = ['ar', 'fa'].includes(languageCode) ? 'rtl' : 'ltr';
+  updateLanguageToggleButton(englishMessages);
 
   return activeLanguageOverride;
 }

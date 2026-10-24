@@ -323,6 +323,75 @@ async function main() {
     await until(() => popup.evaluate("document.documentElement.lang === 'en'"), 'English override');
     console.log('PASS: popup power, compact dependency and English');
 
+    if (process.argv.includes('--localization')) {
+        const screenshotDirectory = process.env.LOCALIZATION_SCREENSHOT_DIR;
+        if (screenshotDirectory) fs.mkdirSync(screenshotDirectory, { recursive: true });
+        const sampleLocales = new Set(['ar', 'bn', 'de', 'ja', 'tr', 'zh_TW']);
+        for (const locale of fs.readdirSync(path.join(root, '_locales')).sort()) {
+            // Inject packaged strings for layout QA; locale routing is covered by the unit suite.
+            const layout = await popup.evaluate(`(async () => {
+                const locale = ${JSON.stringify(locale)};
+                const response = await fetch(chrome.runtime.getURL('_locales/' + locale + '/messages.json'));
+                if (!response.ok) throw new Error('Missing packaged locale: ' + locale);
+                const messages = await response.json();
+                document.documentElement.lang = locale.replace('_', '-');
+                document.documentElement.dir = ['ar', 'fa'].includes(locale) ? 'rtl' : 'ltr';
+                for (const [attribute, target] of [['data-i18n', 'textContent'], ['data-i18n-title', 'title'], ['data-i18n-aria', 'aria-label']]) {
+                    for (const element of document.querySelectorAll('[' + attribute + ']')) {
+                        const text = messages[element.getAttribute(attribute)].message;
+                        if (target === 'aria-label') element.setAttribute(target, text);
+                        else element[target] = text;
+                    }
+                }
+                document.querySelector('#language-toggle').title = messages.languageUseEnglishTitle.message;
+                document.querySelector('#language-toggle').setAttribute('aria-label', messages.languageUseEnglishAria.message);
+                for (const group of document.querySelectorAll('.settings-group')) {
+                    group.classList.remove('collapsed');
+                    group.querySelector('.group-header').setAttribute('aria-expanded', 'true');
+                }
+                await document.fonts.ready;
+                await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+                const errors = [];
+                const rtl = document.documentElement.dir === 'rtl';
+                for (const item of document.querySelectorAll('.setting-item')) {
+                    const info = item.querySelector('.setting-info').getBoundingClientRect();
+                    const toggle = item.querySelector('.toggle-switch').getBoundingClientRect();
+                    if (rtl ? info.left < toggle.right - 1 : info.right > toggle.left + 1) errors.push('toggle overlap');
+                    const label = item.querySelector('.setting-label');
+                    const description = item.querySelector('.setting-desc');
+                    if (label.getBoundingClientRect().bottom > description.getBoundingClientRect().top + 1) errors.push('text overlap');
+                    for (const element of [label, description]) {
+                        if (element.scrollWidth > element.clientWidth + 1) errors.push(element.getAttribute('data-i18n') + ' overflow');
+                        const range = document.createRange();
+                        range.selectNodeContents(element);
+                        for (const rect of range.getClientRects()) {
+                            if (rect.left < info.left - 2 || rect.right > info.right + 2) errors.push(element.getAttribute('data-i18n') + ' clipped');
+                        }
+                    }
+                }
+                return { rows: document.querySelectorAll('.setting-item').length, errors, direction: document.documentElement.dir };
+            })()`);
+            assert.equal(layout.rows, 25, `${locale} translated rows`);
+            assert.equal(layout.direction, ['ar', 'fa'].includes(locale) ? 'rtl' : 'ltr', locale);
+            assert.deepEqual(layout.errors, [], `${locale} text layout: ${layout.errors.join(', ')}`);
+            if (screenshotDirectory && sampleLocales.has(locale)) {
+                const bounds = await popup.evaluate(`(() => {
+                    document.body.style.maxHeight = 'none';
+                    const rect = document.body.getBoundingClientRect();
+                    return { x: rect.x + scrollX, y: rect.y + scrollY, width: rect.width, height: Math.ceil(rect.height) };
+                })()`);
+                const screenshot = await popup.send('Page.captureScreenshot', {
+                    format: 'png', captureBeyondViewport: true,
+                    clip: { ...bounds, scale: 1 }
+                });
+                fs.writeFileSync(path.join(screenshotDirectory, `${locale}.png`), Buffer.from(screenshot.data, 'base64'));
+                await popup.evaluate("document.body.style.maxHeight = ''");
+            }
+            console.log(`PASS: localization layout ${locale} (25 rows, ${layout.direction})`);
+        }
+        await popup.evaluate("applyI18n('en')");
+    }
+
     await page.send('Fetch.disable');
     await page.send('Page.navigate', { url: 'chrome://version/' });
     await until(() => page.evaluate("location.protocol === 'chrome:'"), 'restricted page');

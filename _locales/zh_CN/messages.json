@@ -1,6 +1,6 @@
 {
   "extDescription": {
-    "message": "自定义 YouTube：隐藏 Shorts、侧边栏、评论、推荐等干扰内容！"
+    "message": "自定义 YouTube：隐藏 Shorts、侧边栏、评论、推荐等内容！"
   },
   "toggleThemeTitle": {
     "message": "切换主题"
@@ -13,6 +13,18 @@
   },
   "powerToggleAria": {
     "message": "开启或关闭扩展"
+  },
+  "languageUseEnglishTitle": {
+    "message": "使用英语"
+  },
+  "languageUseEnglishAria": {
+    "message": "将扩展菜单切换为英语"
+  },
+  "languageUseBrowserTitle": {
+    "message": "使用浏览器语言"
+  },
+  "languageUseBrowserAria": {
+    "message": "将扩展菜单切换回浏览器语言"
   },
   "groupBasicUI": {
     "message": "基础界面"
@@ -45,7 +57,7 @@
     "message": "隐藏麦克风图标"
   },
   "labelNotificationBell": {
-    "message": "通知"
+    "message": "通知铃铛"
   },
   "descNotificationBell": {
     "message": "隐藏通知铃铛"
@@ -66,16 +78,16 @@
     "message": "模糊缩略图"
   },
   "descThumbnailBlur": {
-    "message": "模糊视频缩略图，鼠标悬停时显示"
+    "message": "模糊视频缩略图，鼠标悬停时清晰显示"
   },
   "labelThumbnailPlayback": {
-    "message": "悬停缩略图播放"
+    "message": "缩略图悬停播放"
   },
   "descThumbnailPlayback": {
     "message": "阻止鼠标悬停在缩略图上时播放视频预览"
   },
   "labelHideLeftNav": {
-    "message": "隐藏左侧导航"
+    "message": "隐藏整个左侧导航栏"
   },
   "descHideLeftNav": {
     "message": "完全隐藏左侧导航菜单"
@@ -87,10 +99,10 @@
     "message": "隐藏已订阅频道列表"
   },
   "labelYou": {
-    "message": "个人中心"
+    "message": "我"
   },
   "descYou": {
-    "message": "隐藏“个人中心”区域（历史记录、播放列表等）"
+    "message": "隐藏“我”版块（历史记录、播放列表）"
   },
   "labelExplore": {
     "message": "探索"
@@ -120,13 +132,13 @@
     "message": "Hype / 感谢按钮"
   },
   "descHypeButton": {
-    "message": "隐藏视频下方的 Hype 或感谢支持按钮"
+    "message": "隐藏视频下方用于支持创作者的 Hype 或感谢按钮"
   },
   "labelEndScreen": {
     "message": "片尾推荐"
   },
   "descEndScreen": {
-    "message": "隐藏视频结束时出现的推荐卡片"
+    "message": "隐藏视频结尾叠加显示的卡片"
   },
   "labelAutoplay": {
     "message": "自动播放"
@@ -141,16 +153,16 @@
     "message": "尽可能使用原始音轨"
   },
   "labelPremiumPopups": {
-    "message": "Premium 推广"
+    "message": "Premium 弹窗"
   },
   "descPremiumPopups": {
     "message": "隐藏 YouTube Premium 的推广弹窗"
   },
   "labelPremieres": {
-    "message": "直播和首播"
+    "message": "首播"
   },
   "descPremieres": {
-    "message": "隐藏订阅动态中的直播和首播内容"
+    "message": "隐藏即将开始和正在进行的直播"
   },
   "labelShorts": {
     "message": "Shorts"
@@ -168,10 +180,10 @@
     "message": "列表视图"
   },
   "descListView": {
-    "message": "以更清晰的列表显示订阅视频"
+    "message": "以列表形式显示订阅视频"
   },
   "labelCompactListView": {
-    "message": "紧凑列表"
+    "message": "紧凑列表视图"
   },
   "descCompactListView": {
     "message": "使用更小的缩略图（需要开启列表视图）"

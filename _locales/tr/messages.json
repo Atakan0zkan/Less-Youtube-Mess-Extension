@@ -1,81 +1,93 @@
 {
   "extDescription": {
-    "message": "YouTube'u Özelleştir: Shorts, Yan Panel, Yorumlar ve Önerileri Gizle!"
+    "message": "YouTube'u özelleştir: Shorts, yan panel, yorumlar, öneriler ve daha fazlasını gizle!"
   },
   "toggleThemeTitle": {
-    "message": "Temayı Değiştir"
+    "message": "Temayı değiştir"
   },
   "toggleThemeAria": {
-    "message": "Açık/koyu temayı aç/kapat"
+    "message": "Açık ve koyu tema arasında geçiş yap"
   },
   "powerToggleTitle": {
-    "message": "Eklentiyi Aç/Kapat"
+    "message": "Eklentiyi aç/kapat"
   },
   "powerToggleAria": {
     "message": "Eklentiyi aç/kapat"
   },
+  "languageUseEnglishTitle": {
+    "message": "İngilizce kullan"
+  },
+  "languageUseEnglishAria": {
+    "message": "Eklenti menüsünü İngilizce göster"
+  },
+  "languageUseBrowserTitle": {
+    "message": "Tarayıcının dilini kullan"
+  },
+  "languageUseBrowserAria": {
+    "message": "Eklenti menüsünü yeniden tarayıcının dilinde göster"
+  },
   "groupBasicUI": {
-    "message": "Genel Görünüm"
+    "message": "Genel görünüm"
   },
   "groupLeftNav": {
-    "message": "Sol Menü"
+    "message": "Sol menü"
   },
   "groupVideoPlayer": {
-    "message": "Video Oynatıcı"
+    "message": "Video oynatıcı"
   },
   "groupMisc": {
     "message": "Diğer"
   },
   "labelYouTubeLogo": {
-    "message": "YouTube Logosu"
+    "message": "YouTube logosu"
   },
   "descYouTubeLogo": {
     "message": "Sol üst köşedeki YouTube logosunu gizle"
   },
   "labelSearchSuggestions": {
-    "message": "Arama Önerileri"
+    "message": "Arama önerileri"
   },
   "descSearchSuggestions": {
     "message": "Arama çubuğundaki otomatik tamamlamayı gizle"
   },
   "labelVoiceSearch": {
-    "message": "Sesli Arama"
+    "message": "Sesli arama"
   },
   "descVoiceSearch": {
     "message": "Arama çubuğundaki mikrofon simgesini gizle"
   },
   "labelNotificationBell": {
-    "message": "Bildirimler"
+    "message": "Bildirim zili"
   },
   "descNotificationBell": {
     "message": "Bildirim zilini gizle"
   },
   "labelVideoSidebar": {
-    "message": "Önerilen Videolar (Yan Panel)"
+    "message": "Video yan paneli"
   },
   "descVideoSidebar": {
-    "message": "Video izlerken sağ tarafta çıkan önerilen videoları gizle"
+    "message": "Önerilen videolar panelini gizle"
   },
   "labelCreateButton": {
-    "message": "Oluştur Butonu"
+    "message": "Oluştur düğmesi"
   },
   "descCreateButton": {
-    "message": "\"+Oluştur\" video yükleme butonunu gizle"
+    "message": "\"+Oluştur\" video yükleme düğmesini gizle"
   },
   "labelThumbnailBlur": {
-    "message": "Küçük Resimleri Bulanıklaştır"
+    "message": "Küçük resimleri bulanıklaştır"
   },
   "descThumbnailBlur": {
-    "message": "Videoların küçük resimlerini bulanıklaştırır, görmek için fareyle üzerine gelin"
+    "message": "Videoların küçük resimlerini bulanıklaştır; netleştirmek için fareyi üzerlerine getir"
   },
   "labelThumbnailPlayback": {
-    "message": "Küçük Resimde Hover Oynatma"
+    "message": "Üzerine gelince video önizlemesi"
   },
   "descThumbnailPlayback": {
-    "message": "Küçük resimlerin üzerine gelince video önizlemesinin oynatılmasını durdur"
+    "message": "Küçük resimlerin üzerine gelince video önizlemelerinin oynatılmasını durdur"
   },
   "labelHideLeftNav": {
-    "message": "Sol Menüyü Gizle"
+    "message": "Sol menünün tamamını gizle"
   },
   "descHideLeftNav": {
     "message": "Sol yan menünün tamamını gizle"
@@ -102,7 +114,7 @@
     "message": "YouTube'dan Daha Fazlası"
   },
   "descMoreFromYT": {
-    "message": "Premium, Müzik ve Kids bağlantılarını gizle"
+    "message": "Premium, Music ve Kids bağlantılarını gizle"
   },
   "labelComments": {
     "message": "Yorumlar"
@@ -111,46 +123,46 @@
     "message": "Videonun altındaki yorumlar bölümünü gizle"
   },
   "labelLikes": {
-    "message": "Beğeni Sayıları"
+    "message": "Beğeniler"
   },
   "descLikes": {
     "message": "Videolardaki beğeni sayılarını gizle"
   },
   "labelHypeButton": {
-    "message": "Hype / Teşekkürler Butonu"
+    "message": "Hype / Teşekkürler düğmesi"
   },
   "descHypeButton": {
     "message": "Videoların altındaki Hype veya Teşekkürler destek butonunu gizle"
   },
   "labelEndScreen": {
-    "message": "Video Sonu Önerileri"
+    "message": "Video sonu önerileri"
   },
   "descEndScreen": {
-    "message": "Video bittiğinde ekranda çıkan öneri kartlarını gizle"
+    "message": "Video sonunda videonun üzerinde beliren kartları gizle"
   },
   "labelAutoplay": {
-    "message": "Otomatik Oynatma"
+    "message": "Otomatik oynatma"
   },
   "descAutoplay": {
-    "message": "Sonraki videoyu otomatik oynatmayı devre dışı bırak ve gizle"
+    "message": "Otomatik oynatma düğmesini gizle ve sonraki videonun otomatik başlamasını engelle"
   },
   "labelAutoDubbing": {
-    "message": "Otomatik Dublaj"
+    "message": "Otomatik dublaj"
   },
   "descAutoDubbing": {
-    "message": "Mümkünse orijinal sesi kullanır"
+    "message": "Mümkün olduğunda orijinal sesi kullan"
   },
   "labelPremiumPopups": {
-    "message": "Premium Reklamları"
+    "message": "Premium açılır pencereleri"
   },
   "descPremiumPopups": {
-    "message": "Ekranda beliren YouTube Premium satın alma uyarılarını gizle"
+    "message": "YouTube Premium tanıtımlarını gizle"
   },
   "labelPremieres": {
-    "message": "Canlı Yayınlar ve İlk Gösterimler"
+    "message": "İlk gösterimler"
   },
   "descPremieres": {
-    "message": "Abonelikler sayfasındaki canlı yayınları ve ilk gösterimleri gizle"
+    "message": "Planlanmış ve devam eden canlı yayınları gizle"
   },
   "labelShorts": {
     "message": "Shorts"
@@ -159,21 +171,21 @@
     "message": "YouTube'daki tüm Shorts videolarını gizle"
   },
   "labelDefaultSubs": {
-    "message": "Ana Sayfa Yerine Abonelikler"
+    "message": "Ana sayfa yerine Abonelikler"
   },
   "descDefaultSubs": {
-    "message": "YouTube açıldığında ana sayfa yerine doğrudan Abonelikler sayfasını gösterir"
+    "message": "Ana sayfayı otomatik olarak Abonelikler akışına yönlendir"
   },
   "labelListView": {
-    "message": "Liste Görünümü"
+    "message": "Liste görünümü"
   },
   "descListView": {
-    "message": "Abonelikler sayfasındaki videoları yan yana yerine alt alta listeler"
+    "message": "Aboneliklerdeki videoları liste halinde göster"
   },
   "labelCompactListView": {
-    "message": "Daha Sıkı Liste Görünümü"
+    "message": "Kompakt liste görünümü"
   },
   "descCompactListView": {
-    "message": "Listede daha küçük görseller kullanır (Liste Görünümü açık olmalıdır)"
+    "message": "Küçük resimlerin boyutunu azalt (Liste görünümü açık olmalı)"
   }
 }

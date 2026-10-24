@@ -99,7 +99,10 @@ test('static: manifest least-privilege contract', () => {
 test('static: package version matches manifest', () => {
   const pkg = JSON.parse(source('package.json'));
   const m = JSON.parse(source('manifest.json'));
+  const lock = JSON.parse(source('package-lock.json'));
   assert.equal(pkg.version, m.version);
+  assert.equal(lock.version, m.version);
+  assert.equal(lock.packages[''].version, m.version);
   assert.ok(pkg.engines.node.includes('22'));
   assert.ok(pkg.scripts.test.includes('regression') && pkg.scripts.test.includes('comprehensive'));
 });
@@ -130,11 +133,11 @@ test('static: popup wiring — ENG, power, compact dependency', () => {
   assert.ok(html.includes('aria-pressed'));
 });
 
-test('static: locales — 24 folders, 59 keys, same set, no empty', () => {
+test('static: locales — 24 folders, 63 keys, same set, no empty', () => {
   const locales = readdirSync(join(root, '_locales'));
   assert.equal(locales.length, 24);
   const enKeys = Object.keys(JSON.parse(source('_locales/en/messages.json'))).sort();
-  assert.equal(enKeys.length, 59);
+  assert.equal(enKeys.length, 63);
   assert.ok(enKeys.includes('extDescription'));
   for (const locale of locales) {
     const data = JSON.parse(source(`_locales/${locale}/messages.json`));

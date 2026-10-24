@@ -1,6 +1,6 @@
 {
   "extDescription": {
-    "message": "Personaliza YouTube: ¡Oculta Shorts, barra lateral, comentarios, recomendaciones y más!"
+    "message": "Personaliza YouTube: ¡oculta Shorts, la barra lateral, los comentarios, las recomendaciones y más!"
   },
   "toggleThemeTitle": {
     "message": "Cambiar tema"
@@ -14,14 +14,26 @@
   "powerToggleAria": {
     "message": "Activar o desactivar la extensión"
   },
+  "languageUseEnglishTitle": {
+    "message": "Usar inglés"
+  },
+  "languageUseEnglishAria": {
+    "message": "Mostrar el menú de la extensión en inglés"
+  },
+  "languageUseBrowserTitle": {
+    "message": "Usar el idioma del navegador"
+  },
+  "languageUseBrowserAria": {
+    "message": "Volver a mostrar el menú de la extensión en el idioma del navegador"
+  },
   "groupBasicUI": {
-    "message": "Apariencia General"
+    "message": "Interfaz básica"
   },
   "groupLeftNav": {
-    "message": "Menú Lateral"
+    "message": "Barra de navegación izquierda"
   },
   "groupVideoPlayer": {
-    "message": "Reproductor de Video"
+    "message": "Reproductor de video"
   },
   "groupMisc": {
     "message": "Otros"
@@ -33,49 +45,49 @@
     "message": "Ocultar el logo de YouTube de la esquina superior izquierda"
   },
   "labelSearchSuggestions": {
-    "message": "Sugerencias de Búsqueda"
+    "message": "Sugerencias de búsqueda"
   },
   "descSearchSuggestions": {
     "message": "Ocultar el autocompletado en la barra de búsqueda"
   },
   "labelVoiceSearch": {
-    "message": "Búsqueda por Voz"
+    "message": "Búsqueda por voz"
   },
   "descVoiceSearch": {
     "message": "Ocultar el icono del micrófono en la barra de búsqueda"
   },
   "labelNotificationBell": {
-    "message": "Notificaciones"
+    "message": "Campana de notificaciones"
   },
   "descNotificationBell": {
-    "message": "Ocultar el icono de notificaciones"
+    "message": "Ocultar la campana de notificaciones"
   },
   "labelVideoSidebar": {
-    "message": "Videos Sugeridos (Lateral)"
+    "message": "Panel lateral de videos"
   },
   "descVideoSidebar": {
     "message": "Ocultar la lista de videos sugeridos al lado del reproductor"
   },
   "labelCreateButton": {
-    "message": "Botón de Crear"
+    "message": "Botón Crear"
   },
   "descCreateButton": {
     "message": "Ocultar el botón para subir videos (+Crear)"
   },
   "labelThumbnailBlur": {
-    "message": "Desenfocar Miniaturas"
+    "message": "Desenfoque de miniaturas"
   },
   "descThumbnailBlur": {
-    "message": "Desenfoca las miniaturas de los videos, pasa el cursor para revelarlas"
+    "message": "Desenfocar las miniaturas de los videos y mostrarlas al pasar el cursor"
   },
   "labelThumbnailPlayback": {
-    "message": "Reproducción al pasar por miniaturas"
+    "message": "Reproducción al pasar el cursor"
   },
   "descThumbnailPlayback": {
-    "message": "Evita que las vistas previas se reproduzcan al pasar el cursor por las miniaturas"
+    "message": "Impedir que las vistas previas se reproduzcan al pasar el cursor por las miniaturas"
   },
   "labelHideLeftNav": {
-    "message": "Ocultar Menú Lateral"
+    "message": "Ocultar toda la barra de navegación izquierda"
   },
   "descHideLeftNav": {
     "message": "Ocultar completamente el menú lateral izquierdo"
@@ -102,7 +114,7 @@
     "message": "Más de YouTube"
   },
   "descMoreFromYT": {
-    "message": "Ocultar enlaces a Premium, Música y Kids"
+    "message": "Ocultar enlaces a Premium, Music y Kids"
   },
   "labelComments": {
     "message": "Comentarios"
@@ -111,7 +123,7 @@
     "message": "Ocultar la sección de comentarios debajo del video"
   },
   "labelLikes": {
-    "message": "Recuento de Me Gusta"
+    "message": "Me gusta"
   },
   "descLikes": {
     "message": "Ocultar la cantidad de me gusta en los videos"
@@ -120,19 +132,19 @@
     "message": "Botón Hype / Gracias"
   },
   "descHypeButton": {
-    "message": "Oculta el botón de apoyo Hype o Gracias debajo de los videos"
+    "message": "Ocultar el botón de apoyo Hype o Gracias que aparece debajo de los videos"
   },
   "labelEndScreen": {
-    "message": "Sugerencias de Pantalla Final"
+    "message": "Sugerencias de la pantalla final"
   },
   "descEndScreen": {
-    "message": "Ocultar los videos sugeridos al final de la reproducción"
+    "message": "Ocultar las tarjetas superpuestas que aparecen al final del video"
   },
   "labelAutoplay": {
-    "message": "Reproducción Automática"
+    "message": "Reproducción automática"
   },
   "descAutoplay": {
-    "message": "Desactivar y ocultar el botón de reproducción automática"
+    "message": "Ocultar y desactivar la reproducción automática de videos"
   },
   "labelAutoDubbing": {
     "message": "Doblaje automático"
@@ -141,16 +153,16 @@
     "message": "Usa el audio original cuando sea posible"
   },
   "labelPremiumPopups": {
-    "message": "Anuncios de Premium"
+    "message": "Ventanas emergentes de Premium"
   },
   "descPremiumPopups": {
     "message": "Ocultar las ventanas emergentes que ofrecen YouTube Premium"
   },
   "labelPremieres": {
-    "message": "En Vivo y Estrenos"
+    "message": "Estrenos"
   },
   "descPremieres": {
-    "message": "Ocultar las transmisiones en vivo y próximos estrenos en Suscripciones"
+    "message": "Ocultar las transmisiones en directo y las programadas"
   },
   "labelShorts": {
     "message": "Shorts"
@@ -159,21 +171,21 @@
     "message": "Ocultar completamente los videos cortos (Shorts)"
   },
   "labelDefaultSubs": {
-    "message": "Suscripciones al Inicio"
+    "message": "Suscripciones al inicio"
   },
   "descDefaultSubs": {
     "message": "Redirigir automáticamente de la página principal a tus Suscripciones"
   },
   "labelListView": {
-    "message": "Vista de Lista"
+    "message": "Vista de lista"
   },
   "descListView": {
     "message": "Mostrar los videos en Suscripciones en formato de lista en lugar de cuadrícula"
   },
   "labelCompactListView": {
-    "message": "Lista Compacta"
+    "message": "Vista de lista compacta"
   },
   "descCompactListView": {
-    "message": "Reducir el tamaño de las miniaturas en la Vista de Lista"
+    "message": "Miniaturas más pequeñas (requiere Vista de lista)"
   }
 }

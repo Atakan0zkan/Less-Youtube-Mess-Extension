@@ -14,11 +14,23 @@
   "powerToggleAria": {
     "message": "Hidupkan atau matikan sambungan"
   },
+  "languageUseEnglishTitle": {
+    "message": "Gunakan bahasa Inggeris"
+  },
+  "languageUseEnglishAria": {
+    "message": "Paparkan menu sambungan dalam bahasa Inggeris"
+  },
+  "languageUseBrowserTitle": {
+    "message": "Gunakan bahasa pelayar"
+  },
+  "languageUseBrowserAria": {
+    "message": "Kembalikan menu sambungan kepada bahasa pelayar"
+  },
   "groupBasicUI": {
     "message": "Paparan Asas"
   },
   "groupLeftNav": {
-    "message": "Navigasi Kiri"
+    "message": "Bar navigasi kiri"
   },
   "groupVideoPlayer": {
     "message": "Pemain Video"
@@ -45,7 +57,7 @@
     "message": "Sembunyikan ikon mikrofon"
   },
   "labelNotificationBell": {
-    "message": "Pemberitahuan"
+    "message": "Loceng pemberitahuan"
   },
   "descNotificationBell": {
     "message": "Sembunyikan loceng pemberitahuan"
@@ -69,13 +81,13 @@
     "message": "Kaburkan imej kecil video; halakan tetikus untuk melihatnya"
   },
   "labelThumbnailPlayback": {
-    "message": "Main Semasa Arahkan ke Thumbnail"
+    "message": "Pratonton apabila kursor dihalakan"
   },
   "descThumbnailPlayback": {
-    "message": "Hentikan pratonton video daripada dimainkan apabila thumbnail disentuh kursor"
+    "message": "Halang pratonton video daripada dimainkan apabila kursor dihalakan pada imej kecil"
   },
   "labelHideLeftNav": {
-    "message": "Sembunyikan Navigasi Kiri"
+    "message": "Sembunyikan seluruh bar navigasi kiri"
   },
   "descHideLeftNav": {
     "message": "Sembunyikan seluruh menu navigasi kiri"
@@ -126,7 +138,7 @@
     "message": "Cadangan Akhir Video"
   },
   "descEndScreen": {
-    "message": "Sembunyikan kad cadangan pada penghujung video"
+    "message": "Sembunyikan kad yang dipaparkan di atas video pada penghujungnya"
   },
   "labelAutoplay": {
     "message": "Main Automatik"
@@ -138,19 +150,19 @@
     "message": "Alih Suara Automatik"
   },
   "descAutoDubbing": {
-    "message": "Gunakan audio asal jika tersedia"
+    "message": "Gunakan audio asal jika boleh"
   },
   "labelPremiumPopups": {
-    "message": "Promosi Premium"
+    "message": "Pop timbul Premium"
   },
   "descPremiumPopups": {
     "message": "Sembunyikan pop timbul promosi YouTube Premium"
   },
   "labelPremieres": {
-    "message": "Langsung dan Tayangan Perdana"
+    "message": "Tayangan perdana"
   },
   "descPremieres": {
-    "message": "Sembunyikan strim langsung dan tayangan perdana dalam suapan Langganan"
+    "message": "Sembunyikan strim langsung yang sedang berlangsung atau dijadualkan"
   },
   "labelShorts": {
     "message": "Shorts"
@@ -168,12 +180,12 @@
     "message": "Paparan Senarai"
   },
   "descListView": {
-    "message": "Paparkan video Langganan sebagai senarai yang mudah dibaca"
+    "message": "Paparkan video langganan sebagai senarai"
   },
   "labelCompactListView": {
-    "message": "Senarai Padat"
+    "message": "Paparan senarai padat"
   },
   "descCompactListView": {
-    "message": "Gunakan imej kecil yang lebih kecil (memerlukan Paparan Senarai)"
+    "message": "Kurangkan saiz imej kecil (memerlukan Paparan Senarai)"
   }
 }

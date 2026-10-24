@@ -1,6 +1,6 @@
 {
   "extDescription": {
-    "message": "Personnaliser YouTube : Masquez les Shorts, la barre latérale, les commentaires et plus !"
+    "message": "Personnalisez YouTube : masquez les Shorts, la barre latérale, les commentaires, les recommandations et plus encore !"
   },
   "toggleThemeTitle": {
     "message": "Changer de thème"
@@ -14,14 +14,26 @@
   "powerToggleAria": {
     "message": "Activer ou désactiver l'extension"
   },
+  "languageUseEnglishTitle": {
+    "message": "Utiliser l’anglais"
+  },
+  "languageUseEnglishAria": {
+    "message": "Afficher le menu de l’extension en anglais"
+  },
+  "languageUseBrowserTitle": {
+    "message": "Utiliser la langue du navigateur"
+  },
+  "languageUseBrowserAria": {
+    "message": "Rétablir la langue du navigateur pour le menu de l’extension"
+  },
   "groupBasicUI": {
-    "message": "Interface Générale"
+    "message": "Interface générale"
   },
   "groupLeftNav": {
-    "message": "Menu Latéral"
+    "message": "Barre de navigation gauche"
   },
   "groupVideoPlayer": {
-    "message": "Lecteur Vidéo"
+    "message": "Lecteur vidéo"
   },
   "groupMisc": {
     "message": "Divers"
@@ -45,16 +57,16 @@
     "message": "Masquer l'icône du microphone"
   },
   "labelNotificationBell": {
-    "message": "Notifications"
+    "message": "Cloche de notification"
   },
   "descNotificationBell": {
     "message": "Masquer la cloche de notification"
   },
   "labelVideoSidebar": {
-    "message": "Vidéos Suggérées"
+    "message": "Vidéos suggérées"
   },
   "descVideoSidebar": {
-    "message": "Masquer les vidéos recommandées à côté du lecteur"
+    "message": "Masquer le panneau de vidéos suggérées"
   },
   "labelCreateButton": {
     "message": "Bouton Créer"
@@ -66,16 +78,16 @@
     "message": "Flouter les miniatures"
   },
   "descThumbnailBlur": {
-    "message": "Floute les miniatures, passez la souris pour les révéler"
+    "message": "Flouter les miniatures des vidéos ; les survoler pour les voir nettement"
   },
   "labelThumbnailPlayback": {
     "message": "Lecture au survol des miniatures"
   },
   "descThumbnailPlayback": {
-    "message": "Empêche les aperçus vidéo de se lancer au survol des miniatures"
+    "message": "Empêcher la lecture des aperçus vidéo au survol des miniatures"
   },
   "labelHideLeftNav": {
-    "message": "Masquer le menu latéral"
+    "message": "Masquer toute la navigation gauche"
   },
   "descHideLeftNav": {
     "message": "Masquer complètement le menu de navigation gauche"
@@ -84,13 +96,13 @@
     "message": "Abonnements"
   },
   "descSubscriptions": {
-    "message": "Masquer la liste des chaînes abonnées"
+    "message": "Masquer la liste des chaînes auxquelles vous êtes abonné"
   },
   "labelYou": {
     "message": "Vous"
   },
   "descYou": {
-    "message": "Masquer la section 'Vous' (Historique, Playlists)"
+    "message": "Masquer la section « Vous » (Historique, Playlists)"
   },
   "labelExplore": {
     "message": "Explorer"
@@ -99,10 +111,10 @@
     "message": "Masquer la section Explorer"
   },
   "labelMoreFromYT": {
-    "message": "Plus de YouTube"
+    "message": "Autres contenus YouTube"
   },
   "descMoreFromYT": {
-    "message": "Masquer les liens Premium, Musique et Kids"
+    "message": "Masquer les liens vers Premium, Music et Kids"
   },
   "labelComments": {
     "message": "Commentaires"
@@ -111,28 +123,28 @@
     "message": "Masquer la section des commentaires sous la vidéo"
   },
   "labelLikes": {
-    "message": "Nombre de J'aime"
+    "message": "J’aime"
   },
   "descLikes": {
-    "message": "Masquer le compteur de likes sur les vidéos"
+    "message": "Masquer le nombre de mentions J’aime sur les vidéos"
   },
   "labelHypeButton": {
     "message": "Bouton Hype / Merci"
   },
   "descHypeButton": {
-    "message": "Masque le bouton de soutien Hype ou Merci sous les vidéos"
+    "message": "Masquer le bouton de soutien Hype ou Merci sous les vidéos"
   },
   "labelEndScreen": {
-    "message": "Suggestions de fin"
+    "message": "Suggestions de l’écran de fin"
   },
   "descEndScreen": {
-    "message": "Masquer les cartes de suggestions à la fin des vidéos"
+    "message": "Masquer les cartes qui se superposent à la fin des vidéos"
   },
   "labelAutoplay": {
     "message": "Lecture automatique"
   },
   "descAutoplay": {
-    "message": "Désactiver et masquer la lecture automatique"
+    "message": "Masquer et désactiver la lecture automatique des vidéos"
   },
   "labelAutoDubbing": {
     "message": "Doublage automatique"
@@ -141,16 +153,16 @@
     "message": "Utilise l’audio d’origine si possible"
   },
   "labelPremiumPopups": {
-    "message": "Publicités Premium"
+    "message": "Pop-ups Premium"
   },
   "descPremiumPopups": {
     "message": "Masquer les pop-ups promotionnels pour YouTube Premium"
   },
   "labelPremieres": {
-    "message": "En direct et Premières"
+    "message": "Premières"
   },
   "descPremieres": {
-    "message": "Masquer les diffusions en direct et les premières dans les Abonnements"
+    "message": "Masquer les diffusions en direct et celles à venir"
   },
   "labelShorts": {
     "message": "Shorts"
@@ -159,21 +171,21 @@
     "message": "Masquer tous les contenus Shorts"
   },
   "labelDefaultSubs": {
-    "message": "Abonnements par défaut"
+    "message": "Abonnements à l’ouverture"
   },
   "descDefaultSubs": {
     "message": "Rediriger automatiquement l'accueil vers la page des Abonnements"
   },
   "labelListView": {
-    "message": "Vue en Liste"
+    "message": "Vue en liste"
   },
   "descListView": {
     "message": "Afficher les abonnements sous forme de liste"
   },
   "labelCompactListView": {
-    "message": "Liste Compacte"
+    "message": "Vue en liste compacte"
   },
   "descCompactListView": {
-    "message": "Utiliser des miniatures plus petites (nécessite la Vue en Liste)"
+    "message": "Miniatures plus petites (nécessite la Vue en liste)"
   }
 }

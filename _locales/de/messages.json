@@ -1,6 +1,6 @@
 {
   "extDescription": {
-    "message": "YouTube Anpassen: Shorts, Seitenleiste, Kommentare, Empfehlungen und mehr ausblenden!"
+    "message": "YouTube anpassen: Shorts, Seitenleiste, Kommentare, Empfehlungen und mehr ausblenden!"
   },
   "toggleThemeTitle": {
     "message": "Design umschalten"
@@ -14,11 +14,23 @@
   "powerToggleAria": {
     "message": "Erweiterung aktivieren oder deaktivieren"
   },
+  "languageUseEnglishTitle": {
+    "message": "Englisch verwenden"
+  },
+  "languageUseEnglishAria": {
+    "message": "Erweiterungsmenü auf Englisch anzeigen"
+  },
+  "languageUseBrowserTitle": {
+    "message": "Browsersprache verwenden"
+  },
+  "languageUseBrowserAria": {
+    "message": "Erweiterungsmenü wieder in der Browsersprache anzeigen"
+  },
   "groupBasicUI": {
     "message": "Allgemeine Ansicht"
   },
   "groupLeftNav": {
-    "message": "Seitenmenü"
+    "message": "Linke Navigationsleiste"
   },
   "groupVideoPlayer": {
     "message": "Videoplayer"
@@ -27,7 +39,7 @@
     "message": "Sonstiges"
   },
   "labelYouTubeLogo": {
-    "message": "YouTube Logo"
+    "message": "YouTube-Logo"
   },
   "descYouTubeLogo": {
     "message": "Das YouTube-Logo oben links ausblenden"
@@ -51,7 +63,7 @@
     "message": "Das Glockensymbol für Benachrichtigungen ausblenden"
   },
   "labelVideoSidebar": {
-    "message": "Empfohlene Videos (Seite)"
+    "message": "Video-Seitenleiste"
   },
   "descVideoSidebar": {
     "message": "Die Liste der empfohlenen Videos neben dem Player ausblenden"
@@ -63,22 +75,22 @@
     "message": "Den '+Erstellen'-Button zum Hochladen ausblenden"
   },
   "labelThumbnailBlur": {
-    "message": "Vorschaubilder unscharf machen"
+    "message": "Vorschaubilder weichzeichnen"
   },
   "descThumbnailBlur": {
     "message": "Vorschaubilder weichzeichnen, beim Darüberfahren scharf anzeigen"
   },
   "labelThumbnailPlayback": {
-    "message": "Thumbnail-Vorschau bei Hover"
+    "message": "Vorschau beim Darüberfahren"
   },
   "descThumbnailPlayback": {
-    "message": "Verhindert, dass Videovorschauen beim Überfahren von Thumbnails abgespielt werden"
+    "message": "Videovorschauen beim Überfahren der Vorschaubilder mit der Maus verhindern"
   },
   "labelHideLeftNav": {
     "message": "Gesamtes Seitenmenü ausblenden"
   },
   "descHideLeftNav": {
-    "message": "Das gesamte linke Menü komplett ausblenden"
+    "message": "Das gesamte linke Navigationsmenü ausblenden"
   },
   "labelSubscriptions": {
     "message": "Abos"
@@ -87,10 +99,10 @@
     "message": "Die Liste der abonnierten Kanäle ausblenden"
   },
   "labelYou": {
-    "message": "Sie"
+    "message": "Mein YouTube"
   },
   "descYou": {
-    "message": "Den 'Sie'-Bereich ausblenden (Verlauf, Playlists etc.)"
+    "message": "Den Bereich „Mein YouTube“ ausblenden (Verlauf, Playlists)"
   },
   "labelExplore": {
     "message": "Entdecken"
@@ -120,13 +132,13 @@
     "message": "Hype-/Danke-Button"
   },
   "descHypeButton": {
-    "message": "Blendet den Hype- bzw. Danke-Support-Button unter Videos aus"
+    "message": "Den Unterstützungsbutton „Hype“ oder „Danke“ unter Videos ausblenden"
   },
   "labelEndScreen": {
     "message": "Abspann-Empfehlungen"
   },
   "descEndScreen": {
-    "message": "Die Videoempfehlungen am Ende eines Videos ausblenden"
+    "message": "Überlagerte Karten am Videoende ausblenden"
   },
   "labelAutoplay": {
     "message": "Autoplay"
@@ -141,16 +153,16 @@
     "message": "Verwendet nach Möglichkeit die Originaltonspur"
   },
   "labelPremiumPopups": {
-    "message": "Premium-Werbung"
+    "message": "Premium-Pop-ups"
   },
   "descPremiumPopups": {
     "message": "Pop-ups für YouTube Premium ausblenden"
   },
   "labelPremieres": {
-    "message": "Live & Premieren"
+    "message": "Premieren"
   },
   "descPremieres": {
-    "message": "Livestreams und anstehende Premieren im Abo-Feed ausblenden"
+    "message": "Anstehende und laufende Livestreams ausblenden"
   },
   "labelShorts": {
     "message": "Shorts"
@@ -168,12 +180,12 @@
     "message": "Listenansicht"
   },
   "descListView": {
-    "message": "Abonnements als vertikale Liste statt als Raster anzeigen"
+    "message": "Videos aus Abos als Liste anzeigen"
   },
   "labelCompactListView": {
     "message": "Kompakte Listenansicht"
   },
   "descCompactListView": {
-    "message": "Kleinere Vorschaubilder in der Listenansicht verwenden"
+    "message": "Kleinere Vorschaubilder (Listenansicht erforderlich)"
   }
 }

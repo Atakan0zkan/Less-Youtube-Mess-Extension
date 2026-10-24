@@ -14,6 +14,18 @@
   "powerToggleAria": {
     "message": "เปิดหรือปิดส่วนขยาย"
   },
+  "languageUseEnglishTitle": {
+    "message": "ใช้ภาษาอังกฤษ"
+  },
+  "languageUseEnglishAria": {
+    "message": "แสดงเมนูส่วนขยายเป็นภาษาอังกฤษ"
+  },
+  "languageUseBrowserTitle": {
+    "message": "ใช้ภาษาของเบราว์เซอร์"
+  },
+  "languageUseBrowserAria": {
+    "message": "เปลี่ยนเมนูส่วนขยายกลับเป็นภาษาของเบราว์เซอร์"
+  },
   "groupBasicUI": {
     "message": "หน้าตาพื้นฐาน"
   },
@@ -45,7 +57,7 @@
     "message": "ซ่อนไอคอนไมโครโฟน"
   },
   "labelNotificationBell": {
-    "message": "การแจ้งเตือน"
+    "message": "กระดิ่งแจ้งเตือน"
   },
   "descNotificationBell": {
     "message": "ซ่อนไอคอนกระดิ่งแจ้งเตือน"
@@ -66,7 +78,7 @@
     "message": "เบลอภาพขนาดย่อ"
   },
   "descThumbnailBlur": {
-    "message": "เบลอภาพขนาดย่อของวิดีโอ แล้วชี้เมาส์เพื่อดู"
+    "message": "เบลอภาพขนาดย่อของวิดีโอ แล้วชี้เมาส์เพื่อดูภาพชัด"
   },
   "labelThumbnailPlayback": {
     "message": "เล่นวิดีโอเมื่อชี้ที่ภาพขนาดย่อ"
@@ -75,7 +87,7 @@
     "message": "หยุดไม่ให้ตัวอย่างวิดีโอเล่นเมื่อชี้เมาส์ที่ภาพขนาดย่อ"
   },
   "labelHideLeftNav": {
-    "message": "ซ่อนแถบนำทางซ้าย"
+    "message": "ซ่อนแถบนำทางซ้ายทั้งหมด"
   },
   "descHideLeftNav": {
     "message": "ซ่อนเมนูนำทางด้านซ้ายทั้งหมด"
@@ -126,7 +138,7 @@
     "message": "คำแนะนำท้ายวิดีโอ"
   },
   "descEndScreen": {
-    "message": "ซ่อนการ์ดแนะนำที่ปรากฏตอนจบวิดีโอ"
+    "message": "ซ่อนการ์ดที่ซ้อนทับวิดีโอในช่วงท้าย"
   },
   "labelAutoplay": {
     "message": "เล่นอัตโนมัติ"
@@ -141,16 +153,16 @@
     "message": "ใช้เสียงต้นฉบับเมื่อทำได้"
   },
   "labelPremiumPopups": {
-    "message": "โปรโมชัน Premium"
+    "message": "ป๊อปอัป Premium"
   },
   "descPremiumPopups": {
     "message": "ซ่อนป๊อปอัปโปรโมต YouTube Premium"
   },
   "labelPremieres": {
-    "message": "สดและพรีเมียร์"
+    "message": "พรีเมียร์"
   },
   "descPremieres": {
-    "message": "ซ่อนสตรีมสดและพรีเมียร์ในฟีดการติดตาม"
+    "message": "ซ่อนสตรีมสดที่กำลังถ่ายทอดหรือกำหนดไว้ล่วงหน้า"
   },
   "labelShorts": {
     "message": "Shorts"
@@ -171,7 +183,7 @@
     "message": "แสดงวิดีโอจากการติดตามเป็นรายการที่อ่านง่าย"
   },
   "labelCompactListView": {
-    "message": "รายการแบบกะทัดรัด"
+    "message": "มุมมองรายการแบบกะทัดรัด"
   },
   "descCompactListView": {
     "message": "ใช้ภาพขนาดย่อที่เล็กลง (ต้องเปิดมุมมองรายการ)"
