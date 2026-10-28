@@ -1,4 +1,4 @@
-name: Daily Test
+name: On-demand tests
 
 # Formül: blocking fixture + non-blocking live + fail-only AI triage.
 # - offline-tests (BLOCKING): npm ci + offline komutlar. Ağ yok, tarayıcı yok.
@@ -12,8 +12,6 @@ name: Daily Test
 # Yedek model satırı ai-triage job'unda yorumdadır.
 
 on:
-  schedule:
-    - cron: '0 4 * * *' # daily 07:00 TRT (UTC+3, no DST -> 04:00 UTC)
   workflow_dispatch:
 
 permissions:
