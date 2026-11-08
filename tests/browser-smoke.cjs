@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 Atakan Özkan
+// SPDX-License-Identifier: AGPL-3.0-only
+// See COPYRIGHT and LICENSE in the project root.
+
 // Node 22+; set BROWSER_PATH to Brave/Chromium. Uses only a disposable profile.
 const assert = require('node:assert/strict');
 const fs = require('node:fs');

@@ -2,6 +2,7 @@
   "name": "less-youtube-mess",
   "version": "1.8.5",
   "private": true,
+  "license": "AGPL-3.0-only",
   "description": "Less Youtube Mess — Chrome MV3 extension (AI-less, zero-dependency tests)",
   "engines": {
     "node": ">=22"
@@ -12,6 +13,7 @@
     "test:comprehensive": "node --test tests/comprehensive.test.cjs",
     "test:localization": "node --test tests/localization.test.cjs",
     "test:security": "node --test tests/security.test.cjs",
+    "test:licensing": "node --test tests/licensing.test.cjs",
     "test:performance": "node --test tests/performance.test.cjs",
     "test:release": "node tests/release.cjs",
     "test:release:offline": "node tests/release.cjs --offline",

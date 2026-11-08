@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 Atakan Özkan
+// SPDX-License-Identifier: AGPL-3.0-only
+// See COPYRIGHT and LICENSE in the project root.
+
 const displayFeatures = [
     ['hide_left_nav', 'tp-yt-app-drawer#guide'],
     ['hide_subscriptions_section', '#guide-subs'],

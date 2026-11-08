@@ -1,4 +1,7 @@
 @echo off
+rem SPDX-FileCopyrightText: 2026 Atakan Özkan
+rem SPDX-License-Identifier: AGPL-3.0-only
+rem See COPYRIGHT and LICENSE in the project root.
 cd /d "%~dp0"
 echo [Less YouTube Mess] Running mandatory release checks...
 call npm run test:release
@@ -9,7 +12,7 @@ if errorlevel 1 (
 
 echo [Less YouTube Mess] Packaging extension...
 
-powershell.exe -NoProfile -NonInteractive -Command "$ErrorActionPreference = 'Stop'; Import-Module (Join-Path $PSHOME 'Modules\Microsoft.PowerShell.Archive\Microsoft.PowerShell.Archive.psd1') -ErrorAction Stop; Compress-Archive -Path 'manifest.json', 'content.js', 'page-audio-bridge.js', 'styles.css', 'popup.html', 'popup.js', 'popup.css', 'shared', 'icons', '_locales' -DestinationPath 'extension.zip' -Force"
+powershell.exe -NoProfile -NonInteractive -Command "$ErrorActionPreference = 'Stop'; Import-Module (Join-Path $PSHOME 'Modules\Microsoft.PowerShell.Archive\Microsoft.PowerShell.Archive.psd1') -ErrorAction Stop; Compress-Archive -Path 'manifest.json', 'content.js', 'page-audio-bridge.js', 'styles.css', 'popup.html', 'popup.js', 'popup.css', 'shared', 'icons', '_locales', 'LICENSE', 'COPYRIGHT' -DestinationPath 'extension.zip' -Force"
 
 if %errorlevel% equ 0 (
     echo.

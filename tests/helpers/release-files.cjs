@@ -1,9 +1,14 @@
+// SPDX-FileCopyrightText: 2026 Atakan Özkan
+// SPDX-License-Identifier: AGPL-3.0-only
+// See COPYRIGHT and LICENSE in the project root.
+
 const fs = require('node:fs');
 const path = require('node:path');
 
 const runtimeEntries = Object.freeze([
     'manifest.json', 'content.js', 'styles.css', 'page-audio-bridge.js',
-    'popup.html', 'popup.js', 'popup.css', 'shared', 'icons', '_locales'
+    'popup.html', 'popup.js', 'popup.css', 'shared', 'icons', '_locales',
+    'LICENSE', 'COPYRIGHT'
 ]);
 
 function runtimeFiles(root) {

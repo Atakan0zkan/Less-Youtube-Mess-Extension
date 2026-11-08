@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 Atakan Özkan
+// SPDX-License-Identifier: AGPL-3.0-only
+// See COPYRIGHT and LICENSE in the project root.
+
 module.exports = Object.freeze({
     runtimeBytes: 512 * 1024,
     contentScriptBytes: 80 * 1024,

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 Atakan Özkan
+// SPDX-License-Identifier: AGPL-3.0-only
+// See COPYRIGHT and LICENSE in the project root.
+
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -24,7 +28,7 @@ test('security: MV3 permissions, isolation, CSP and exposed files cannot broaden
 test('security: release file allowlist excludes credentials, profiles, maps, test code and unexpected assets', () => {
     const files = runtimeFiles(root);
     for (const file of files) {
-        assert.match(file, /^(manifest\.json|content\.js|styles\.css|page-audio-bridge\.js|popup\.(html|js|css)|shared\/constants\.js|icons\/icon(16|48|128)\.png|_locales\/[a-z]{2}(?:_[A-Z]{2})?\/messages\.json)$/);
+        assert.match(file, /^(LICENSE|COPYRIGHT|manifest\.json|content\.js|styles\.css|page-audio-bridge\.js|popup\.(html|js|css)|shared\/constants\.js|icons\/icon(16|48|128)\.png|_locales\/[a-z]{2}(?:_[A-Z]{2})?\/messages\.json)$/);
         assert.doesNotMatch(file, /(?:\.env|\.pem|\.key|\.map|Cookies|Login Data|test-results|\.codex)/i);
     }
     const manifest = JSON.parse(source('manifest.json'));

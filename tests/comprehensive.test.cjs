@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 Atakan Özkan
+// SPDX-License-Identifier: AGPL-3.0-only
+// See COPYRIGHT and LICENSE in the project root.
+
 // Less Youtube Mess — Comprehensive AI-less static + unit suite.
 // Zero dependencies. Runs with: node --test tests/comprehensive.test.cjs
 // Complements tests/regression.test.cjs (13 focused lifecycle tests) with

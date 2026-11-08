@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 Atakan Özkan
+// SPDX-License-Identifier: AGPL-3.0-only
+// See COPYRIGHT and LICENSE in the project root.
+
 const assert = require('node:assert/strict');
 const { requiredBrowserChecks } = require('./feature-matrix.cjs');
 

@@ -1,0 +1,110 @@
+# Development
+
+For a product overview and screenshots, see the [README](../README.md).
+
+## Local Setup
+
+1. Clone this repository.
+2. Open `chrome://extensions` and enable Developer mode.
+3. Choose **Load unpacked** and select the repository folder.
+
+There is no build step or runtime dependency. The extension requires Chrome 105 or newer; development checks require Node 22 or newer.
+
+## Architecture
+
+The extension follows a small Manifest V3 structure:
+
+```text
+manifest.json          Extension manifest, permissions, CSP, content script registration
+shared/constants.js    Shared settings keys, defaults, and centralized YouTube selectors
+content.js             YouTube content script: settings, DOM handling, navigation, observers
+page-audio-bridge.js   Page-context bridge for best-effort original audio selection
+styles.css             CSS hiding rules via html attributes and :has() selectors
+popup.html             Extension popup UI
+popup.css              Popup styling with dark/light themes
+popup.js               Popup settings, i18n, English override, accordion state, power toggle
+_locales/              Chrome i18n messages for 24 locale folders
+icons/                 Extension icons
+package.bat            Release zip helper, including runtime files and legal notices
+LICENSE / COPYRIGHT    License text, copyright notice, and source instructions
+```
+
+The main pattern is:
+
+1. `popup.js` saves feature settings to `chrome.storage.sync`.
+2. `content.js` reads those settings and writes attributes onto `<html>`, such as `hide_shorts="true"`.
+3. `styles.css` uses those attributes to hide YouTube UI quickly.
+4. `content.js` supplements CSS where YouTube re-renders custom elements, such as likes, topbar controls, Premium backdrops, autoplay, thumbnail previews, and lazy-loaded subscription descriptions.
+5. `page-audio-bridge.js` runs in YouTube's page context only to request the original audio track through YouTube's internal player methods when automatic dubbing is disabled.
+
+## Technical Notes
+
+- The extension is intentionally dependency-free.
+- New installs start with the extension enabled, but every feature setting defaults to off until the user chooses it.
+- Most hiding is CSS-first for speed and low layout churn.
+- `shared/constants.js` is the source of truth for the 25 feature settings, defaults, and selector lists.
+- Settings loaded from `chrome.storage.sync` are normalized to strict booleans in both the content script and popup so legacy values such as `"false"` do not behave as enabled.
+- The global `extension_enabled` toggle is stored in `chrome.storage.local` and is normalized when read.
+- The manifest is scoped to `https://www.youtube.com/*` and sets `minimum_chrome_version` to Chrome 105 because the CSS layer depends on `:has()`.
+- YouTube selectors are centralized so DOM updates can usually be fixed in one place. Critical selectors prefer tag, href, structure, and attribute selectors before class-based fallbacks.
+- Subscription feed item discovery goes through `SELECTORS.SUBSCRIPTION_ITEM` and `getSubscriptionItems()` so diagnostics, List View descriptions, and live/premiere marking use the same outer-container model.
+- Subscriptions list view avoids absolute positioning inside YouTube components because YouTube wrappers often use `contain`, `isolation`, and nested positioning.
+- List View preserves native hover previews and watched/resume red progress bars together. Both were user-confirmed working on 2026-08-18; do not force thumbnail host sizing/display.
+- Video descriptions in list view are fetched lazily with `IntersectionObserver`, session caching, a high queue cap, concurrency limiting, origin validation, `credentials: "omit"`, and `DOMParser`. New description fetches pause while the tab is hidden.
+- Description fetches are restricted to canonical `https://www.youtube.com/watch?v=VIDEO_ID` URLs with valid 11-character YouTube IDs. Redirects are rejected, referrers omitted, and decoded input is capped at 15,000 bytes. If metadata is outside this budget, descriptions are omitted rather than downloading the entire page.
+- `page-audio-bridge.js` is a minimal web-accessible resource that runs in YouTube's page context only to request original audio through YouTube's internal player methods. The audio-track/dubbing menu remains visible for manual selection.
+- Popup UI localization covers 24 Chrome locale folders, each with the same 63 message keys, including localized language-button tooltips and screen-reader labels. Arabic and Persian use right-to-left layout; the English override restores left-to-right layout.
+- The popup `ENG` override is stored in `chrome.storage.local` as a UI preference. It only loads `_locales/en/messages.json` inside the popup and does not affect YouTube content scripts or sync settings.
+- `selfDiagnose()` is intentionally conservative: the delayed subscriptions outer-structure warning should fire only when watch links exist but no known subscription item or lockup containers are found.
+
+## Maintenance Watchlist
+
+- YouTube may rename custom element tags or classes. `selfDiagnose()` in `content.js` helps warn when critical selectors no longer match.
+- Subscriptions feed outer containers can rotate between rich item, rich grid media, direct lockup, and legacy video renderer structures. Keep `SELECTORS.SUBSCRIPTION_ITEM` current before changing List View or diagnostics.
+- Do not force List View hover previews by resizing or displaying thumbnail host elements (`yt-thumbnail-view-model`, `ytd-thumbnail`); that can break watched/resume progress overlays.
+- Large `:has()` selector groups are useful but can become expensive if expanded carelessly.
+- The list-view description fetch feature is the largest network/performance surface. Keep it lazy, bounded, and abortable.
+- Premium popup cleanup must avoid hiding shared backdrops when a functional non-Premium dialog is visibly open.
+- Autoplay persistence uses YouTube's internal `yt-autoplay` localStorage key as best-effort; keep the click fallback and prefer a stable player signal if YouTube ever exposes one.
+- The MutationObserver should stay connected to the current `ytd-app` root after SPA navigation because YouTube can replace app roots during larger redesigns.
+- The extension-disabled state is read from async local storage, so default attributes can briefly apply during page startup before the disabled state is known.
+- Likes, topbar controls, and thumbnail preview suppression use extension-owned data markers for cleanup. New JS supplements should follow the same marker-and-cleanup pattern.
+- Original audio selection is best-effort because it depends on YouTube internal player methods and audio-track labels. Re-test it on videos with multiple audio tracks after YouTube player updates.
+- The automatic dubbing setting should keep YouTube's audio-track/dubbing menu visible unless the product decision changes.
+
+## Development Checks
+
+Before packaging or deploying, run the complete dependency-free gate with Node 22 or newer:
+
+```sh
+npm run test:release
+```
+
+This runs syntax and whitespace checks, all unit/regression/security/performance/localization tests, the real unpacked extension's feature scenarios, and the 24-language popup layout matrix. Missing browsers, failures, skipped/TODO tests, timeouts or source changes during a run fail the gate. `package.bat` runs this gate before creating a new ZIP.
+
+Brave is detected automatically in standard Windows installations. Set `BROWSER_PATH` explicitly for another compatible Chromium executable (Chrome for Testing in CI). The runner never downloads a browser. Test writes are paced below Chrome's real sync-storage quota, so a full run takes several minutes.
+
+Results, stage logs, browser metrics and failure screenshots are written to an ignored, timestamped `test-results/release-*/` folder. `report.json` identifies the version, commit and SHA-256 of runtime/test inputs; `report.md` is the short summary. No commit, push, publication or ZIP replacement is performed by the test command.
+
+Useful narrower commands:
+
+```sh
+npm test                       # All offline tests
+npm run test:security
+npm run test:licensing
+npm run test:performance
+npm run test:release:offline    # Partial report, NOT a release approval
+npm run test:release:live       # Full gate plus public YouTube checks
+```
+
+Browser tests use an isolated, signed-out disposable profile and copy only release runtime files. Fixture requests are fulfilled locally or blocked, not sent to YouTube. Your existing profiles, settings and unpacked installation are not modified. The gate covers independent on/off effects, popup-to-page persistence, power, theme, keyboard controls, Premium/functional dialogs, transcript/sidebar, list/compact layout, watched progress, preview media, blur hover, autoplay, original-audio bridge, description XSS/cache and SPA navigation.
+
+Performance checks enforce three concurrent description requests, a 100-item queue, 250 cached descriptions and 15,000 decoded bytes per request. They also verify cancellation, hidden-tab pausing, mutation coalescing and idle settling. A controlled 300-card feed must stay below a 250 ms p95 and 1,000 ms maximum synchronous feature pass; a 1,000-node mutation burst may cause at most two passes. Payload limits are in `tests/helpers/budgets.cjs`; do not raise them merely to silence a regression.
+
+The on-demand CI workflow runs the full gate and retains diagnostic artifacts for 14 days. It starts only through workflow_dispatch, not on a push, PR or schedule. Real YouTube smoke checks remain a separate, non-blocking job in that requested run. Hosted CI configuration is not proof that a particular run has passed.
+
+Passing fixtures cannot guarantee every future YouTube experiment or account state. Check signed-in subscription descriptions, real multi-audio videos, actual native hover initiation and the final store package before publication. Localization tests verify coverage and layout, not whether every translation sounds natural. Existing ZIP archives are not validated by the source test gate.
+
+## License
+
+This project uses [AGPL-3.0-only](../LICENSE). Keep [COPYRIGHT](../COPYRIGHT) and the license text in distributed packages.

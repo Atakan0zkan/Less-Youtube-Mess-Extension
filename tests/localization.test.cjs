@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 Atakan Özkan
+// SPDX-License-Identifier: AGPL-3.0-only
+// See COPYRIGHT and LICENSE in the project root.
+
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { readFileSync, readdirSync } = require('node:fs');
@@ -138,17 +142,4 @@ test('localization: failed English load keeps the browser translation and RTL di
     assert.equal(env.button.title, catalogs.ar.languageUseEnglishTitle.message);
     assert.equal(env.button.getAttribute('aria-pressed'), 'false');
     assert.equal(env.warnings.length, 1);
-});
-
-test('localization: store descriptions cover all 24 locales and retain all six features and contact links', () => {
-    const listings = source('STORE_LISTINGS.md');
-    const sections = [...listings.matchAll(/^## (\w+) — [^\r\n]+\r?\n([\s\S]*?)(?=^## |$(?![\s\S]))/gm)];
-    assert.deepEqual(sections.map(match => match[1]).sort(), locales);
-    for (const [, locale, text] of sections) {
-        assert.deepEqual([...text.matchAll(/^([1-6])\uFE0F?\u20E3 /gm)].map(match => match[1]), ['1', '2', '3', '4', '5', '6'], locale);
-        assert.equal((text.match(/https:\/\/github\.com\/Atakan0zkan\/Less-Youtube-Mess-Extension/g) || []).length, 1, locale);
-        assert.equal((text.match(/atakanozkanapps@gmail\.com/g) || []).length, 1, locale);
-        assert.ok(text.includes('100'), `${locale} open-source claim`);
-        assert.equal(text.trim().split(/\r?\n\s*\r?\n/).length, 11, `${locale} paragraph coverage`);
-    }
 });

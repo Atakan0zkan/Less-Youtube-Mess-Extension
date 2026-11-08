@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 Atakan Özkan
+// SPDX-License-Identifier: AGPL-3.0-only
+// See COPYRIGHT and LICENSE in the project root.
+
 // Less Youtube Mess - Content Script
 // Settings are cached in memory; CSS attribute-selectors on <html> handle visibility toggling.
 
