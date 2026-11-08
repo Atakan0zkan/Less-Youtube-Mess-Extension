@@ -41,7 +41,7 @@ function validTestSummary(summary) {
 }
 
 function fingerprint() {
-    const files = [...runtimeFiles(root), 'package.json', 'package-lock.json', ...testFiles().map(file => path.relative(root, file).replaceAll('\\', '/'))].sort();
+    const files = [...runtimeFiles(root), 'package.json', 'package-lock.json', 'package.bat', ...testFiles().map(file => path.relative(root, file).replaceAll('\\', '/'))].sort();
     const hash = createHash('sha256');
     for (const file of files) hash.update(file + '\0').update(fs.readFileSync(path.join(root, file)));
     return hash.digest('hex');

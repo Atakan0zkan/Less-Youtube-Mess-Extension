@@ -6,7 +6,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
-const { source, root } = require('./helpers/runtime.cjs');
+const { source } = require('./helpers/runtime.cjs');
 const { requiredBrowserChecks } = require('./helpers/feature-matrix.cjs');
 const { validateBrowserReport } = require('./helpers/browser-contract.cjs');
 
@@ -80,6 +80,8 @@ test('release runner: packaging runs the full gate and exits before compression 
     const archive = batch.indexOf('Compress-Archive');
     assert.ok(gate >= 0 && archive > gate);
     assert.match(batch.slice(gate, archive), /if errorlevel 1\s*\([\s\S]*exit \/b 1/);
+    assert.match(batch, /powershell\.exe -NoProfile -NonInteractive -Command "\$ErrorActionPreference = 'Stop'; Import-Module \(Join-Path \$PSHOME /);
+    assert.ok(batch.includes("'Modules\\Microsoft.PowerShell.Archive\\Microsoft.PowerShell.Archive.psd1') -ErrorAction Stop; Compress-Archive"));
 });
 
 test('release runner: empty or incomplete browser reports cannot masquerade as full coverage', () => {
@@ -97,11 +99,15 @@ test('release runner: empty or incomplete browser reports cannot masquerade as f
 });
 
 if (process.platform === 'win32') {
-    test('release runner: Windows packaging failure probe creates no ZIP or publishing side effects', () => {
+    for (const failAt of ['tests', 'compression']) test(`release runner: Windows ${failAt} failure creates no ZIP and returns a failure exit code`, () => {
         const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'lym-package-test-'));
         try {
-            fs.copyFileSync(path.join(root, 'package.bat'), path.join(directory, 'package.bat'));
-            fs.writeFileSync(path.join(directory, 'npm.cmd'), '@exit /b 7\r\n');
+            let batch = source('package.bat');
+            // A .cmd mock needs CALL to return, unlike the real PowerShell executable.
+            if (failAt === 'compression') batch = batch.replace(/^powershell\.exe /m, 'call powershell ');
+            fs.writeFileSync(path.join(directory, 'package.bat'), batch);
+            fs.writeFileSync(path.join(directory, 'npm.cmd'), `@exit /b ${failAt === 'tests' ? 7 : 0}\r\n`);
+            fs.writeFileSync(path.join(directory, 'powershell.cmd'), '@exit /b 9\r\n');
             const env = { ...process.env };
             for (const name of Object.keys(env)) if (name.toLowerCase() === 'path') delete env[name];
             env.PATH = directory + path.delimiter + process.env.PATH;
@@ -109,8 +115,12 @@ if (process.platform === 'win32') {
                 cwd: directory, env, windowsHide: true, timeout: 5000, stdio: ['ignore', 'pipe', 'pipe']
             }), error => {
                 assert.equal(error.status, 1);
-                assert.match(error.stdout.toString(), /Release checks failed/);
-                assert.doesNotMatch(error.stdout.toString(), /Packaging extension/);
+                if (failAt === 'tests') {
+                    assert.match(error.stdout.toString(), /Release checks failed/);
+                    assert.doesNotMatch(error.stdout.toString(), /Packaging extension/);
+                } else {
+                    assert.match(error.stdout.toString(), /An error occurred while creating the package/);
+                }
                 return true;
             });
             assert.equal(fs.existsSync(path.join(directory, 'extension.zip')), false);
