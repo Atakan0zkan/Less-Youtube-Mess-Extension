@@ -338,7 +338,9 @@ function markLiveAndPremieres(items) {
             const badges = item.querySelectorAll('.badge-shape-wiz__text, .yt-core-attributed-string');
             for (const badge of badges) {
                 const text = (badge.textContent || '');
-                if (LIVE_PREMIERE_PATTERNS.badgeText.test(text)) {
+                // RegExp /i alone does not handle Turkish I case folding.
+                if (LIVE_PREMIERE_PATTERNS.badgeText.test(text) ||
+                    LIVE_PREMIERE_PATTERNS.badgeText.test(text.toLocaleLowerCase('tr'))) {
                     isLive = true;
                     break;
                 }

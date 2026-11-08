@@ -2,74 +2,10 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { readFileSync, readdirSync } = require('node:fs');
 const { join } = require('node:path');
-const vm = require('node:vm');
+const { element, environment } = require('./helpers/runtime.cjs');
 
 const root = join(__dirname, '..');
 const source = file => readFileSync(join(root, file), 'utf8');
-
-function element() {
-    const attrs = new Map();
-    const styles = new Map();
-    return {
-        nodeType: 1, isConnected: true, checked: false, disabled: false,
-        children: [], textContent: '',
-        setAttribute: (key, value) => attrs.set(key, value),
-        getAttribute: key => attrs.get(key) ?? null,
-        hasAttribute: key => attrs.has(key),
-        removeAttribute: key => attrs.delete(key),
-        querySelector: () => null, querySelectorAll: () => [],
-        appendChild() {}, remove() {}, addEventListener() {},
-        getClientRects: () => [{}],
-        getBoundingClientRect: () => ({ width: 100, height: 100 }),
-        style: {
-            setProperty: (key, value) => styles.set(key, value),
-            removeProperty: key => styles.delete(key),
-            getPropertyValue: key => styles.get(key) || '',
-            getPropertyPriority: () => ''
-        }
-    };
-}
-
-function environment(file) {
-    const nodes = new Map();
-    const timers = new Map();
-    const listeners = new Map();
-    const pending = { local: [], sync: [] };
-    let timerId = 0;
-    const document = {
-        documentElement: element(), body: element(), head: element(), hidden: false,
-        getElementById: id => nodes.get(id) || null,
-        querySelector: () => null, querySelectorAll: () => [],
-        createElement: () => element(), addEventListener() {}
-    };
-    const context = vm.createContext({
-        console, URL, Set, Map, AbortController, TextDecoder, Uint8Array,
-        Node: { ELEMENT_NODE: 1 }, document,
-        location: new URL('https://www.youtube.com/watch?v=abcdefghijk'),
-        setTimeout: fn => { timers.set(++timerId, fn); return timerId; },
-        clearTimeout: id => timers.delete(id), queueMicrotask: () => {},
-        addEventListener: (name, fn) => listeners.set(name, fn),
-        dispatchEvent: event => listeners.get(event.type)?.(event),
-        CustomEvent: class { constructor(type) { this.type = type; } },
-        getComputedStyle: el => ({ display: el.style.getPropertyValue('display') || 'block', visibility: 'visible', opacity: '1' }),
-        MutationObserver: class { observe() {} disconnect() {} },
-        IntersectionObserver: class { observe() {} disconnect() {} },
-        localStorage: { setItem() {} },
-        chrome: {
-            runtime: { id: 'test', getURL: file => `chrome-extension://test/${file}` },
-            storage: {
-                local: { get: (keys, cb) => pending.local.push(cb), set() {} },
-                sync: { get: (keys, cb) => pending.sync.push(cb), set() {} },
-                onChanged: { addListener() {} }
-            }
-        }
-    });
-    context.window = context;
-    context.self = context;
-    vm.runInContext(source('shared/constants.js'), context);
-    vm.runInContext(source(file), context);
-    return { context, document, nodes, timers, pending, run: code => vm.runInContext(code, context) };
-}
 
 test('popup keeps compact locked when local disabled state arrives before sync', () => {
     const env = environment('popup.js');

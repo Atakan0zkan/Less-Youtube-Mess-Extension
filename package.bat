@@ -1,4 +1,12 @@
 @echo off
+cd /d "%~dp0"
+echo [Less YouTube Mess] Running mandatory release checks...
+call npm run test:release
+if errorlevel 1 (
+    echo [ERROR] Release checks failed. No new package was created.
+    exit /b 1
+)
+
 echo [Less YouTube Mess] Packaging extension...
 
 powershell -Command "Compress-Archive -Path 'manifest.json', 'content.js', 'page-audio-bridge.js', 'styles.css', 'popup.html', 'popup.js', 'popup.css', 'shared', 'icons', '_locales' -DestinationPath 'extension.zip' -Force"

@@ -5,8 +5,15 @@ const os = require('node:os');
 const path = require('node:path');
 const { spawn } = require('node:child_process');
 const { setTimeout: delay } = require('node:timers/promises');
+const { runtimeEntries } = require('./helpers/release-files.cjs');
+const { displayFeatures } = require('./helpers/feature-matrix.cjs');
+const { writeBudget } = require('./helpers/write-budget.cjs');
 
 const root = path.resolve(__dirname, '..');
+const releaseMode = process.argv.includes('--release');
+const report = { checks: [], locales: [], metrics: {}, errors: [], diagnostics: [], network: { descriptions: 0, denied: [] } };
+const reportDirectory = process.env.LYM_RELEASE_REPORT_DIR;
+const syncBudget = writeBudget({ onWait: ms => console.log(`Waiting ${Math.ceil(ms / 1000)}s for the real sync write quota`) });
 const browserPath = process.env.BROWSER_PATH;
 assert.ok(browserPath && fs.existsSync(browserPath), 'Set BROWSER_PATH to Brave/Chromium');
 const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'lym-smoke-'));
@@ -14,7 +21,7 @@ assert.ok(!temporary.includes(' '), 'Use a TEMP path without spaces');
 const extension = path.join(temporary, 'extension');
 const profile = path.join(temporary, 'profile');
 fs.mkdirSync(extension);
-for (const file of ['manifest.json', 'content.js', 'styles.css', 'page-audio-bridge.js', 'popup.html', 'popup.js', 'popup.css', 'shared', 'icons', '_locales']) {
+for (const file of runtimeEntries) {
     fs.cpSync(path.join(root, file), path.join(extension, file), { recursive: true });
 }
 
@@ -28,6 +35,13 @@ class CDP {
             this.socket.addEventListener('open', resolve, { once: true });
             this.socket.addEventListener('error', reject, { once: true });
         });
+        this.socket.addEventListener('close', () => {
+            for (const pending of this.pending.values()) {
+                clearTimeout(pending.timer);
+                pending.reject(new Error('CDP connection closed'));
+            }
+            this.pending.clear();
+        });
         this.socket.addEventListener('message', event => {
             const message = JSON.parse(event.data);
             if (message.id) {
@@ -37,7 +51,12 @@ class CDP {
                 clearTimeout(pending.timer);
                 message.error ? pending.reject(new Error(message.error.message)) : pending.resolve(message.result);
             } else {
-                for (const handler of this.handlers.get(message.method) || []) handler(message.params);
+                for (const handler of this.handlers.get(message.method) || []) {
+                    Promise.resolve().then(() => handler(message.params)).catch(error => {
+                        report.errors.push(error.message);
+                        console.error('CDP event error:', error.message);
+                    });
+                }
             }
         });
     }
@@ -65,6 +84,7 @@ class CDP {
 async function until(check, message, timeout = 15000) {
     const deadline = Date.now() + timeout;
     while (Date.now() < deadline) {
+        if (runExpired) throw new Error('Browser suite exceeded its 10-minute deadline');
         const value = await check();
         if (value) return value;
         await delay(100);
@@ -106,13 +126,14 @@ ytd-browse,ytd-rich-grid-renderer,#contents,ytd-rich-item-renderer,yt-lockup-vie
 <div class="html5-endscreen" id="endscreen">End</div>
 <div class="ytp-autonav-toggle-button-container" id="autoplay-toggle">Autoplay</div>
 <ytd-watch-metadata><div id="actions">
-<div id="segmented-like-button"><span class="yt-core-attributed-string" id="like-text">12K</span></div>
+<div id="segmented-like-button"><button id="like-button" aria-label="Like"><span class="yt-core-attributed-string" id="like-text">12K</span></button></div>
 <ytd-button-renderer id="hype-btn"><button aria-label="Hype">Hype</button></ytd-button-renderer>
 </div></ytd-watch-metadata>
 <ytd-mealbar-promo-renderer id="mealbar">Premium promo</ytd-mealbar-promo-renderer>
 <ytd-thumbnail id="blur-thumb"><img src="about:blank"></ytd-thumbnail>
 <ytd-video-preview id="thumb-preview"><video></video></ytd-video-preview>
 </div>
+<div id="movie_player"><video id="main-video"></video><div id="audio-menu">Audio tracks</div></div>
 <div id="secondary"><div id="related">Recommendations</div>
 <ytd-engagement-panel-section-list-renderer target-id="engagement-panel-searchable-transcript" visibility="ENGAGEMENT_PANEL_VISIBILITY_HIDDEN">Transcript</ytd-engagement-panel-section-list-renderer>
 </div></div></ytd-watch-flexy>
@@ -128,6 +149,52 @@ const clients = [];
 let browser;
 let browserClient;
 let browserClosed = false;
+let runExpired = false;
+function monitorErrors(client) {
+    client.on('Runtime.exceptionThrown', ({ exceptionDetails }) => {
+        report.errors.push(exceptionDetails.exception?.description || exceptionDetails.text);
+    });
+    client.on('Runtime.consoleAPICalled', ({ type, args }) => {
+        const text = args.map(arg => arg.value || arg.description || '').join(' ');
+        if (type === 'error') report.errors.push(text);
+        if (type === 'warning' && text.includes('[Less YouTube Mess]')) {
+            if (/selector not found|outer structure changed/.test(text)) report.diagnostics.push(text);
+            else report.errors.push(text);
+        }
+    });
+}
+
+async function interceptFixtures(client) {
+    await client.send('Fetch.enable', { patterns: [{ urlPattern: '*' }] });
+    client.on('Fetch.requestPaused', async event => {
+        const url = new URL(event.request.url);
+        if (['chrome-extension:', 'chrome:', 'about:', 'data:', 'blob:'].includes(url.protocol)) {
+            await client.send('Fetch.continueRequest', { requestId: event.requestId });
+            return;
+        }
+        let html;
+        if (['https://www.youtube.com', 'https://example.test'].includes(url.origin) && url.pathname === '/favicon.ico' && !url.search) {
+            await client.send('Fetch.fulfillRequest', { requestId: event.requestId, responseCode: 204 });
+            return;
+        }
+        if (url.origin === 'https://www.youtube.com') {
+            if (event.resourceType === 'Document') html = fixture;
+            else if (url.pathname === '/watch' && /^[A-Za-z0-9_-]{11}$/.test(url.searchParams.get('v') || '')) {
+                report.network.descriptions++;
+                html = '<!doctype html><head><meta name="description" content="Safe description &lt;img src=x onerror=&quot;window.releaseXss=true&quot;&gt;"></head><body>Not downloaded</body>';
+            }
+        } else if (url.origin === 'https://example.test' && event.resourceType === 'Document') {
+            html = '<!doctype html><title>Foreign fixture</title><h1>Outside YouTube</h1>';
+        }
+        if (html !== undefined) {
+            await client.send('Fetch.fulfillRequest', { requestId: event.requestId, responseCode: 200, responseHeaders: [{ name: 'Content-Type', value: 'text/html; charset=utf-8' }], body: Buffer.from(html).toString('base64') });
+        } else {
+            report.network.denied.push(`${event.resourceType} ${url.origin}${url.pathname}`);
+            await client.send('Fetch.failRequest', { requestId: event.requestId, errorReason: 'BlockedByClient' });
+        }
+    });
+}
+
 async function main() {
     // CI containers (GitHub ubuntu runners) have tiny /dev/shm and restricted
     // sandboxing: allow opt-in via BROWSER_NO_SANDBOX=1. Local runs unaffected.
@@ -138,6 +205,8 @@ async function main() {
         `--user-data-dir=${profile}`, '--remote-debugging-port=0',
         `--load-extension=${extension}`, `--disable-extensions-except=${extension}`,
         '--no-first-run', '--no-default-browser-check', '--disable-sync',
+        '--disable-background-timer-throttling', '--disable-renderer-backgrounding',
+        '--disable-backgrounding-occluded-windows',
         '--window-size=1280,900', ...ciArgs, 'about:blank'
     ], { windowsHide: true, stdio: 'ignore' });
     browser.on('error', error => console.error(error));
@@ -145,27 +214,38 @@ async function main() {
     await until(() => fs.existsSync(activePort), 'Brave DevTools endpoint', 60000);
     const [port, endpoint] = fs.readFileSync(activePort, 'utf8').trim().split(/\r?\n/);
     browserClient = new CDP(`ws://127.0.0.1:${port}${endpoint}`);
-    console.log('Browser:', (await browserClient.send('Browser.getVersion')).product);
+    report.browser = (await browserClient.send('Browser.getVersion')).product;
+    console.log('Browser:', report.browser);
     const targets = await (await fetch(`http://127.0.0.1:${port}/json/list`)).json();
     const page = new CDP(targets.find(target => target.type === 'page').webSocketDebuggerUrl);
     clients.push(page);
+    monitorErrors(page);
     const contexts = new Map();
     page.on('Runtime.executionContextCreated', ({ context }) => contexts.set(context.id, context));
     page.on('Runtime.executionContextDestroyed', ({ executionContextId }) => contexts.delete(executionContextId));
     page.on('Runtime.executionContextsCleared', () => contexts.clear());
     await page.send('Runtime.enable');
     await page.send('Page.enable');
-    await page.send('Fetch.enable', { patterns: [{ urlPattern: 'https://www.youtube.com/*', resourceType: 'Document' }] });
-    page.on('Fetch.requestPaused', event => {
-        page.send('Fetch.fulfillRequest', { requestId: event.requestId, responseCode: 200, responseHeaders: [{ name: 'Content-Type', value: 'text/html; charset=utf-8' }], body: Buffer.from(fixture).toString('base64') }).catch(console.error);
-    });
+    await interceptFixtures(page);
     await page.send('Page.navigate', { url: 'https://www.youtube.com/watch?v=abcdefghijk' });
     let isolated = await until(() => [...contexts.values()].find(context => context.origin.startsWith('chrome-extension://')), 'unpacked content context');
     await until(() => page.evaluate("typeof cachedSettings !== 'undefined'", isolated.id), 'content initialization');
     const extensionId = new URL(isolated.origin).hostname;
     const settings = async values => {
-        await page.evaluate(`chrome.storage.sync.set(${JSON.stringify(values)})`, isolated.id);
-        await delay(350);
+        await syncBudget.reserve();
+        await page.evaluate(`new Promise((resolve,reject) => chrome.storage.sync.set(${JSON.stringify(values)}, () => chrome.runtime.lastError ? reject(new Error(chrome.runtime.lastError.message)) : resolve()))`, isolated.id);
+        await until(() => page.evaluate(`Object.entries(${JSON.stringify(values)}).every(([key,value]) => cachedSettings[key] === value) && !_runFeaturesScheduled`, isolated.id), 'settings applied by content script');
+        const cleanupSelectors = {
+            hide_likes: '[data-lym-likes-applied]',
+            hide_create_button: '[data-lym-control-hidden="create"]',
+            hide_hype_button: '[data-lym-control-hidden="hype"]',
+            hide_premium_popups: '[data-lym-premium-hidden],[data-lym-premium-backdrop-hidden],[data-lym-premium-promo-hidden]',
+            disable_thumbnail_playback: '[data-lym-thumbnail-playback-disabled]',
+            hide_sidebar: 'html[data-lym-transcript-active]'
+        };
+        const selectors = Object.entries(cleanupSelectors).filter(([key]) => values[key] === false).map(([, selector]) => selector).join(',');
+        if (selectors) await until(() => page.evaluate(`!document.querySelector(${JSON.stringify(selectors)})`), 'disabled features cleaned up');
+        await delay(200);
     };
     // SPA navigations destroy the isolated world: snapshot ids BEFORE navigating,
     // then wait for a fresh live context (dead redirect-chain candidates are
@@ -232,28 +312,7 @@ async function main() {
         await settings({ [setting]: true });
         await until(async () => await display(selector) === 'none', `${setting} hides ${selector}`);
     };
-    const matrix = [
-        ['hide_left_nav', 'tp-yt-app-drawer#guide'],
-        ['hide_subscriptions_section', '#guide-subs'],
-        ['hide_you_section', '#guide-you'],
-        ['hide_explore', '#guide-explore'],
-        ['hide_more_from_youtube', '#guide-more'],
-        ['hide_comments', '#comments'],
-        ['hide_likes', '#like-text'],
-        ['hide_hype_button', '#hype-btn'],
-        ['hide_end_suggestions', '#endscreen'],
-        ['hide_autoplay', '#autoplay-toggle'],
-        ['hide_premium_popups', '#mealbar'],
-        ['hide_shorts', '#shorts-link'],
-        ['hide_shorts', '#shorts-shelf'],
-        ['hide_search_suggestions', '#search-sugg'],
-        ['hide_voice_search', '#voice-search-button'],
-        ['hide_notif_bell', '#bell'],
-        ['hide_youtube_logo', '#logo'],
-        ['hide_create_button', '#create-btn'],
-        ['disable_thumbnail_playback', '#thumb-preview'],
-        ['hide_live_premiere', '#live-item'],
-    ];
+    const matrix = displayFeatures;
     for (const [setting, selector] of matrix) await hidden(setting, selector);
     console.log('PASS: display matrix hides (20 checks)');
     // Blur asserts filter instead of display.
@@ -311,7 +370,12 @@ async function main() {
     const popupTarget = await until(async () => (await (await fetch(`http://127.0.0.1:${port}/json/list`)).json()).find(target => target.id === targetId), 'popup target');
     const popup = new CDP(popupTarget.webSocketDebuggerUrl);
     clients.push(popup);
+    monitorErrors(popup);
+    await popup.send('Runtime.enable');
+    await popup.send('Page.enable');
+    await interceptFixtures(popup);
     await until(() => popup.evaluate("document.querySelector('#version-display')?.textContent === 'v' + chrome.runtime.getManifest().version"), 'popup ready');
+    await syncBudget.reserve();
     await popup.evaluate("chrome.storage.sync.set({list_view:true,compact_list_view:true})");
     await popup.evaluate("chrome.storage.local.set({extension_enabled:false})");
     await popup.send('Page.reload');
@@ -323,7 +387,16 @@ async function main() {
     await until(() => popup.evaluate("document.documentElement.lang === 'en'"), 'English override');
     console.log('PASS: popup power, compact dependency and English');
 
-    if (process.argv.includes('--localization')) {
+    if (releaseMode) {
+        await require('./browser-release.cjs')({
+            page, popup, settings, navigate: navigateAndRefresh,
+            content: expression => page.evaluate(expression, isolated.id),
+            until, report, network: report.network, syncBudget
+        });
+    }
+
+    if (process.argv.includes('--localization') || releaseMode) {
+        await popup.send('Page.bringToFront');
         const screenshotDirectory = process.env.LOCALIZATION_SCREENSHOT_DIR;
         if (screenshotDirectory) fs.mkdirSync(screenshotDirectory, { recursive: true });
         const sampleLocales = new Set(['ar', 'bn', 'de', 'ja', 'tr', 'zh_TW']);
@@ -356,6 +429,7 @@ async function main() {
                 for (const item of document.querySelectorAll('.setting-item')) {
                     const info = item.querySelector('.setting-info').getBoundingClientRect();
                     const toggle = item.querySelector('.toggle-switch').getBoundingClientRect();
+                    if (info.width <= 0 || info.height <= 0 || toggle.width <= 0 || toggle.height <= 0) errors.push('invisible setting row');
                     if (rtl ? info.left < toggle.right - 1 : info.right > toggle.left + 1) errors.push('toggle overlap');
                     const label = item.querySelector('.setting-label');
                     const description = item.querySelector('.setting-desc');
@@ -374,6 +448,7 @@ async function main() {
             assert.equal(layout.rows, 25, `${locale} translated rows`);
             assert.equal(layout.direction, ['ar', 'fa'].includes(locale) ? 'rtl' : 'ltr', locale);
             assert.deepEqual(layout.errors, [], `${locale} text layout: ${layout.errors.join(', ')}`);
+            report.locales.push({ name: locale, ...layout });
             if (screenshotDirectory && sampleLocales.has(locale)) {
                 const bounds = await popup.evaluate(`(() => {
                     document.body.style.maxHeight = 'none';
@@ -398,8 +473,12 @@ async function main() {
     await delay(200);
     assert.equal([...contexts.values()].some(context => context.origin.startsWith('chrome-extension://')), false);
     console.log('PASS: no content injection on browser-owned page');
+    assert.deepEqual(report.network.denied, [], 'Unexpected fixture network requests');
+    assert.deepEqual(report.errors, [], 'Uncaught browser/extension errors');
 
     if (process.argv.includes('--live')) {
+        await popup.send('Fetch.disable');
+        await syncBudget.reserve();
         await popup.evaluate("chrome.storage.sync.set({list_view:false,compact_list_view:false,hide_sidebar:true,hide_premium_popups:true})");
         await page.send('Page.navigate', { url: 'https://www.youtube.com/watch?v=aircAruvnKk&hl=en&gl=US' });
         await until(() => page.evaluate("!!document.querySelector('ytd-watch-flexy #secondary')"), 'live watch page', 45000);
@@ -435,7 +514,29 @@ async function main() {
     }
 }
 
-main().catch(error => { console.error(error); process.exitCode = 1; }).finally(async () => {
+let watchdog;
+const deadline = new Promise((resolve, reject) => {
+    watchdog = setTimeout(() => { runExpired = true; reject(new Error('Browser suite exceeded its 10-minute deadline')); }, 600000);
+});
+Promise.race([main(), deadline]).catch(async error => {
+    report.failure = error.stack || error.message;
+    console.error(error);
+    process.exitCode = 1;
+    if (reportDirectory) {
+        fs.mkdirSync(reportDirectory, { recursive: true });
+        for (const [index, client] of clients.entries()) {
+            try {
+                const capture = await client.send('Page.captureScreenshot', { format: 'png' });
+                fs.writeFileSync(path.join(reportDirectory, `failure-${index}.png`), Buffer.from(capture.data, 'base64'));
+            } catch {}
+        }
+    }
+}).finally(async () => {
+    clearTimeout(watchdog);
+    if (reportDirectory) {
+        fs.mkdirSync(reportDirectory, { recursive: true });
+        fs.writeFileSync(path.join(reportDirectory, 'browser.json'), JSON.stringify(report, null, 2) + '\n');
+    }
     for (const client of clients) client.close();
     if (browserClient) {
         try { await browserClient.send('Browser.close'); browserClosed = true; } catch {}

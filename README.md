@@ -103,20 +103,35 @@ The main pattern is:
 
 ## Development Checks
 
-Run the dependency-free regression suite with Node 22 or newer:
+Before packaging or deploying, run the complete dependency-free gate with Node 22 or newer:
 
 ```sh
-node --test tests/regression.test.cjs
+npm run test:release
 ```
 
-For browser smoke tests, set `BROWSER_PATH` to an installed Brave/Chromium executable, then run:
+This runs syntax and whitespace checks, all unit/regression/security/performance/localization tests, the real unpacked extension's feature scenarios, and the 24-language popup layout matrix. Missing browsers, failures, skipped/TODO tests, timeouts or source changes during a run fail the gate. `package.bat` runs this gate before creating a new ZIP.
+
+Brave is detected automatically in standard Windows installations. Set `BROWSER_PATH` explicitly for another compatible Chromium executable (Chrome for Testing in CI). The runner never downloads a browser. Test writes are paced below Chrome's real sync-storage quota, so a full run takes several minutes.
+
+Results, stage logs, browser metrics and failure screenshots are written to an ignored, timestamped `test-results/release-*/` folder. `report.json` identifies the version, commit and SHA-256 of runtime/test inputs; `report.md` is the short summary. No commit, push, publication or ZIP replacement is performed by the test command.
+
+Useful narrower commands:
 
 ```sh
-node tests/browser-smoke.cjs
-node tests/browser-smoke.cjs --live
+npm test                       # All offline tests
+npm run test:security
+npm run test:performance
+npm run test:release:offline    # Partial report, NOT a release approval
+npm run test:release:live       # Full gate plus public YouTube checks
 ```
 
-The browser harness copies runtime files to a temporary path without spaces, uses a fresh signed-out profile, and closes/removes only its own test session. The default run uses controlled fixtures; `--live` additionally checks a public YouTube transcript and compares old/new bounded description fetching. No existing browser profile or unpacked installation is modified.
+Browser tests use an isolated, signed-out disposable profile and copy only release runtime files. Fixture requests are fulfilled locally or blocked, not sent to YouTube. Your existing profiles, settings and unpacked installation are not modified. The gate covers independent on/off effects, popup-to-page persistence, power, theme, keyboard controls, Premium/functional dialogs, transcript/sidebar, list/compact layout, watched progress, preview media, blur hover, autoplay, original-audio bridge, description XSS/cache and SPA navigation.
+
+Performance checks enforce three concurrent description requests, a 100-item queue, 250 cached descriptions and 15,000 decoded bytes per request. They also verify cancellation, hidden-tab pausing, mutation coalescing and idle settling. A controlled 300-card feed must stay below a 250 ms p95 and 1,000 ms maximum synchronous feature pass; a 1,000-node mutation burst may cause at most two passes. Payload limits are in `tests/helpers/budgets.cjs`; do not raise them merely to silence a regression.
+
+The on-demand CI workflow runs the full gate and retains diagnostic artifacts for 14 days. It starts only through workflow_dispatch, not on a push, PR or schedule. Real YouTube smoke checks remain a separate, non-blocking job in that requested run. Hosted CI configuration is not proof that a particular run has passed.
+
+Passing fixtures cannot guarantee every future YouTube experiment or account state. Check signed-in subscription descriptions, real multi-audio videos, actual native hover initiation and the final store package before publication. Localization tests verify coverage and layout, not whether every translation sounds natural. Existing ZIP archives are not validated by the source test gate.
 
 See [the September audit](docs/audit-2026-09-13.md) for fixes, research sources, and remaining test gaps.
 

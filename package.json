@@ -7,13 +7,18 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "node --test tests/regression.test.cjs tests/comprehensive.test.cjs tests/localization.test.cjs",
+    "test": "node --test",
     "test:regression": "node --test tests/regression.test.cjs",
     "test:comprehensive": "node --test tests/comprehensive.test.cjs",
     "test:localization": "node --test tests/localization.test.cjs",
+    "test:security": "node --test tests/security.test.cjs",
+    "test:performance": "node --test tests/performance.test.cjs",
+    "test:release": "node tests/release.cjs",
+    "test:release:offline": "node tests/release.cjs --offline",
+    "test:release:live": "node tests/release.cjs --live",
     "test:e2e": "node tests/browser-smoke.cjs",
     "test:e2e:localization": "node tests/browser-smoke.cjs --localization",
     "test:e2e:live": "node tests/browser-smoke.cjs --live",
-    "check": "node --check content.js && node --check popup.js && node --check page-audio-bridge.js && node --check shared/constants.js && git diff --check"
+    "check": "node tests/check.cjs"
   }
 }

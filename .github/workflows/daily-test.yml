@@ -36,12 +36,7 @@ jobs:
         run: npm ci --no-audit --no-fund
 
       - name: Syntax + whitespace (offline)
-        run: |
-          node --check content.js
-          node --check popup.js
-          node --check page-audio-bridge.js
-          node --check shared/constants.js
-          git diff --check
+        run: npm run check
 
       - name: Unit + DOM (offline, zero-dep)
         run: npm test
@@ -71,11 +66,20 @@ jobs:
         id: chrome
         uses: browser-actions/setup-chrome@latest
 
-      - name: Fixture E2E (AI-free, deterministic)
+      - name: Full release gate (all features, security, performance and 24 locales)
         env:
           BROWSER_PATH: ${{ steps.chrome.outputs.chrome-path }}
           BROWSER_NO_SANDBOX: '1'
-        run: xvfb-run -a node tests/browser-smoke.cjs
+        run: xvfb-run -a npm run test:release
+
+      - name: Upload release diagnostics
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-tests-${{ github.run_id }}-${{ github.run_attempt }}
+          path: test-results/release-*/
+          retention-days: 14
+          if-no-files-found: warn
 
   live-smoke:
     name: live-smoke (real YouTube, non-blocking signal)
